@@ -1,0 +1,77 @@
+# ==========================================
+# .gitignore: Specify which files NOT to track in Git
+# This keeps your repository lean by excluding generated/large files
+# ==========================================
+
+# ============ EXCLUDE LARGE FILES ============
+# These files are generated during pipeline execution and are heavy (MB/GB)
+# Remove from this list if you want to track them
+
+# Datasets (large CSVs)
+PROMISE-relabeled-NICE.csv
+
+# Machine Learning Artifacts (trained models, vectorizers)
+requirement_classifier.pkl
+tfidf_vectorizer.pkl
+tfidf_matrix.npz
+tfidf_labels.npy
+
+# Generated Figures (EDA outputs)
+EDA Figures/
+*.png
+*.jpg
+*.jpeg
+*.pdf
+
+# Large Temporary Files
+*.pyc
+__pycache__/
+*.egg-info/
+dist/
+build/
+
+# ============ INCLUDE THESE (NOT ignored) ============
+# Python Source Files (always track)
+# *.py          ← INCLUDE in repo
+
+# Markdown Documentation (always track)
+# *.md          ← INCLUDE in repo
+
+# Configuration Files (always track)
+# .gitignore    ← This file itself
+# requirements.txt  ← If you create one
+
+# Deliverables & Documentation
+# DELIVERABLES/ ← INCLUDE in repo
+# .MD DOCS/     ← INCLUDE in repo
+
+# ============ IDE & OS SPECIFIC ============
+# VS Code
+.vscode/
+*.code-workspace
+
+# PyCharm
+.idea/
+*.iml
+
+# Python Virtual Environments
+venv/
+env/
+ENV/
+*.venv
+
+# OS Files
+.DS_Store
+Thumbs.db
+*.swp
+*.swo
+*~
+
+# Jupyter Notebooks (if any)
+.ipynb_checkpoints/
+*.ipynb
+
+# ============ ENVIRONMENT VARIABLES ============
+.env
+.env.local
+secrets.txt

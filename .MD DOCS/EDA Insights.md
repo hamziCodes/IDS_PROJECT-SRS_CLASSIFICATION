@@ -1,0 +1,8 @@
+Insight 1: Requirement priorities are highly project-dependent.
+By grouping and visualizing the category distribution by ProjectID, your EDA reveals that non-functional demands are not uniform across the dataset. Different software projects prioritize completely different quality attributes—for instance, one project might be heavily skewed toward Security and Fault Tolerance, while another is dominated by Usability and Look & Feel.
+
+Insight 2: Software requirements frequently exhibit multi-label complexity.
+Your "Category Overlap" visualization proves that requirements rarely fit neatly into a single box. The stacked horizontal bar chart shows that complex requirements often trigger multiple Non-Functional Requirement (NFR) flags simultaneously, indicating that a single sentence can dictate several distinct architectural or operational constraints.
+
+Insight 3: Requirement verbosity is a strong indicator of its classification type.
+Through your robust ReqType categorization and word count analysis, the data demonstrates a clear structural difference in how requirements are written. The histograms and side-by-side bar charts highlight a measurable difference in average word counts between "Purely FR," "Purely NFR," and "Mixed" constraints, suggesting that documenting specific quality attributes inherently requires more verbose and detailed language than stating standard functional actions.s
