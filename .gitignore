@@ -8,7 +8,7 @@
 # Remove from this list if you want to track them
 
 # Datasets (large CSVs)
-PROMISE-relabeled-NICE.csv
+
 
 # Machine Learning Artifacts (trained models, vectorizers)
 requirement_classifier.pkl
@@ -30,6 +30,11 @@ __pycache__/
 dist/
 build/
 
+# Deliverables & Documentation
+# Keep these folders local for personal use and submissions.
+DELIVERABLES/
+.MD DOCS/
+
 # ============ INCLUDE THESE (NOT ignored) ============
 # Python Source Files (always track)
 # *.py          ← INCLUDE in repo
@@ -39,11 +44,9 @@ build/
 
 # Configuration Files (always track)
 # .gitignore    ← This file itself
-# requirements.txt  ← If you create one
 
-# Deliverables & Documentation
-# DELIVERABLES/ ← INCLUDE in repo
-# .MD DOCS/     ← INCLUDE in repo
+# Dataset
+#PROMISE-relabeled-NICE.csv
 
 # ============ IDE & OS SPECIFIC ============
 # VS Code
