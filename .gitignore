@@ -7,9 +7,6 @@
 # These files are generated during pipeline execution and are heavy (MB/GB)
 # Remove from this list if you want to track them
 
-# Datasets (large CSVs)
-
-
 # Machine Learning Artifacts (trained models, vectorizers)
 requirement_classifier.pkl
 tfidf_vectorizer.pkl
