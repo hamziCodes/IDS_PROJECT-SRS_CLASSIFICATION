@@ -1,42 +1,39 @@
-# ==========================================
-    # PIPELINE STEP 5: Feature Engineering & Selection
-    # Objective: Translate cleaned English text into a mathematical matrix 
-    # using TF-IDF. Cap the vocabulary at the 5000 most predictive features 
-    # (n-grams) to prevent overfitting and handle dimensionality reduction natively.
-    # ==========================================
+"""Stage 5: turn cleaned text into TF-IDF features and save the vectorizer.
 
-import pandas as pd
-import numpy as np
-from sklearn.feature_extraction.text import TfidfVectorizer
-import scipy.sparse
+Layman: Convert cleaned requirement text into numeric TF-IDF features the
+models can understand, then save the vectorizer and sparse matrix.
+"""
+
 import joblib
+import pandas as pd
+import scipy.sparse
+from sklearn.feature_extraction.text import TfidfVectorizer
 
-#TF-IDF for meaningful words in the reviews
-PROMISE = pd.read_csv('PROMISE-relabeled-NICE.csv')
+from pipeline_common import STAGE4_CLEANED_PATH, STAGE5_MATRIX_PATH, STAGE5_VECTORIZER_PATH, TRAINED_MODELS_DIR
 
-#dropping empy rows 
-PROMISE.dropna(subset=['CleanedRequirementText'], inplace=True)
 
-#define vectorizer with 5k max features and n-grams (1,2) to capture single words and pairs of words
-vectorizer = TfidfVectorizer(max_features=5000, ngram_range=(1, 2))
+print("[STAGE 5] FEATURE ENGINEERING")
+print("-" * 100)
 
-#fit and transform the cleaned requirements to get the TF-IDF matrix
-tfidf_matrix = vectorizer.fit_transform(PROMISE['CleanedRequirementText'])
-tfidf_labels = PROMISE['IsFunctional'].values
+# Load the cleaned dataset so the feature matrix matches the final cleaned text.
+combined_df = pd.read_csv(STAGE4_CLEANED_PATH)
 
-#feature names extarted by the vectorizer
-feature_names = vectorizer.get_feature_names_out()
+# Build a simple TF-IDF vectorizer with the same settings used in the original script.
+print("  -> Initializing TF-IDF vectorizer...")
+vectorizer = TfidfVectorizer(max_features=5000, ngram_range=(1, 2), min_df=2, max_df=0.95)
 
-#print matrix stats 
-print(f'TF-IDF matrix shape: {tfidf_matrix.shape}')
-print(f'Number of Unique Features: {tfidf_matrix.shape[1]}')
-print("\n Features/Vocalbulary Sample:")
-print(feature_names[200:215])  # Print a sample of feature names
+# Fit the vectorizer and convert the text into a sparse numeric matrix.
+print("  -> Fitting and transforming cleaned text...")
+tfidf_matrix = vectorizer.fit_transform(combined_df["CleanedRequirementText"])
 
-#save the TF-IDF matrix and labels for later use
-joblib.dump(vectorizer, 'tfidf_vectorizer.pkl')
+# Save the vectorizer and matrix so training can reuse the exact same features later.
+TRAINED_MODELS_DIR.mkdir(parents=True, exist_ok=True)
+joblib.dump(vectorizer, STAGE5_VECTORIZER_PATH)
+scipy.sparse.save_npz(STAGE5_MATRIX_PATH, tfidf_matrix)
 
-#save the sparse matrix and labels
-scipy.sparse.save_npz('tfidf_matrix.npz', tfidf_matrix)
-np.save('tfidf_labels.npy', tfidf_labels)
-print("TF-IDF matrix and labels saved successfully.")
+# Print a short summary so we can verify the feature space size and sparsity.
+print(f"\n✓ Saved vectorizer: {STAGE5_VECTORIZER_PATH}")
+print(f"✓ Saved TF-IDF matrix: {STAGE5_MATRIX_PATH}")
+print(f"  -> Matrix shape: {tfidf_matrix.shape}")
+print(f"  -> Sparsity: {(1 - tfidf_matrix.nnz / (tfidf_matrix.shape[0] * tfidf_matrix.shape[1])) * 100:.2f}%")
+print(f"  -> Vocabulary size: {tfidf_matrix.shape[1]}")

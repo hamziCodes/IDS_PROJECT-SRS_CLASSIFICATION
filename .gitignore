@@ -1,77 +1,42 @@
-# ==========================================
-# .gitignore: Specify which files NOT to track in Git
-# This keeps your repository lean by excluding generated/large files
-# ==========================================
+# Project outputs and generated artifacts
+DELIVERABLES/
+.MD DOCS/
+trained_models/
+DATASETS/*.csv
+DATASETS/*.zip
+DATASETS/combined_stage*.csv
+DATASETS/outlier_review*.csv
+DATASETS/*_cleaned_v1.csv
 
-# ============ EXCLUDE LARGE FILES ============
-# These files are generated during pipeline execution and are heavy (MB/GB)
-# Remove from this list if you want to track them
-
-# Machine Learning Artifacts (trained models, vectorizers)
-requirement_classifier.pkl
-tfidf_vectorizer.pkl
-tfidf_matrix.npz
-tfidf_labels.npy
-
-# Generated Figures (EDA outputs)
-EDA Figures/
-*.png
-*.jpg
-*.jpeg
-*.pdf
-
-# Large Temporary Files
-*.pyc
+# Python cache and build files
 __pycache__/
+*.py[cod]
 *.egg-info/
 dist/
 build/
 
-# Deliverables & Documentation
-# Keep these folders local for personal use and submissions.
-DELIVERABLES/
-.MD DOCS/
+# Notebook and notebook cache files
+.ipynb_checkpoints/
+*.ipynb
 
-# ============ INCLUDE THESE (NOT ignored) ============
-# Python Source Files (always track)
-# *.py          ← INCLUDE in repo
-
-# Markdown Documentation (always track)
-# *.md          ← INCLUDE in repo
-
-# Configuration Files (always track)
-# .gitignore    ← This file itself
-
-# Dataset
-#PROMISE-relabeled-NICE.csv
-
-# ============ IDE & OS SPECIFIC ============
-# VS Code
-.vscode/
-*.code-workspace
-
-# PyCharm
-.idea/
-*.iml
-
-# Python Virtual Environments
+# Local development files
+.venv/
 venv/
 env/
 ENV/
-*.venv
+.vscode/
+.idea/
+*.code-workspace
+*.iml
 
-# OS Files
+# Operating system files
 .DS_Store
 Thumbs.db
 *.swp
 *.swo
 *~
 
-# Jupyter Notebooks (if any)
-.ipynb_checkpoints/
-*.ipynb
-
-# ============ ENVIRONMENT VARIABLES ============
+# Environment secrets
 .env
 .env.local
 secrets.txt

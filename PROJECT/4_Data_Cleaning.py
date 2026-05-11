@@ -1,65 +1,44 @@
-# ==========================================
-# PIPELINE STEP 4: Data Cleaning & Preprocessing
-# Objective: Standardize raw textual data by removing noise (punctuation, 
-# stop words), tokenizing numerical metrics to <NUM>, and applying 
-# lemmatization to prepare the text for feature extraction.
-# ==========================================
+"""Stage 4: clean the requirement text and remove duplicates.
 
-import pandas as pd 
-from nltk.corpus import stopwords
-from nltk.tokenize import word_tokenize
-from nltk.stem import WordNetLemmatizer
+Layman: Convert raw requirement sentences into a normalized cleaned column
+and remove duplicate or empty items so training data is consistent.
+"""
 
-# Load the dataset
-PROMISE = pd.read_csv('PROMISE-relabeled-NICE.csv')
+import pandas as pd
 
-#create a new column for the cleaned text
-PROMISE['CleanedRequirementText'] = PROMISE['RequirementText']
-
-#convert to lowercase for uniformity
-PROMISE['CleanedRequirementText'] = PROMISE['RequirementText'].str.lower()
-
-# 1. Remove punctuation (Using 'r' to prevent Python 3.12 syntax warnings)
-PROMISE['CleanedRequirementText'] = PROMISE['CleanedRequirementText'].str.replace(r'[^\w\s]', '', regex=True)
-
-# 2. Remove stop words
-stop_words = set(stopwords.words('english'))
-PROMISE['CleanedRequirementText'] = PROMISE['CleanedRequirementText'].apply(
-    lambda x: ' '.join([word for word in word_tokenize(x) if word not in stop_words])
-)
-
-# 3. Replace numbers with <NUM> token instead of deleting them entirely
-PROMISE['CleanedRequirementText'] = PROMISE['CleanedRequirementText'].str.replace(r'\d+', ' NUM ', regex=True)
-
-# 4. Remove extra whitespace
-PROMISE['CleanedRequirementText'] = PROMISE['CleanedRequirementText'].str.strip().str.replace(r'\s+', ' ', regex=True)
-
-# 5. Lemmatization 
-lemmatizer = WordNetLemmatizer()
-PROMISE['CleanedRequirementText'] = PROMISE['CleanedRequirementText'].apply(
-    lambda x: ' '.join([lemmatizer.lemmatize(word) for word in word_tokenize(x)])
-)
-
-# 6. Remove duplicates based on the CLEANED text
-PROMISE.drop_duplicates(subset='CleanedRequirementText', inplace=True)
-
-# 7. Remove rows where the cleaning process left the text completely empty
-PROMISE = PROMISE[PROMISE['CleanedRequirementText'] != '']
-
-# 8. Reset index after dropping rows
-PROMISE.reset_index(drop=True, inplace=True)
+from pipeline_common import STAGE2_FILTERED_PATH, STAGE4_CLEANED_PATH, clean_text, ensure_nltk_data
 
 
-# 10. Save the cleaned dataset
-PROMISE.to_csv('PROMISE-relabeled-NICE.csv', index=False)
-print("\nSuccess! Saved to PROMISE-relabeled-NICE.csv")
+print("[STAGE 4] DATA CLEANING")
+print("-" * 100)
 
-# SANITY CHECK: Print side-by-side comparison cleanly
-print("\n--- PREPROCESSING COMPLETE: SIDE-BY-SIDE CHECK ---")
-sample_df = PROMISE[['RequirementText', 'CleanedRequirementText']].sample(5, random_state=42)
+# Make sure the tokenizer and lemmatizer resources are available before cleaning text.
+ensure_nltk_data()
 
-for index, row in sample_df.iterrows():
-    print(f"Row {index}:")
-    print(f"  ORIGINAL: {row['RequirementText']}")
-    print(f"  CLEANED : {row['CleanedRequirementText']}")
-    print("-" * 80) # Adds a clean dividing line between examples
+# Load the filtered dataset so cleaning happens after outlier removal.
+combined_df = pd.read_csv(STAGE2_FILTERED_PATH)
+
+# Rebuild the cleaned text column from the raw requirement text for a clean handoff.
+combined_df = combined_df.dropna(subset=["RequirementText"])
+combined_df["CleanedRequirementText"] = combined_df["RequirementText"].apply(clean_text)
+
+# Remove repeated cleaned rows so the model does not see duplicate examples.
+initial_count = len(combined_df)
+combined_df.drop_duplicates(subset="CleanedRequirementText", inplace=True)
+print(f"  -> Removed duplicate rows: {initial_count - len(combined_df)}")
+
+# Drop empty cleaned texts because they do not add useful signal to the model.
+combined_df = combined_df[combined_df["CleanedRequirementText"].str.strip() != ""]
+combined_df.reset_index(drop=True, inplace=True)
+
+# Save the cleaned dataset so feature engineering and training use the same text.
+STAGE4_CLEANED_PATH.parent.mkdir(parents=True, exist_ok=True)
+combined_df.to_csv(STAGE4_CLEANED_PATH, index=False)
+
+# Print a few cleaned samples so we can confirm the transformation is sensible.
+print(f"\n✓ Saved cleaned dataset: {STAGE4_CLEANED_PATH}")
+print(f"  -> Remaining rows: {len(combined_df)}")
+print("\nCleaned text samples:")
+for index, (original, cleaned) in enumerate(zip(combined_df["RequirementText"].head(2), combined_df["CleanedRequirementText"].head(2)), start=1):
+    print(f"  Sample {index} original: {str(original)[:80]}...")
+    print(f"  Sample {index} cleaned : {str(cleaned)[:80]}...")

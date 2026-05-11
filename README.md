@@ -1,369 +1,177 @@
-# Software Requirements Classification: NLP & Machine Learning Pipeline
+# Software Requirements Classification Pipeline
 
-## Project Overview
+This repository turns raw software requirement text into a working classifier.
+It trains models for three tasks:
 
-This project implements an end-to-end data science pipeline for **Software Requirements Classification**—automatically categorizing software requirements as **Functional (FR)** or **Non-Functional (NFR)** using Natural Language Processing (NLP) and Machine Learning techniques.
+1. spotting obvious outliers or non-requirement text
+2. predicting Functional vs Non-Functional requirement labels
+3. predicting the Non-Functional type when a requirement is NFR
 
-### Business Objective
-Software requirements are critical for project planning, resource allocation, and architectural decisions. Manual classification is time-consuming and prone to inconsistency. This pipeline provides an automated, data-driven solution to classify requirements accurately.
+The code is split into small numbered scripts so each stage is easier to read,
+debug, and run on its own.
 
----
+## What the final app does
 
-## Dataset: PROMISE
+The Streamlit app in [PROJECT/app.py](PROJECT/app.py) does not retrain the model.
+It loads saved artifacts from the `trained_models` folder, converts your text
+with the saved TF-IDF vectorizer, and then asks the trained classifiers for a
+prediction.
 
-**Source:** [PROMISE Software Engineering Repository](http://promise.site.uottawa.ca/)  
-**Dataset Name:** PROMISE-relabeled-NICE.csv
+In simple terms:
 
-### Dataset Justification & Relevance
-- **622 software requirements** manually labeled from real-world projects
-- **Multi-label classification:** Each requirement can have multiple Non-Functional attributes (Security, Usability, Performance, Maintainability, etc.)
-- **Binary Primary Classification:** IsFunctional (1 = Functional, 0 = Non-Functional)
-- **Class Distribution:** Balanced mix of FR and NFR requirements, suitable for binary classification
-- **Text Quality:** Well-structured, domain-specific text from industrial software projects—ideal for NLP analysis
-- **Relevance:** Directly addresses the task of categorizing software requirements and improving classification accuracy
+- training scripts create the model files
+- the app reads those model files later
+- your text is cleaned, turned into numbers, and scored by the saved models
 
-**Key Statistics:**
-- Total Requirements: 622
-- Features: 14 (IsFunctional + 13 NFR categories)
-- No missing values after preprocessing
-- Original text length: 5-200 words per requirement
+## Data sources
 
----
+The project uses the PROMISE requirement dataset plus a synthetic NFR dataset.
+Main input files live in [DATASETS/](DATASETS/):
 
-## Pipeline Architecture
+- [PROMISE-relabeled-NICE.csv](DATASETS/PROMISE-relabeled-NICE.csv)
+- [synthetic_NFR_augmentation.csv](DATASETS/synthetic_NFR_augmentation.csv)
 
-The project follows the **Universal Data Science Pipeline** with 6 sequential steps:
+Cleaned and intermediate CSV files are also written back into the same folder
+so later stages can reuse them.
 
-### Step 1: Data Exploration & Understanding (3_EDA.py)
-**Objective:** Analyze raw data patterns, distributions, and relationships
+## Pipeline flow
 
-**Key Analyses:**
-- ✅ Descriptive statistics (shape, unique values, data types)
-- ✅ Missing value detection
-- ✅ Category distribution by project ID
-- ✅ Category overlap visualization (stacked bar charts)
-- ✅ Requirement length analysis by type (FR vs NFR)
-
-**Outputs:**
-- Category distribution bar chart
-- Category overlap heatmap
-- Word count histograms
-- **3 Key Insights:**
-  1. **Project Dependency:** Non-functional demands vary significantly by project
-  2. **Multi-Label Complexity:** Requirements often have multiple NFR tags
-  3. **Verbosity Indicator:** Word count correlates with requirement type (FR vs NFR)
-
----
-
-### Step 2: Data Cleaning & Preprocessing (4_Data_Cleaning.py)
-**Objective:** Transform noisy raw text into clean, standardized data ready for modeling
-
-**Preprocessing Steps:**
-- ✅ Lowercase conversion for uniformity
-- ✅ Punctuation removal (regex-based)
-- ✅ Stop word removal (NLTK English stop words)
-- ✅ Number tokenization (→ `<NUM>` token)
-- ✅ Lemmatization (WordNetLemmatizer)
-- ✅ Duplicate removal based on cleaned text
-- ✅ Empty row removal
-
-**Example:**
-```
-BEFORE: "The system shall display error messages within 500 milliseconds!"
-AFTER:  "system display error message NUM millisecond"
+```mermaid
+flowchart TD
+      A[Raw CSV files in DATASETS/] --> B[Stage 0: train outlier model]
+      B --> C[Stage 1: load and merge datasets]
+      C --> D[Stage 2: filter outliers]
+      D --> E[Stage 3: quick EDA summary]
+      E --> F[Stage 4: clean text]
+      F --> G[Stage 5: build TF-IDF features]
+      G --> H[Stage 6: train FR/NFR models]
+      H --> I[Saved model files in trained_models/]
+      I --> J[Streamlit app predicts on new text]
 ```
 
-**Data Quality Improvements:**
-- Reduced vocabulary noise by ~40%
-- Removed duplicate requirements
-- Final dataset: 622 requirements, 100% non-empty text
+## Prediction flow in the app
 
----
-
-### Step 3: Feature Engineering & Selection (5_Feature_Engineering.py)
-**Objective:** Convert cleaned English text into a mathematical matrix for machine learning
-
-**Technique:** TF-IDF (Term Frequency-Inverse Document Frequency)
-
-**Configuration:**
-- **Max Features:** 5,000 most predictive words/n-grams
-- **N-gram Range:** (1, 2) — captures single words and word pairs
-- **Output:** Sparse matrix (622 × 5,000)
-
-**Why TF-IDF?**
-- Assigns higher weights to words that are common in one class but rare in the other
-- Handles the curse of dimensionality by selecting only top 5,000 features
-- Industry-standard for text classification tasks
-
-**Artifacts Generated:**
-- `tfidf_matrix.npz` — Sparse feature matrix
-- `tfidf_labels.npy` — Binary labels (0 = NFR, 1 = FR)
-- `tfidf_vectorizer.pkl` — Saved vectorizer for inference
-
----
-
-### Step 4: Model Building & Evaluation (6_Model_Building_Evaluation.py)
-**Objective:** Train a classifier, evaluate performance, and identify predictive features
-
-**Model Selection:** Logistic Regression
-- **Why?** Fast baseline, interpretable coefficients, works well with TF-IDF sparse matrices
-- **Hyperparameters:** `class_weight='balanced'` (handles class imbalance), `max_iter=1000`
-
-**Data Split:** 80/20 train-test split (stratified for class balance)
-
-#### Model Performance Results
-
-**Overall Accuracy:** [Generated at runtime]
-
-**Classification Report:**
-- Precision, Recall, and F1-Score for both classes
-- Support (number of test samples per class)
-
-**Confusion Matrix:**
-```
-                 Predicted NFR    Predicted FR
-Actual NFR       [True Neg]       [False Pos]
-Actual FR        [False Neg]      [True Pos]
+```mermaid
+flowchart LR
+      T[User types requirement text] --> C[App cleans text]
+      C --> R{Outlier check}
+      R -->|Looks irrelevant| W[Show warning / allow force classify]
+      R -->|Looks like a requirement| V[TF-IDF vectorizer]
+      V --> M1[FR/NFR model]
+      V --> M2[NFR type model]
+      M1 --> O[Display result]
+      M2 --> O
+      W --> O
 ```
 
-#### Top 15 Predictive Features (Words/N-grams)
+## Files and what they do
 
-The model identifies these as most important for classification:
-- **High-weight FR indicators:** "shall", "user", "display", "system", "function"
-- **High-weight NFR indicators:** "performance", "security", "usability", "availability", "error"
+### [PROJECT/0_Outlier_Training.py](PROJECT/0_Outlier_Training.py)
+Trains the outlier detector used before the main model pipeline. It loads local
+requirement text, optionally pulls extra public text examples, trains an outlier
+classifier, and saves the outlier artifacts.
 
-(Full rankings generated at runtime)
+### [PROJECT/1_Load_and_Merge.py](PROJECT/1_Load_and_Merge.py)
+Loads the PROMISE and synthetic datasets, cleans them if needed, and merges them
+into one combined CSV for the later stages.
 
----
+### [PROJECT/2_Outlier_Gate.py](PROJECT/2_Outlier_Gate.py)
+Uses simple rules and the trained outlier model to remove obvious non-requirement
+text before the main model is trained.
 
-### Step 5: Prototype / Interactive Dashboard (7_Dashboard.py) *(Optional but Encouraged)*
-**Objective:** Develop an interactive web interface for real-time requirement classification and visualization
+### [PROJECT/3_EDA.py](PROJECT/3_EDA.py)
+Prints a small exploratory summary of the filtered dataset, including shape,
+missing values, label balance, and text length checks.
 
-**Technology:** Streamlit (lightweight, Python-native, deployment-ready)
+### [PROJECT/4_Data_Cleaning.py](PROJECT/4_Data_Cleaning.py)
+Normalizes the requirement text, removes duplicates, removes empty rows, and
+writes the cleaned dataset used by feature engineering.
 
-**Features:**
-- 🎯 **Live Classification:** Input any requirement text and get instant FR/NFR prediction
-- 📊 **Batch Prediction:** Upload CSV file with multiple requirements for bulk classification
-- 📈 **Model Insights:** Display confusion matrix, top predictive features, and performance metrics
-- 📉 **EDA Visualizations:** Interactive charts showing category distributions, word counts, and patterns
-- 💾 **Export Results:** Download predictions as CSV for further analysis
+### [PROJECT/5_Feature_Engineering.py](PROJECT/5_Feature_Engineering.py)
+Turns cleaned requirement text into TF-IDF numbers and saves both the vectorizer
+and the sparse feature matrix.
 
-**How to Run:**
-```bash
-streamlit run PROJECT/7_Dashboard.py
+### [PROJECT/6_Model_Training_and_Export.py](PROJECT/6_Model_Training_and_Export.py)
+Trains the Functional vs Non-Functional classifier and the multi-label NFR type
+classifier, then saves the model files and metadata.
+
+### [PROJECT/RUN_PIPELINE_TRAINING.py](PROJECT/RUN_PIPELINE_TRAINING.py)
+Runs stages 0 through 6 in order, each in a fresh Python process.
+
+### [PROJECT/app.py](PROJECT/app.py)
+Streamlit app for testing one requirement at a time. It loads the trained files,
+checks for outliers, predicts FR/NFR, and shows detected NFR types.
+
+### [PROJECT/pipeline_common.py](PROJECT/pipeline_common.py)
+Shared helper file for paths, text cleaning, NLTK setup, and dataset loading.
+This keeps the stage scripts simple and avoids repeating the same code.
+
+### [PROJECT/requirements.txt](PROJECT/requirements.txt)
+Lists the Python packages needed to run the pipeline and the app.
+
+## Output folders
+
+- [DATASETS/](DATASETS/) stores raw, cleaned, and intermediate CSV files
+- [trained_models/FR_NFRTrained_models](trained_models/FR_NFRTrained_models) stores the main classifier artifacts
+- [trained_models/outlierTrained_model](trained_models/outlierTrained_model) stores the outlier detector artifacts
+
+## Training pipeline order
+
+```text
+Stage 0 -> Stage 1 -> Stage 2 -> Stage 3 -> Stage 4 -> Stage 5 -> Stage 6
 ```
-Opens at `http://localhost:8501`
 
-**Dashboard Sections:**
-1. **Classification Engine** — Single or batch requirement prediction
-2. **Model Performance** — Accuracy, confusion matrix, classification report
-3. **Feature Analysis** — Top 15 predictive words with importance scores
-4. **Dataset Explorer** — Interactive EDA visualizations and statistics
+The stages are intentionally small:
 
----
+- Stage 0 trains the outlier model first
+- Stage 1 combines the raw datasets
+- Stage 2 removes obvious junk text
+- Stage 3 prints a quick data summary
+- Stage 4 cleans the text
+- Stage 5 builds TF-IDF features
+- Stage 6 trains and exports the final models
 
-## How to Run the Pipeline
+## How to run
 
-### Prerequisites
-```bash
-# Install required libraries
-pip install pandas numpy scikit-learn nltk scipy seaborn matplotlib joblib streamlit
-```
-
-### Execution Steps
-
-Run the scripts in order (each builds on the previous):
+### Install requirements
 
 ```bash
-# Step 1: Explore the data
-python PROJECT/3_EDA.py
-
-# Step 2: Clean and preprocess text
-python PROJECT/4_Data_Cleaning.py
-
-# Step 3: Build TF-IDF feature matrix
-python PROJECT/5_Feature_Engineering.py
-
-# Step 4: Train model and evaluate
-python PROJECT/6_Model_Building_Evaluation.py
-
-# Step 5: Launch interactive dashboard
-streamlit run PROJECT/7_Dashboard.py
+pip install -r PROJECT/requirements.txt
 ```
 
-### Expected Outputs
+### Run the full training pipeline
 
-| Script | Outputs |
-|--------|---------|
-| 3_EDA.py | Charts, statistics, insights |
-| 4_Data_Cleaning.py | Updated CSV, preprocessing logs |
-| 5_Feature_Engineering.py | tfidf_matrix.npz, tfidf_labels.npy, vectorizer.pkl |
-| 6_Model_Building_Evaluation.py | Accuracy, confusion matrix, top features, classifier.pkl |
-| 7_Dashboard.py | Interactive web interface (localhost:8501) |
-
----
-
-## File Structure
-
-```
-d:/IDS_PROJECT/
-├── README.md                          (this file - complete documentation)
-├── .gitignore                         (specifies which files to track in git)
-├── PROMISE-relabeled-NICE.csv         (input dataset - 622 requirements)
-├── PROJECT/
-│   ├── 3_EDA.py                       (data exploration)
-│   ├── 4_Data_Cleaning.py             (preprocessing)
-│   ├── 5_Feature_Engineering.py       (TF-IDF vectorization)
-│   ├── 6_Model_Building_Evaluation.py (model training & evaluation)
-│   └── 7_Dashboard.py                 (interactive Streamlit dashboard)
-├── EDA Figures/                       (generated visualizations from EDA)
-├── DELIVERABLES/                      (project outputs & reports)
-├── .MD DOCS/
-│   ├── General Roadmap.md             (data science concepts)
-│   └── EDA Insights.md                (key findings)
-├── tfidf_matrix.npz                   (sparse feature matrix)
-├── tfidf_labels.npy                   (binary labels)
-├── tfidf_vectorizer.pkl               (saved vectorizer)
-└── requirement_classifier.pkl         (trained model)
+```bash
+python PROJECT/RUN_PIPELINE_TRAINING.py
 ```
 
-**Note:** Only files tracked in `.gitignore` are pushed to the repository.
+### Run the app
 
----
-
-## Key Findings & Insights
-
-### Insight 1: Project-Dependent NFR Priorities
-Different software projects prioritize different quality attributes:
-- Some emphasize Security and Fault Tolerance
-- Others focus on Usability and Look & Feel
-- One-size-fits-all classification may need project-specific tuning
-
-### Insight 2: Multi-Label Complexity
-Requirements rarely fit neatly into single categories. The stacked bar visualization shows many requirements trigger multiple NFR flags simultaneously, indicating architectural complexity.
-
-### Insight 3: Verbosity as a Classification Signal
-Word count analysis reveals a statistically significant difference:
-- **Purely FR** requirements: Typically shorter, action-oriented
-- **Purely NFR** requirements: Longer, more detailed quality specifications
-- This feature alone could improve classification accuracy
-
----
-
-## Performance Metrics Explained
-
-- **Accuracy:** Overall correct predictions across all test samples
-- **Precision:** Of predicted FRs, how many were actually FR? (Minimizes false positives)
-- **Recall:** Of actual FRs, how many did we catch? (Minimizes false negatives)
-- **F1-Score:** Harmonic mean of precision and recall (balanced metric)
-
-### Why These Matter for Requirements Classification
-- **High Precision:** Avoids incorrectly marking NFRs as FRs (prevents architectural oversights)
-- **High Recall:** Catches all actual FRs (prevents missed functional requirements)
-- **Balanced F1:** Equally important for both types in real-world projects
-
----
-
-## Technologies & Libraries
-
-| Technology | Purpose |
-|-----------|---------|
-| **Pandas** | Data manipulation and preprocessing |
-| **NumPy** | Numerical computing |
-| **Scikit-Learn** | Machine learning (TF-IDF, Logistic Regression, metrics) |
-| **NLTK** | Natural language processing (tokenization, lemmatization, stop words) |
-| **Matplotlib & Seaborn** | Data visualization |
-| **SciPy** | Sparse matrix handling |
-| **Joblib** | Model serialization |
-
----
-
-## Future Enhancements
-
-1. **Experiment with advanced models:** Random Forest, SVM, Gradient Boosting
-2. **Hyperparameter tuning:** Grid search for optimal model configuration
-3. **Cross-validation:** K-fold CV for more robust performance estimates
-4. **Multi-label classification:** Classify all 13 NFR categories simultaneously
-5. **Dashboard deployment:** Build interactive web interface for real-time classification
-6. **Ensemble methods:** Combine multiple models for improved accuracy
-7. **Word embeddings:** Replace TF-IDF with Word2Vec or BERT embeddings
-
----
-
-## Documentation & Presentation
-
-### Project Report
-**Location:** `DELIVERABLES/` folder
-
-**Report Contents:**
-1. **Problem Statement** — Challenge of manual software requirement classification and need for automation
-2. **Methodology**
-   - Data collection and justification (PROMISE dataset)
-   - 7-step NLP preprocessing pipeline
-   - TF-IDF feature engineering with dimensionality reduction
-   - Logistic Regression model architecture
-3. **Results**
-   - Model accuracy and performance metrics
-   - Confusion matrix analysis
-   - Top 15 predictive features and their importance
-   - 3 key insights from exploratory data analysis
-4. **Limitations & Future Work**
-   - Class imbalance considerations
-   - Potential for advanced models (Random Forest, SVM, transformers)
-   - Multi-label classification opportunity
-   - Deployment and scalability considerations
-
-### Class Presentation
-**Demo Structure:**
-1. **Problem Context** (2 min) — Why requirements classification matters
-2. **Dataset Overview** (2 min) — PROMISE repository characteristics
-3. **Live Dashboard Demo** (5 min) — Interactive prediction and visualization
-4. **Results & Insights** (3 min) — Model performance and key findings
-5. **Q&A** — Discussion and future enhancements
-
-**Presentation Artifacts:**
-- Slides with methodology, results, and visualizations
-- Live Streamlit dashboard running on laptop
-- Confusion matrix and feature importance charts
-- Sample predictions on new requirements
-
----
-
-## Project Completion Checklist
-
-- ✅ Data Collection (PROMISE dataset justified)
-- ✅ Data Preprocessing (7-step text cleaning pipeline)
-- ✅ Exploratory Data Analysis (descriptive stats + 3 visualizations + 3 insights)
-- ✅ Feature Engineering (TF-IDF with dimensionality reduction)
-- ✅ Model Building (Logistic Regression classifier)
-- ✅ Model Evaluation (accuracy, precision, recall, F1, confusion matrix)
-- ✅ Feature Importance Analysis (top 15 predictive features)
-- ✅ Prototype / Interface (Streamlit interactive dashboard)
-- ✅ Documentation (comprehensive README + report)
-- ✅ Presentation (in-class demo and discussion)
-
----
-
-## Questions & Troubleshooting
-
-**Q: Which script should I run first?**
-A: Always run in order (3 → 4 → 5 → 6). Each depends on outputs from the previous step.
-
-**Q: What if I modify the dataset?**
-A: Restart from 3_EDA.py. The pipeline will regenerate all preprocessing artifacts.
-
-**Q: How do I use the trained model for new requirements?**
-A: Load the vectorizer and classifier:
-```python
-import joblib
-vectorizer = joblib.load('tfidf_vectorizer.pkl')
-model = joblib.load('requirement_classifier.pkl')
-new_text = vectorizer.transform(['your new requirement text'])
-prediction = model.predict(new_text)  # 0 = NFR, 1 = FR
+```bash
+streamlit run PROJECT/app.py
 ```
 
----
+The app should open in your browser after Streamlit starts.
 
-**Project Date:** May 2026  
-**Dataset:** PROMISE Software Engineering Repository  
-**Methodology:** End-to-End NLP + Machine Learning Pipeline
+## What gets saved
+
+After a successful pipeline run, the important saved files are:
+
+- `trained_models/FR_NFRTrained_models/model_fr_nfr.pkl`
+- `trained_models/FR_NFRTrained_models/model_nfr_types.pkl`
+- `trained_models/FR_NFRTrained_models/vectorizer_combined.pkl`
+- `trained_models/FR_NFRTrained_models/model_metadata.pkl`
+- `trained_models/FR_NFRTrained_models/nfr_types.npy`
+- `trained_models/outlierTrained_model/outlier_vectorizer.pkl`
+- `trained_models/outlierTrained_model/outlier_classifier.pkl`
+
+These files are what the app reads when you type text into the UI.
+
+## Notes
+
+- The app uses the saved models only; it does not rerun the training scripts
+  every time you make a prediction.
+- The helper file [PROJECT/pipeline_common.py](PROJECT/pipeline_common.py)
+  keeps paths and cleaning logic consistent across the whole project.
+- If you change a stage, rerun the pipeline so the saved artifacts match the
+  new code.
