@@ -11,7 +11,7 @@
     <key>provisioningProfiles</key>
     <dict>
         <key>com.vertexsolutions.vertexapp</key>
-        <string>Vertex App Store</string>
+        <string>Vertex App TestFlight Profile</string>
     </dict>
     <key>signingStyle</key>
     <string>automatic</string>
