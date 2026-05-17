@@ -1,12 +1,12 @@
 # Project outputs and generated artifacts
 DELIVERABLES/
 .MD DOCS/
-trained_models/
-DATASETS/*.csv
+#trained_models/
+#DATASETS/*.csv
 DATASETS/*.zip
-DATASETS/combined_stage*.csv
-DATASETS/outlier_review*.csv
-DATASETS/*_cleaned_v1.csv
+#DATASETS/combined_stage*.csv
+#DATASETS/outlier_review*.csv
+#DATASETS/*_cleaned_v1.csv
 
 # Python cache and build files
 __pycache__/
