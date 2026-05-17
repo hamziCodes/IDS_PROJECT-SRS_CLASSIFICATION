@@ -106,10 +106,23 @@ class _ModelContent extends StatelessWidget {
             .map((e) => e.toString())
             .toList();
 
-    final accuracy = (metrics['accuracy'] as num?)?.toDouble() ?? 0;
-    final precision = (metrics['precision'] as num?)?.toDouble() ?? 0;
-    final recall = (metrics['recall'] as num?)?.toDouble() ?? 0;
-    final f1 = (metrics['f1'] as num?)?.toDouble() ?? 0;
+    final hasFullMetrics =
+        metrics['precision'] != null && metrics['recall'] != null;
+    final accuracy = _number(metrics['accuracy']) ??
+        _number(info.metadata['accuracy_fr_nfr']) ??
+        0;
+    final precision = _number(metrics['precision']) ?? 0;
+    final recall = _number(metrics['recall']) ?? 0;
+    final f1 = _number(metrics['f1']) ??
+        _number(metrics['nfr_type_weighted_f1']) ??
+        _number(info.metadata['weighted_f1_nfr_types']) ??
+        0;
+    final nfrAccuracy = _number(metrics['nfr_type_accuracy']) ??
+        _number(info.metadata['accuracy_nfr_types']) ??
+        0;
+    final hammingLoss = _number(metrics['nfr_type_hamming_loss']) ??
+        _number(info.metadata['hamming_loss_nfr_types']) ??
+        0;
 
     return SingleChildScrollView(
       padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
@@ -134,16 +147,47 @@ class _ModelContent extends StatelessWidget {
           Wrap(
             spacing: 12,
             runSpacing: 12,
-            children: [
-              MetricCard(label: 'Accuracy', value: accuracy * 100, suffix: '%'),
-              MetricCard(
-                label: 'Precision',
-                value: precision * 100,
-                suffix: '%',
-              ),
-              MetricCard(label: 'Recall', value: recall * 100, suffix: '%'),
-              MetricCard(label: 'F1-Score', value: f1 * 100, suffix: '%'),
-            ],
+            children: hasFullMetrics
+                ? [
+                    MetricCard(
+                      label: 'Accuracy',
+                      value: accuracy * 100,
+                      suffix: '%',
+                    ),
+                    MetricCard(
+                      label: 'Precision',
+                      value: precision * 100,
+                      suffix: '%',
+                    ),
+                    MetricCard(
+                      label: 'Recall',
+                      value: recall * 100,
+                      suffix: '%',
+                    ),
+                    MetricCard(label: 'F1-Score', value: f1 * 100, suffix: '%'),
+                  ]
+                : [
+                    MetricCard(
+                      label: 'FR/NFR Accuracy',
+                      value: accuracy * 100,
+                      suffix: '%',
+                    ),
+                    MetricCard(
+                      label: 'NFR Accuracy',
+                      value: nfrAccuracy * 100,
+                      suffix: '%',
+                    ),
+                    MetricCard(
+                      label: 'NFR F1',
+                      value: f1 * 100,
+                      suffix: '%',
+                    ),
+                    MetricCard(
+                      label: 'Hamming Loss',
+                      value: hammingLoss * 100,
+                      suffix: '%',
+                    ),
+                  ],
           ),
           const SizedBox(height: 16),
           ConfusionMatrixCard(matrix: matrix, labels: labels),
@@ -214,6 +258,10 @@ class _ModelContent extends StatelessWidget {
         ],
       ),
     );
+  }
+
+  double? _number(Object? value) {
+    return value is num ? value.toDouble() : null;
   }
 
   Widget _infoRow(BuildContext context, String label, Object? value) {

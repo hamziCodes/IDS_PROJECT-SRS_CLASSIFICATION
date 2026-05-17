@@ -110,7 +110,15 @@ def get_model_bundle() -> ModelBundle:
 
 def compute_fr_nfr_metrics(bundle: ModelBundle) -> Dict[str, Any]:
     if not STAGE4_CLEANED_PATH.exists():
-        return {}
+        metadata = bundle.metadata
+        return {
+            "accuracy": metadata.get("accuracy_fr_nfr"),
+            "nfr_type_accuracy": metadata.get("accuracy_nfr_types"),
+            "nfr_type_weighted_f1": metadata.get("weighted_f1_nfr_types"),
+            "nfr_type_hamming_loss": metadata.get("hamming_loss_nfr_types"),
+            "sample_count": metadata.get("n_samples"),
+            "note": "Metrics loaded from saved model metadata",
+        }
 
     df = pd.read_csv(STAGE4_CLEANED_PATH)
     if "RequirementText" not in df.columns:
