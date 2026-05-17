@@ -54,7 +54,7 @@ jobs:
         run: |
           flutter build ipa \
             --release \
-            --export-options-template=ios/ExportOptions.plist \
+            --export-options-plist=ios/ExportOptions.plist \ # <-- TO THIS
             --suppress-analytics
 
       # 6. Upload to TestFlight using App Store Connect API
