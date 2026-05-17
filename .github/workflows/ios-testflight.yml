@@ -51,11 +51,7 @@ jobs:
       # 5. Build iOS app
       - name: Build iOS IPA
         working-directory: ./vertex_app
-        run: |
-          flutter build ipa \
-            --release \
-            --export-options-plist=ios/ExportOptions.plist \ # <-- TO THIS
-            --suppress-analytics
+        run: flutter build ipa --release --export-options-plist=ios/ExportOptions.plist --suppress-analytics
 
       # 6. Upload to TestFlight using App Store Connect API
       - name: Upload to TestFlight
