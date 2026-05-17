@@ -7,6 +7,7 @@ from functools import lru_cache
 from pathlib import Path
 from typing import Any, Dict, List, Optional
 import sys
+import os
 
 import joblib
 import numpy as np
@@ -15,6 +16,13 @@ from sklearn.metrics import accuracy_score, confusion_matrix, precision_recall_f
 
 
 def _find_repo_root(start_path: Path) -> Path:
+    # First check if REPO_ROOT is set in environment (for Vercel)
+    if "REPO_ROOT" in os.environ:
+        root = Path(os.environ["REPO_ROOT"])
+        if (root / "PROJECT").exists() and (root / "trained_models").exists():
+            return root
+    
+    # Fall back to searching parent directories
     for candidate in start_path.parents:
         if (candidate / "PROJECT").exists() and (candidate / "trained_models").exists():
             return candidate
