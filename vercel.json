@@ -7,14 +7,12 @@
 "builds": [
     {
       "src": "vertex_app/backend/index.py",
-      "use": "@vercel/python"
+      "use": "@vercel/python",
+      "config": {
+        "includeFiles": "{PROJECT/**,trained_models/**,pipeline_common.py}"
+      }
     }
   ],
-  "functions": {
-    "vertex_app/backend/index.py": {
-      "includeFiles": "{PROJECT/**,trained_models/**,pipeline_common.py}"
-    }
-  },
   "routes": [
     {
       "src": "/(.*)",
