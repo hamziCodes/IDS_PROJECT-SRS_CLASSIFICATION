@@ -153,6 +153,53 @@ streamlit run PROJECT/app.py
 
 The app should open in your browser after Streamlit starts.
 
+## Backend API (FastAPI)
+
+The mobile app consumes a FastAPI service that loads the trained models.
+
+```bash
+cd vertex_app/backend
+python -m venv .venv
+.venv\\Scripts\\activate
+pip install -r requirements.txt
+uvicorn app.main:app --host 0.0.0.0 --port 8000 --reload
+```
+
+## Mobile App (Flutter)
+
+The Flutter app lives in `vertex_app/` and targets both Android and iOS.
+
+```bash
+cd vertex_app
+flutter pub get
+flutter run --dart-define=API_BASE_URL=http://10.0.2.2:8000
+```
+
+For iOS simulators, replace the base URL with `http://127.0.0.1:8000`.
+
+### Build
+
+```bash
+flutter build apk --release
+flutter build ios --release
+```
+
+### Deployment notes
+
+- Android emulators use `http://10.0.2.2:8000` to reach the host machine.
+- iOS simulators use `http://127.0.0.1:8000`.
+- Physical devices should point to your machine IP on the local network.
+
+### Backend deployment
+
+For production, run the API with a process manager and a production ASGI server, for example:
+
+```bash
+cd vertex_app/backend
+pip install -r requirements.txt
+uvicorn app.main:app --host 0.0.0.0 --port 8000
+```
+
 ## What gets saved
 
 After a successful pipeline run, the important saved files are:
