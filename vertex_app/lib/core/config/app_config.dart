@@ -1,9 +1,9 @@
 import 'package:flutter/foundation.dart';
 
 class AppConfig {
-  // Primary: Vercel production backend
-  static const String vercelApiBaseUrl =
-      'https://vertex-ids-srs-classification-backend.vercel.app';
+  // Primary: Render production backend
+  static const String renderApiBaseUrl =
+      'https://vertex-ids-backend.onrender.com';
 
   // Fallback: Local development backend (for viva/testing if Vercel fails)
   static const String devApiBaseUrl = 'http://10.0.2.2:8000';
@@ -18,7 +18,7 @@ class AppConfig {
       return fromEnv;
     }
 
-    // Use Vercel production by default
+    // Use Render production by default
     // Dev fallback only if specified in environment
     const useLocalDev = String.fromEnvironment(
       'USE_LOCAL_DEV',
@@ -28,6 +28,6 @@ class AppConfig {
       return kIsWeb ? webDevApiBaseUrl : devApiBaseUrl;
     }
 
-    return vercelApiBaseUrl;
+    return renderApiBaseUrl;
   }
 }

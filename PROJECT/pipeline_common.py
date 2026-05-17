@@ -62,6 +62,7 @@ def ensure_nltk_data():
     # Download the small NLTK resources the text pipeline needs if they are missing.
     for resource, package in [
         ("tokenizers/punkt", "punkt"),
+        ("tokenizers/punkt_tab", "punkt_tab"),
         ("corpora/stopwords", "stopwords"),
         ("corpora/wordnet", "wordnet"),
     ]:

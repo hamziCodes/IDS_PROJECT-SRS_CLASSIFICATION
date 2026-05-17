@@ -2,6 +2,8 @@
 
 from __future__ import annotations
 
+import logging
+
 from fastapi import FastAPI, HTTPException
 from fastapi.middleware.cors import CORSMiddleware
 
@@ -11,6 +13,7 @@ from .schemas import ModelInfoResponse, PredictRequest, PredictResponse, Require
 
 
 app = FastAPI(title="Vertex IDS API", version="1.0.0")
+logger = logging.getLogger(__name__)
 
 app.add_middleware(
     CORSMiddleware,
@@ -53,6 +56,7 @@ def predict(request: PredictRequest) -> PredictResponse:
     except FileNotFoundError as error:
         raise HTTPException(status_code=500, detail=str(error)) from error
     except Exception as error:
+        logger.exception("Prediction failed")
         raise HTTPException(status_code=500, detail="Prediction failed") from error
 
     def to_schema(items):
