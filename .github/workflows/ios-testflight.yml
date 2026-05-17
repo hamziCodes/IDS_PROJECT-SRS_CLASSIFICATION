@@ -40,6 +40,9 @@ jobs:
           p12-file-base64: ${{ secrets.APPSTORE_CERT_P12_BASE64 }}
           p12-password: ${{ secrets.APPSTORE_CERT_PASSWORD }}
       
+      - name: Verify signing identities
+        run: security find-identity -v -p codesigning
+
       - name: Import provisioning profile
         uses: apple-actions/download-provisioning-profiles@v1
         with:
@@ -51,18 +54,46 @@ jobs:
       # 5. Build iOS app
       - name: Build iOS IPA
         working-directory: ./vertex_app
-        run: |
-          flutter build ipa --release \
-            --export-options-plist=ios/ExportOptions.plist \
-            --suppress-analytics \
-            --code-sign-style=manual \
-            --code-sign-identity="Apple Distribution"
+        run: flutter build ios --release --no-codesign --suppress-analytics
 
-      # 6. Upload to TestFlight using App Store Connect API
-      - name: Upload to TestFlight
-        uses: apple-actions/upload-testflight-build@v1
-        with:
-          app-path: 'vertex_app/build/ios/ipa/vertex_app.ipa'
-          issuer-id: ${{ secrets.APPSTORE_ISSUER_ID }}
-          api-key-id: ${{ secrets.APPSTORE_API_KEY_ID }}
-          api-private-key: ${{ secrets.APPSTORE_API_PRIVATE_KEY }}
+      - name: Show installed provisioning profiles
+        run: ls -la ~/Library/MobileDevice/Provisioning\ Profiles
+
+      # 6. Archive and export IPA using native Xcode
+      - name: Archive and Export IPA
+        working-directory: ./vertex_app/ios
+        run: |
+          mkdir -p build
+
+          xcodebuild \
+            -workspace Runner.xcworkspace \
+            -scheme Runner \
+            -configuration Release \
+            -sdk iphoneos \
+            -archivePath build/Runner.xcarchive \
+            CODE_SIGN_STYLE=Manual \
+            DEVELOPMENT_TEAM=TMDKN6YV7D \
+            PRODUCT_BUNDLE_IDENTIFIER=com.vertexsolutions.vertexapp \
+            CODE_SIGN_IDENTITY="Apple Distribution" \
+            PROVISIONING_PROFILE_SPECIFIER="Vertex App TestFlight Profile" \
+            clean archive
+
+          xcodebuild \
+            -exportArchive \
+            -archivePath build/Runner.xcarchive \
+            -exportPath build/AppStore \
+            -exportOptionsPlist ExportOptions.plist
+
+      - name: List exported files
+        working-directory: ./vertex_app/ios
+        run: find build/AppStore
+
+      # 7. Upload to TestFlight
+      - name: Upload IPA to TestFlight
+        working-directory: ./vertex_app/ios
+        run: |
+          xcrun altool --upload-app \
+            --type ios \
+            --file build/AppStore/Runner.ipa \
+            --apiKey ${{ secrets.APPSTORE_API_KEY_ID }} \
+            --apiIssuer ${{ secrets.APPSTORE_ISSUER_ID }}
