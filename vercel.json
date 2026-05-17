@@ -4,19 +4,9 @@
   "env": {
     "PYTHON_VERSION": "3.11"
   },
-"builds": [
-    {
-      "src": "vertex_app/backend/index.py",
-      "use": "@vercel/python",
-      "config": {
-        "includeFiles": "{PROJECT/**,trained_models/**,pipeline_common.py}"
-      }
+"functions": {
+    "api/**/*.py": {
+      "includeFiles": "{PROJECT/**,trained_models/**,pipeline_common.py,vertex_app/**}"
     }
-  ],
-  "routes": [
-    {
-      "src": "/(.*)",
-      "dest": "vertex_app/backend/index.py"
-    }
-  ]
+  }
 }
