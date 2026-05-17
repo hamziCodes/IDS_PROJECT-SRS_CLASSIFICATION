@@ -78,7 +78,6 @@ jobs:
           pod repo update
           echo "  Installing pods..."
           pod install --repo-update
-          pod install:update_search_paths
           
           # Verify Pods are installed
           if [ -d "Pods" ]; then
