@@ -7,8 +7,8 @@ from pathlib import Path
 from fastapi import FastAPI, HTTPException
 from fastapi.middleware.cors import CORSMiddleware
 
-# Because this file is in /api, the repo root is just one level up
-REPO_ROOT = Path(__file__).parent.resolve()
+# Because this file is in /api, the repo root is one level above it.
+REPO_ROOT = Path(__file__).resolve().parents[1]
 backend_path = REPO_ROOT / "vertex_app" / "backend"
 
 # Only insert the backend API path to prevent Streamlit collisions
