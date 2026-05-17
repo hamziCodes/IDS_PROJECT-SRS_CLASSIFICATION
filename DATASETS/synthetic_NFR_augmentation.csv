@@ -1,0 +1,702 @@
+ProjectID,RequirementText,IsFunctional,IsQuality,Availability (A),Fault Tolerance (FT),Legal (L),Look & Feel (LF),Maintainability (MN),Operability (O),Performance (PE),Portability (PO),Scalability (SC),Security (SE),Usability (US),Other (OT)
+SYN-100,The carpooling platform shall maintain a minimum uptime of 99.9% measured on a rolling 30-day window excluding scheduled maintenance windows communicated at least 48 hours in advance.,0,1,1,0,0,0,0,0,0,0,0,0,0,0
+SYN-101,All authentication tokens issued by the restaurant delivery API shall be signed using AES-256 encryption and validated on every request through an OAuth 2.0 bearer token flow.,0,1,0,0,0,0,0,0,0,0,0,1,0,0
+SYN-102,The automated data pipeline shall comply with GDPR Article 17 right-to-erasure obligations by purging all personal data within 72 hours of a verified deletion request.,0,1,0,0,1,0,0,0,0,0,0,0,0,0
+SYN-103,The mobile driver application for the carpooling service shall render consistently on screens ranging from 4.7 inches to 12.9 inches and support both portrait and landscape orientations without layout breakage.,0,1,0,0,0,1,0,0,0,0,0,0,0,0
+SYN-104,The restaurant delivery platform shall process a customer checkout request and return an order confirmation within 1.2 seconds at the 95th percentile under a load of 500 concurrent users.,0,1,0,0,0,0,0,0,1,0,0,0,0,0
+SYN-105,"The backend data pipeline shall be deployable as a Dockerized container image and shall run without modification on AWS ECS, Google Cloud Run, and Azure Container Instances.",0,1,0,0,0,0,0,0,0,1,0,0,0,0
+SYN-106,The carpooling platform shall support horizontal scaling to accommodate a 10x surge in ride-matching requests during peak commuting hours without degradation of response times.,0,1,0,0,0,0,0,0,0,0,1,0,0,0
+SYN-107,The system shall implement role-based access control (RBAC) so that restaurant managers can only view reports scoped to their own outlets and cannot access data belonging to other tenants.,0,1,0,0,0,0,0,0,0,0,0,1,0,0
+SYN-108,The customer-facing ordering web application shall achieve a Web Content Accessibility Guidelines (WCAG) 2.1 Level AA conformance rating so that users with visual impairments can complete an order without assistance.,0,1,0,0,0,0,0,0,0,0,0,0,1,0
+SYN-109,The data pipeline orchestration service shall record structured audit logs for every DAG run including start time end time exit code and operator-level error messages to facilitate post-incident analysis.,0,1,0,0,0,0,0,0,0,0,0,0,0,1
+SYN-110,The carpooling service shall remain available for ride booking and tracking operations during partial backend failures by serving cached route data and queuing booking requests locally for up to 5 minutes.,0,1,0,1,0,0,0,0,0,0,0,0,0,0
+SYN-111,The restaurant delivery platform shall be available to end customers 24 hours a day 7 days a week including public holidays with a maximum tolerated unplanned downtime of 4 hours per calendar month.,0,1,1,0,0,0,0,0,0,0,0,0,0,0
+SYN-112,The data pipeline shall comply with Pakistan's Personal Data Protection Bill requirements by ensuring all personally identifiable information is stored within data centers physically located within national borders to satisfy data sovereignty obligations.,0,1,0,0,1,0,0,0,0,0,0,0,0,0
+SYN-113,The iOS and Android driver applications shall share a single React Native codebase and be deployable to both platforms from a single CI/CD pipeline without platform-specific branching in the business logic layer.,0,1,0,0,0,0,0,0,0,1,0,0,0,0
+SYN-114,The onboarding flow for new restaurant partners shall be completable within 10 minutes by a user with no prior training with no step requiring more than 3 user interactions to advance.,0,1,0,0,0,0,0,0,0,0,0,0,1,0
+SYN-115,The carpooling platform's source code shall adhere to modular monorepo conventions using clearly defined package boundaries so that a developer unfamiliar with the codebase can locate and patch a fare-calculation bug within 2 hours.,0,1,0,0,0,0,1,0,0,0,0,0,0,0
+SYN-116,The automated data pipeline shall degrade gracefully when an upstream data source becomes unreachable by skipping the affected partition logging a structured warning and continuing to process all remaining partitions without operator intervention.,0,1,0,1,0,0,0,0,0,0,0,0,0,0
+SYN-117,The web-based restaurant delivery dashboard shall match the brand color palette defined in the corporate design system using hex codes #E63946 for primary actions and #F1FAEE for background surfaces.,0,1,0,0,0,1,0,0,0,0,0,0,0,0
+SYN-118,The carpooling platform shall execute a ride-match algorithm and return a ranked list of available drivers to the requesting passenger within 800 milliseconds end-to-end at median load.,0,1,0,0,0,0,0,0,1,0,0,0,0,0
+SYN-119,The restaurant delivery application server shall be hardware-agnostic and shall operate correctly on ARM64 and x86-64 processor architectures without recompilation or configuration changes.,0,1,0,0,0,0,0,0,0,1,0,0,0,0
+SYN-120,The carpooling platform database cluster shall scale write throughput automatically from 500 to 50000 transactions per second by adding read replicas and sharding the rides table by geographic region without manual DBA intervention.,0,1,0,0,0,0,0,0,0,0,1,0,0,0
+SYN-121,All payment card data transmitted through the restaurant delivery checkout flow shall be protected using TLS 1.3 and the platform shall undergo a third-party penetration test at least once per calendar year with all critical findings remediated within 30 days.,0,1,0,0,0,0,0,0,0,0,0,1,0,0
+SYN-122,The data pipeline platform shall maintain SLA availability of 99.5% for all scheduled pipeline executions measured monthly with automated alerting triggered when cumulative downtime exceeds 3 hours in any rolling 30-day period.,0,1,1,0,0,0,0,0,0,0,0,0,0,0
+SYN-123,The restaurant delivery platform shall comply with applicable consumer protection regulations in each operating jurisdiction and shall present legally required allergen disclosures prominently on every menu item detail page prior to any purchase action.,0,1,0,0,1,0,0,0,0,0,0,0,0,0
+SYN-124,The carpooling application shall display a consistent visual hierarchy across all screens using the Inter typeface at designated size scales and a maximum of 3 accent colors to ensure a professional and coherent look and feel.,0,1,0,0,0,1,0,0,0,0,0,0,0,0
+SYN-125,The data pipeline framework shall be instrumented so that a data engineer can add a new transformation step by creating a single Python module conforming to the operator interface without modifying any existing pipeline definition files.,0,1,0,0,0,0,1,0,0,0,0,0,0,0
+SYN-126,The automated ETL pipeline shall operate within the resource limits of a standard 4-vCPU 16 GB RAM Kubernetes pod and shall not require elevated cluster-admin privileges to run scheduled jobs.,0,1,0,0,0,0,0,1,0,0,0,0,0,0
+SYN-127,The carpooling platform shall return live vehicle location updates to the passenger application at a refresh interval not exceeding 3 seconds under normal network conditions and no greater than 10 seconds under degraded 3G connectivity.,0,1,0,0,0,0,0,0,1,0,0,0,0,0
+SYN-128,The restaurant delivery web application shall be deployable as a cross-platform Progressive Web App installable on Windows macOS Linux iOS and Android without publishing separate native binaries to platform-specific app stores.,0,1,0,0,0,0,0,0,0,1,0,0,0,0
+SYN-129,The carpooling platform's microservices architecture shall allow the ride-matching service to be scaled independently to 200 instances during sporting events or public holidays without requiring redeployment of the payment or notification services.,0,1,0,0,0,0,0,0,0,0,1,0,0,0
+SYN-130,The carpooling application shall enforce multi-factor authentication for all driver accounts and shall store credential hashes using bcrypt with a minimum cost factor of 12 with no plaintext or reversibly encrypted passwords permitted in the database.,0,1,0,0,0,0,0,0,0,0,0,1,0,0
+SYN-131,New users of the restaurant delivery application shall be able to browse menus add items to a cart and place a first order within 4 minutes of opening the application for the first time with no prior product training.,0,1,0,0,0,0,0,0,0,0,0,0,1,0
+SYN-132,The automated data pipeline shall emit OpenTelemetry-compliant trace spans for every task execution enabling full distributed tracing from ingestion source to data warehouse sink without requiring custom instrumentation in individual operator code.,0,1,0,0,0,0,0,0,0,0,0,0,0,1
+SYN-133,In the event of a primary database node failure the carpooling platform shall automatically promote a hot standby replica and resume accepting ride bookings within 30 seconds using a pre-configured failover policy with no manual operator intervention required.,0,1,0,1,0,0,0,0,0,0,0,0,0,0
+SYN-134,The restaurant delivery platform shall sustain a monthly availability rate of no less than 99.95% for the order placement and tracking APIs with planned maintenance excluded and unplanned outages compensated through customer credit in line with the published SLA.,0,1,1,0,0,0,0,0,0,0,0,0,0,0
+SYN-135,The carpooling platform shall process all driver and passenger personal data in compliance with applicable data protection law and shall obtain explicit opt-in consent before sharing location history with third-party analytics providers as required under data sovereignty frameworks.,0,1,0,0,1,0,0,0,0,0,0,0,0,0
+SYN-136,All public-facing screens of the restaurant delivery mobile application shall use a minimum touch target size of 44x44 points consistent spacing tokens from the design system and legible font sizes no smaller than 14pt to meet brand look and feel standards.,0,1,0,0,0,1,0,0,0,0,0,0,0,0
+SYN-137,The data pipeline codebase shall maintain a test coverage rate of at least 85% across all transformation modules and any new operator merged to the main branch shall include unit tests and a documented rollback procedure.,0,1,0,0,0,0,1,0,0,0,0,0,0,0
+SYN-138,The carpooling platform shall operate fully within a standard corporate network environment including behind an HTTP forward proxy without requiring firewall rule exceptions beyond ports 80 and 443.,0,1,0,0,0,0,0,1,0,0,0,0,0,0
+SYN-139,The restaurant delivery platform shall generate a complete order confirmation page and send a push notification to the customer within 2 seconds of payment authorization at the 99th percentile under peak load of 2000 concurrent checkouts.,0,1,0,0,0,0,0,0,1,0,0,0,0,0
+SYN-140,The carpooling driver application shall be packaged as a cross-platform Dockerized build artifact so that the QA team can spin up a fully functional local environment on any developer machine regardless of host operating system within 5 minutes.,0,1,0,0,0,0,0,0,0,1,0,0,0,0
+SYN-141,The restaurant delivery platform's order management service shall scale elastically to handle a 20x increase in order volume during promotional flash-sale events by auto-provisioning additional compute nodes through the cloud provider's managed autoscaling group.,0,1,0,0,0,0,0,0,0,0,1,0,0,0
+SYN-142,The carpooling platform shall conduct automated static analysis of all API endpoints using OWASP ZAP as part of every CI pipeline run and shall reject any merge that introduces a high-severity vulnerability as defined by the OWASP Top 10.,0,1,0,0,0,0,0,0,0,0,0,1,0,0
+SYN-143,A first-time passenger on the carpooling platform shall be able to understand the ride booking flow and complete their first booking request without consulting documentation with at least 90% task-completion rate observed in usability testing sessions.,0,1,0,0,0,0,0,0,0,0,0,0,1,0
+SYN-144,The automated data pipeline shall publish a data quality scorecard to the internal metrics dashboard after every pipeline run reporting completeness consistency and timeliness dimensions to enable SRE teams to monitor pipeline health without querying raw logs.,0,1,0,0,0,0,0,0,0,0,0,0,0,1
+SYN-145,The data pipeline's message queue layer shall implement redundant nodes across two availability zones and shall continue processing events at full throughput if one availability zone becomes unreachable using an active-active failover configuration.,0,1,0,1,0,0,0,0,0,0,0,0,0,0
+SYN-146,The carpooling platform's core ride-matching and booking services shall maintain 99.8% availability with automatic health checks every 60 seconds and self-healing pod restarts so that passengers experience no service interruption during routine infrastructure maintenance.,0,1,1,0,0,0,0,0,0,0,0,0,0,0
+SYN-147,The restaurant delivery platform shall undergo annual compliance audits against PCI-DSS Level 1 requirements and all audit findings classified as critical shall be remediated and re-verified within 14 calendar days of the audit report delivery.,0,1,0,0,1,0,0,0,0,0,0,0,0,0
+SYN-148,The restaurant delivery partner portal shall present a clean visual interface adopting a card-based layout with consistent 8-pixel grid spacing neutral background tones and a single primary brand color used exclusively for call-to-action elements.,0,1,0,0,0,1,0,0,0,0,0,0,0,0
+SYN-149,The carpooling backend services shall be structured so that the fare engine can be updated and redeployed independently without requiring changes to the matching service or the notification service maintaining zero-downtime deployments via blue-green switching.,0,1,0,0,0,0,1,0,0,0,0,0,0,0
+SYN-150,The automated data pipeline shall be operable by a data analyst with no Linux system administration experience using a self-service web UI that exposes pipeline scheduling backfill triggering and log inspection without requiring SSH access to production servers.,0,1,0,0,0,0,0,1,0,0,0,0,0,0
+SYN-151,The carpooling platform's map rendering service shall deliver an initial tile load for a 15-kilometer radius around the user's location within 1.5 seconds on a standard 4G mobile connection.,0,1,0,0,0,0,0,0,1,0,0,0,0,0
+SYN-152,The restaurant delivery platform's microservice containers shall be hardware-agnostic and the same container image shall execute identically in local developer Docker Desktop environments and in the production Kubernetes cluster without environment-specific code paths.,0,1,0,0,0,0,0,0,0,1,0,0,0,0
+SYN-153,The carpooling platform's notification service shall be independently scalable and shall handle up to 1 million push notification dispatches per hour by consuming from a partitioned Kafka topic without impacting the latency of the ride-matching service.,0,1,0,0,0,0,0,0,0,0,1,0,0,0
+SYN-154,The carpooling platform shall protect all driver identity documents stored in the system using field-level AES-256 encryption and shall restrict access to those documents through RBAC policies granting read permission only to the compliance officer role.,0,1,0,0,0,0,0,0,0,0,0,1,0,0
+SYN-155,Customers of the restaurant delivery application shall be able to customise an order including selecting toppings specifying dietary exclusions and adding delivery instructions using no more than 3 screen transitions with all primary actions reachable within one thumb's reach on a standard smartphone.,0,1,0,0,0,0,0,0,0,0,0,0,1,0
+SYN-156,The data pipeline platform shall emit standardised operational metrics including job queue depth average task duration and late-arrival record counts to a Prometheus endpoint so that platform KPIs can be visualised in Grafana dashboards without custom exporters.,0,1,0,0,0,0,0,0,0,0,0,0,0,1
+SYN-157,The restaurant delivery platform shall implement circuit-breaker patterns on all third-party payment gateway integrations so that a gateway timeout of more than 3 seconds triggers graceful degradation by surfacing an alternative payment method to the customer rather than presenting an error page.,0,1,0,1,0,0,0,0,0,0,0,0,0,0
+SYN-158,The carpooling service driver-facing application shall be available offline for viewing upcoming bookings and accessing navigation instructions for the next scheduled ride using locally cached data when the device loses internet connectivity.,0,1,1,0,0,0,0,0,0,0,0,0,0,0
+SYN-159,The automated data pipeline platform shall retain complete lineage metadata for every dataset transformation and shall provide a queryable API so that data governance teams can trace any field in a report back to its raw source record to satisfy compliance audit requirements.,0,1,0,0,1,0,0,0,0,0,0,0,0,0
+SYN-160,The carpooling platform shall maintain 99.99% uptime measured across any rolling 30-day window.,0,1,1,0,0,0,0,0,0,0,0,0,0,0
+SYN-161,The restaurant delivery API shall failover to a standby node within 15 seconds of primary node failure.,0,1,0,1,0,0,0,0,0,0,0,0,0,0
+SYN-162,The SaaS platform shall comply with GDPR data retention policies deleting inactive user records after 24 months.,0,1,0,0,1,0,0,0,0,0,0,0,0,0
+SYN-163,All application screens shall adhere to the brand color palette using only approved hex values from the design system.,0,1,0,0,0,1,0,0,0,0,0,0,0,0
+SYN-164,All pipeline modules shall follow PEP-8 conventions enabling new developers to onboard within one working day.,0,1,0,0,0,0,1,0,0,0,0,0,0,0
+SYN-165,The data pipeline shall operate within standard Kubernetes resource quotas without requiring elevated cluster privileges.,0,1,0,0,0,0,0,1,0,0,0,0,0,0
+SYN-166,The carpooling matching engine shall return driver results within 800 milliseconds at the 95th percentile.,0,1,0,0,0,0,0,0,1,0,0,0,0,0
+SYN-167,The restaurant delivery application shall run identically on iOS 16 and Android 13 without platform-specific code branches.,0,1,0,0,0,0,0,0,0,1,0,0,0,0
+SYN-168,The SaaS order management service shall auto-scale horizontally to handle a 15x traffic surge during peak hours.,0,1,0,0,0,0,0,0,0,0,1,0,0,0
+SYN-169,All user passwords shall be hashed using bcrypt with a minimum cost factor of 12 before database storage.,0,1,0,0,0,0,0,0,0,0,0,1,0,0
+SYN-170,First-time users shall complete the carpooling registration flow within 3 minutes without external assistance.,0,1,0,0,0,0,0,0,0,0,0,0,1,0
+SYN-171,The pipeline platform shall emit OpenTelemetry trace spans for every task enabling full end-to-end distributed tracing.,0,1,0,0,0,0,0,0,0,0,0,0,0,1
+SYN-172,The restaurant delivery platform shall sustain 99.9% availability for order placement APIs every calendar month.,0,1,1,0,0,0,0,0,0,0,0,0,0,0
+SYN-173,The data pipeline shall implement graceful degradation skipping unavailable partitions and resuming without operator input.,0,1,0,1,0,0,0,0,0,0,0,0,0,0
+SYN-174,The SaaS platform shall comply with SOC 2 Type II requirements and pass an annual third-party compliance audit.,0,1,0,0,1,0,0,0,0,0,0,0,0,0
+SYN-175,The enterprise dashboard shall use a consistent 8-pixel grid spacing and neutral typography across all views.,0,1,0,0,0,1,0,0,0,0,0,0,0,0
+SYN-176,Pipeline operators shall be replaceable by creating a single module implementing the defined operator interface.,0,1,0,0,0,0,1,0,0,0,0,0,0,0
+SYN-177,The carpooling admin console shall function within standard corporate proxy environments on ports 80 and 443 only.,0,1,0,0,0,0,0,1,0,0,0,0,0,0
+SYN-178,The SaaS reporting engine shall generate a full analytics dashboard render within 2 seconds for datasets up to 1 million rows.,0,1,0,0,0,0,0,0,1,0,0,0,0,0
+SYN-179,The backend services shall be packaged as hardware-agnostic Docker images executable on ARM64 and x86-64 architectures.,0,1,0,0,0,0,0,0,0,1,0,0,0,0
+SYN-180,The carpooling notification service shall independently scale to dispatch 500000 push notifications per hour.,0,1,0,0,0,0,0,0,0,0,1,0,0,0
+SYN-181,The SaaS platform shall enforce RBAC ensuring tenant administrators cannot access data belonging to other tenants.,0,1,0,0,0,0,0,0,0,0,0,1,0,0
+SYN-182,The restaurant delivery checkout flow shall be completable in under 4 screen transitions by any first-time user.,0,1,0,0,0,0,0,0,0,0,0,0,1,0
+SYN-183,The data pipeline shall publish job queue depth and task duration metrics to a Prometheus endpoint after every run.,0,1,0,0,0,0,0,0,0,0,0,0,0,1
+SYN-184,The carpooling booking service shall be available offline for viewing upcoming rides using locally cached data.,0,1,1,0,0,0,0,0,0,0,0,0,0,0
+SYN-185,The SaaS payment gateway integration shall activate a circuit-breaker after three consecutive timeouts exceeding 3 seconds.,0,1,0,1,0,0,0,0,0,0,0,0,0,0
+SYN-186,The platform shall retain data lineage metadata satisfying HIPAA audit trail requirements for a minimum of 7 years.,0,1,0,0,1,0,0,0,0,0,0,0,0,0
+SYN-187,The carpooling driver app shall render trip cards using consistent iconography and spacing defined in the component library.,0,1,0,0,0,1,0,0,0,0,0,0,0,0
+SYN-188,Any new microservice shall be deployable independently without modifying shared libraries or redeploying sibling services.,0,1,0,0,0,0,1,0,0,0,0,0,0,0
+SYN-189,The data pipeline self-service UI shall allow a data analyst to trigger backfills without SSH access to production servers.,0,1,0,0,0,0,0,1,0,0,0,0,0,0
+SYN-190,The restaurant delivery platform shall deliver push notifications to customers within 2 seconds of order status change.,0,1,0,0,0,0,0,0,1,0,0,0,0,0
+SYN-191,The SaaS platform shall be deployable as a cross-platform Progressive Web App installable on Windows macOS and Linux.,0,1,0,0,0,0,0,0,0,1,0,0,0,0
+SYN-192,The carpooling platform's ride-matching service shall scale to 200 concurrent instances during public holiday surges.,0,1,0,0,0,0,0,0,0,0,1,0,0,0
+SYN-193,All API communications shall be encrypted using TLS 1.3 with certificate pinning enforced on all mobile clients.,0,1,0,0,0,0,0,0,0,0,0,1,0,0
+SYN-194,90% of new restaurant partner users shall complete onboarding without consulting documentation in usability testing.,0,1,0,0,0,0,0,0,0,0,0,0,1,0
+SYN-195,The pipeline platform shall produce a data quality scorecard reporting completeness consistency and timeliness after each DAG run.,0,1,0,0,0,0,0,0,0,0,0,0,0,1
+SYN-196,The SaaS platform's core APIs shall maintain 99.95% availability with automated health checks every 60 seconds.,0,1,1,0,0,0,0,0,0,0,0,0,0,0
+SYN-197,The carpooling platform shall promote a hot standby replica and resume bookings within 30 seconds of primary database failure.,0,1,0,1,0,0,0,0,0,0,0,0,0,0
+SYN-198,The restaurant delivery platform shall display mandatory allergen disclosures on every menu item before purchase as required by law.,0,1,0,0,1,0,0,0,0,0,0,0,0,0
+SYN-199,The SaaS admin portal shall present a card-based layout with a single primary brand color used exclusively for CTAs.,0,1,0,0,0,1,0,0,0,0,0,0,0,0
+SYN-200,The codebase shall maintain 85% unit test coverage with every merged PR including a documented rollback procedure.,0,1,0,0,0,0,1,0,0,0,0,0,0,0
+SYN-201,The carpooling platform shall operate behind a corporate HTTP forward proxy without requiring custom firewall exceptions.,0,1,0,0,0,0,0,1,0,0,0,0,0,0
+SYN-202,The SaaS search index shall return filtered results within 500 milliseconds for queries across 50 million records.,0,1,0,0,0,0,0,0,1,0,0,0,0,0
+SYN-203,The restaurant delivery container images shall execute identically in local Docker Desktop and production Kubernetes environments.,0,1,0,0,0,0,0,0,0,1,0,0,0,0
+SYN-204,The data pipeline's message broker shall use load balancing across partitioned topics to sustain 1 million events per minute.,0,1,0,0,0,0,0,0,0,0,1,0,0,0
+SYN-205,Driver identity documents shall be protected with field-level AES-256 encryption accessible only to the compliance officer role.,0,1,0,0,0,0,0,0,0,0,0,1,0,0
+SYN-206,Users shall be able to reorder a previous restaurant delivery using no more than 2 taps from the order history screen.,0,1,0,0,0,0,0,0,0,0,0,0,1,0
+SYN-207,The SaaS platform shall record structured audit logs capturing user ID action timestamp and affected resource for every write operation.,0,1,0,0,0,0,0,0,0,0,0,0,0,1
+SYN-208,The carpooling API gateway shall sustain 99.9% uptime with automated failover and zero manual intervention required.,0,1,1,0,0,0,0,0,0,0,0,0,0,0
+SYN-209,The restaurant delivery order service shall queue and replay failed webhook deliveries for up to 24 hours before alerting operations.,0,1,0,1,0,0,0,0,0,0,0,0,0,0
+SYN-210,The SaaS platform shall undergo a GDPR compliance audit annually with all critical findings resolved within 30 days.,0,1,0,0,1,0,0,0,0,0,0,0,0,0
+SYN-211,The carpooling passenger app shall maintain visual consistency with a maximum of 3 accent colors and the Inter typeface throughout.,0,1,0,0,0,1,0,0,0,0,0,0,0,0
+SYN-212,The fare calculation engine shall be redeployable independently using blue-green switching without touching the matching service.,0,1,0,0,0,0,1,0,0,0,0,0,0,0
+SYN-213,The data pipeline web UI shall expose scheduling backfill and log inspection features usable by non-Linux-administrator analysts.,0,1,0,0,0,0,0,1,0,0,0,0,0,0
+SYN-214,The carpooling map tile service shall deliver an initial 15-kilometer radius load within 1.5 seconds on a 4G connection.,0,1,0,0,0,0,0,0,1,0,0,0,0,0
+SYN-215,The SaaS platform shall be built as a hardware-agnostic application deployable without recompilation on any POSIX-compliant host.,0,1,0,0,0,0,0,0,0,1,0,0,0,0
+SYN-216,The restaurant delivery platform shall auto-provision additional nodes to handle a 20x order volume increase during flash sales.,0,1,0,0,0,0,0,0,0,0,1,0,0,0
+SYN-217,The platform shall enforce OAuth 2.0 authorization code flow with PKCE for all third-party application integrations.,0,1,0,0,0,0,0,0,0,0,0,1,0,0
+SYN-218,The carpooling onboarding wizard shall achieve a 90% task-completion rate among new users in formal usability testing.,0,1,0,0,0,0,0,0,0,0,0,0,1,0
+SYN-219,The automated pipeline shall expose a queryable lineage API allowing any dataset field to be traced back to its raw source.,0,1,0,0,0,0,0,0,0,0,0,0,0,1
+SYN-220,The SaaS platform shall guarantee 99.8% availability for tenant-facing APIs with monthly downtime not exceeding 87 minutes.,0,1,1,0,0,0,0,0,0,0,0,0,0,0
+SYN-221,The data pipeline shall implement redundant nodes across two availability zones maintaining full throughput if one zone fails.,0,1,0,1,0,0,0,0,0,0,0,0,0,0
+SYN-222,The carpooling platform shall obtain explicit opt-in consent before sharing passenger location history with analytics partners.,0,1,0,0,1,0,0,0,0,0,0,0,0,0
+SYN-223,The restaurant delivery partner portal shall use a clean card-based layout with 8-pixel grid spacing and neutral background tones.,0,1,0,0,0,1,0,0,0,0,0,0,0,0
+SYN-224,A developer unfamiliar with the SaaS codebase shall locate and patch a billing bug within 2 hours using inline documentation.,0,1,0,0,0,0,1,0,0,0,0,0,0,0
+SYN-225,The carpooling platform shall be operable by a system administrator using only a web-based console without CLI access.,0,1,0,0,0,0,0,1,0,0,0,0,0,0
+SYN-226,The SaaS analytics engine shall process and render a complex multi-join report across 10 million rows in under 3 seconds.,0,1,0,0,0,0,0,0,1,0,0,0,0,0
+SYN-227,The data pipeline build artifact shall be a Dockerized image deployable without modification to AWS GCP and Azure runtimes.,0,1,0,0,0,0,0,0,0,1,0,0,0,0
+SYN-228,The carpooling platform database shall shard the rides table by region and scale writes from 500 to 50000 TPS automatically.,0,1,0,0,0,0,0,0,0,0,1,0,0,0
+SYN-229,The SaaS platform shall conduct automated OWASP ZAP scans on every CI run blocking merges with high-severity vulnerabilities.,0,1,0,0,0,0,0,0,0,0,0,1,0,0
+SYN-230,The restaurant delivery app shall allow customers to customise an order and add delivery instructions within 3 screen transitions.,0,1,0,0,0,0,0,0,0,0,0,0,1,0
+SYN-231,The carpooling platform shall generate an uptime report every 24 hours summarising availability SLA adherence by service.,0,1,0,0,0,0,0,0,0,0,0,0,0,1
+SYN-232,The restaurant delivery platform shall remain available and serve cached menus during upstream inventory service outages.,0,1,1,0,0,0,0,0,0,0,0,0,0,0
+SYN-233,The SaaS application shall use bulkhead isolation so a slow reporting job cannot degrade the core transaction processing path.,0,1,0,1,0,0,0,0,0,0,0,0,0,0
+SYN-234,The platform shall comply with data sovereignty laws storing all PII in data centers physically located within the user's jurisdiction.,0,1,0,0,1,0,0,0,0,0,0,0,0,0
+SYN-235,All modal dialogs and notification banners shall use a consistent visual style defined by the enterprise UI component library.,0,1,0,0,0,1,0,0,0,0,0,0,0,0
+SYN-236,The restaurant delivery service codebase shall use modular monorepo conventions with clear package boundaries and versioned interfaces.,0,1,0,0,0,0,1,0,0,0,0,0,0,0
+SYN-237,The carpooling platform shall operate on standard corporate workstations without requiring administrator-level OS permissions to install.,0,1,0,0,0,0,0,1,0,0,0,0,0,0
+SYN-238,The SaaS data export job shall complete a full tenant dataset export of 5 GB within 10 minutes under normal load.,0,1,0,0,0,0,0,0,1,0,0,0,0,0
+SYN-239,The restaurant delivery web app shall be installable as a cross-platform PWA on iOS Android and desktop browsers without native binaries.,0,1,0,0,0,0,0,0,0,1,0,0,0,0
+SYN-240,The SaaS platform shall elastically scale its worker pool from 10 to 500 instances based on queue depth without manual intervention.,0,1,0,0,0,0,0,0,0,0,1,0,0,0
+SYN-241,All stored user credentials shall use Argon2id hashing and the platform shall enforce a 90-day password rotation policy.,0,1,0,0,0,0,0,0,0,0,0,1,0,0
+SYN-242,The carpooling app error messages shall be written in plain language guiding users to resolution without technical jargon.,0,1,0,0,0,0,0,0,0,0,0,0,1,0
+SYN-243,The data pipeline shall record and expose schema evolution history for every managed dataset in a versioned metadata store.,0,1,0,0,0,0,0,0,0,0,0,0,0,1
+SYN-244,The carpooling platform shall achieve 99.95% availability for the ride-booking endpoint during regional public transport strikes.,0,1,1,0,0,0,0,0,0,0,0,0,0,0
+SYN-245,The SaaS messaging layer shall automatically reroute traffic to healthy nodes within 10 seconds of detecting a node failure.,0,1,0,1,0,0,0,0,0,0,0,0,0,0
+SYN-246,The restaurant delivery platform shall comply with PCI-DSS Level 1 with all critical audit findings remediated within 14 days.,0,1,0,0,1,0,0,0,0,0,0,0,0,0
+SYN-247,The enterprise SaaS dashboard shall follow a dark-mode design option maintaining WCAG 4.5:1 contrast ratios across all components.,0,1,0,0,0,1,0,0,0,0,0,0,0,0
+SYN-248,The carpooling backend shall expose versioned REST APIs allowing clients to migrate gradually without forced simultaneous upgrades.,0,1,0,0,0,0,1,0,0,0,0,0,0,0
+SYN-249,The restaurant delivery platform's admin dashboard shall be operable via keyboard navigation alone without requiring a mouse.,0,1,0,0,0,0,0,1,0,0,0,0,0,0
+SYN-250,The data pipeline ingestion layer shall process 100000 records per second sustained throughput with P99 latency under 200 milliseconds.,0,1,0,0,0,0,0,0,1,0,0,0,0,0
+SYN-251,The SaaS platform services shall run without modification on any OCI-compliant container runtime making deployments hardware-agnostic.,0,1,0,0,0,0,0,0,0,1,0,0,0,0
+SYN-252,The carpooling platform's geofencing service shall scale to cover 500 concurrent city zones without degrading location accuracy.,0,1,0,0,0,0,0,0,0,0,1,0,0,0
+SYN-253,The platform shall perform quarterly penetration testing with all critical vulnerabilities patched before the next release cycle.,0,1,0,0,0,0,0,0,0,0,0,1,0,0
+SYN-254,The SaaS platform shall achieve WCAG 2.1 Level AA conformance enabling screen-reader users to complete all primary workflows.,0,1,0,0,0,0,0,0,0,0,0,0,1,0
+SYN-255,The restaurant delivery platform shall publish a daily availability report summarising P99 latency and error rates per service endpoint.,0,1,0,0,0,0,0,0,0,0,0,0,0,1
+SYN-256,The data pipeline orchestration service shall maintain 99.5% scheduled-execution availability measured on a rolling monthly basis.,0,1,1,0,0,0,0,0,0,0,0,0,0,0
+SYN-257,The carpooling platform shall implement automatic failover for its session store with zero data loss using synchronous replication.,0,1,0,1,0,0,0,0,0,0,0,0,0,0
+SYN-258,The SaaS platform shall ensure all data processing agreements with sub-processors are GDPR Article 28 compliant before activation.,0,1,0,0,1,0,0,0,0,0,0,0,0,0
+SYN-259,All illustration and icon assets used across the restaurant delivery app shall follow the unified visual language defined in the style guide.,0,1,0,0,0,1,0,0,0,0,0,0,0,0
+SYN-260,The SaaS platform shall allow feature flags to be toggled per tenant in production without requiring a code deployment.,0,1,0,0,0,0,1,0,0,0,0,0,0,0
+SYN-261,The carpooling dispatch service shall run within the memory and CPU limits of a standard 2-vCPU 8 GB Kubernetes pod.,0,1,0,0,0,0,0,1,0,0,0,0,0,0
+SYN-262,The restaurant delivery platform shall serve the full menu catalog to the mobile client within 1 second on a standard 4G connection.,0,1,0,0,0,0,0,0,1,0,0,0,0,0
+SYN-263,The SaaS platform backend shall be compilable and runnable on Linux Windows and macOS without OS-specific conditional code blocks.,0,1,0,0,0,0,0,0,0,1,0,0,0,0
+SYN-264,The data pipeline's Kafka consumer group shall rebalance and resume processing within 30 seconds when new worker nodes join the cluster.,0,1,0,0,0,0,0,0,0,0,1,0,0,0
+SYN-265,The carpooling platform shall encrypt all inter-service communications using mutual TLS preventing man-in-the-middle interception.,0,1,0,0,0,0,0,0,0,0,0,1,0,0
+SYN-266,The restaurant delivery app shall display contextual inline validation messages so users can correct form errors without submission.,0,1,0,0,0,0,0,0,0,0,0,0,1,0
+SYN-267,The SaaS platform shall provide a tenant health dashboard showing real-time CPU memory and request-rate metrics without custom tooling.,0,1,0,0,0,0,0,0,0,0,0,0,0,1
+SYN-268,The carpooling platform shall serve trip status updates to passengers even during partial backend outages using edge-cached responses.,0,1,1,0,0,0,0,0,0,0,0,0,0,0
+SYN-269,The restaurant delivery platform shall retry failed database writes up to 3 times with exponential backoff before surfacing an error.,0,1,0,1,0,0,0,0,0,0,0,0,0,0
+SYN-270,The SaaS platform shall comply with CCPA requirements providing California residents a verified data deletion mechanism within 45 days.,0,1,0,0,1,0,0,0,0,0,0,0,0,0
+SYN-271,The carpooling mobile app shall use a bottom navigation bar with icons and labels consistent with the platform's design token library.,0,1,0,0,0,1,0,0,0,0,0,0,0,0
+SYN-272,All database schema migrations shall be versioned backward-compatible and executable without taking the application offline.,0,1,0,0,0,0,1,0,0,0,0,0,0,0
+SYN-273,The restaurant delivery platform shall be fully configurable by operations staff through an admin portal without engineering involvement.,0,1,0,0,0,0,0,1,0,0,0,0,0,0
+SYN-274,The SaaS platform's webhook dispatcher shall deliver event payloads to subscriber endpoints within 500 milliseconds of event creation.,0,1,0,0,0,0,0,0,1,0,0,0,0,0
+SYN-275,The carpooling service shall be packaged as a Dockerized multi-stage build image runnable on any OCI-compliant container runtime.,0,1,0,0,0,0,0,0,0,1,0,0,0,0
+SYN-276,The restaurant delivery platform shall dynamically provision additional database read replicas to maintain query latency under 50 milliseconds at 10x normal load.,0,1,0,0,0,0,0,0,0,0,1,0,0,0
+SYN-277,The SaaS platform shall enforce least-privilege access by default with RBAC policies reviewed and re-certified every 90 days.,0,1,0,0,0,0,0,0,0,0,0,1,0,0
+SYN-278,The carpooling app shall surface a progress indicator within 200 milliseconds of any user action to prevent perceived unresponsiveness.,0,1,0,0,0,0,0,0,0,0,0,0,1,0
+SYN-279,The data pipeline shall maintain a versioned catalog of all managed table schemas accessible via REST API for governance reporting.,0,1,0,0,0,0,0,0,0,0,0,0,0,1
+SYN-280,The Islamabad carpooling network must remain available 99.9% during peak hours 7-9am.,0,1,1,0,0,0,0,0,0,0,0,0,0,0
+SYN-281,Restaurant delivery system must continue offline order caching when 10-inch tablet loses connectivity.,0,1,0,1,0,0,0,0,0,0,0,0,0,0
+SYN-282,Student exchange portal must comply with Islamabad regional transport data privacy regulations.,0,1,0,0,1,0,0,0,0,0,0,0,0,0
+SYN-283,Carpooling app dashboard must use consistent color scheme and map icons for Islamabad landmarks.,0,1,0,0,0,1,0,0,0,0,0,0,0,0
+SYN-284,Delivery platform’s codebase must be modular for rapid menu updates across restaurants.,0,1,0,0,0,0,1,0,0,0,0,0,0,0
+SYN-285,University exchange portal must support one-click document uploads with clear progress indicators.,0,1,0,0,0,0,0,1,0,0,0,0,0,0
+SYN-286,Carpooling route suggestions must render within 2 seconds for up to 500 concurrent requests.,0,1,0,0,0,0,0,0,1,0,0,0,0,0
+SYN-287,Restaurant order system must run on both Android and iOS 10-inch tablets seamlessly.,0,1,0,0,0,0,0,0,0,1,0,0,0,0
+SYN-288,Carpooling platform must support elastic load balancing for 10x growth in Islamabad users.,0,1,0,0,0,0,0,0,0,0,1,0,0,0
+SYN-289,Student exchange system must use JWT-based authentication for all API calls.,0,1,0,0,0,0,0,0,0,0,0,1,0,0
+SYN-290,Delivery app’s checkout flow must have large touch targets for 10-inch tablet users.,0,1,0,0,0,0,0,0,0,0,0,0,1,0
+SYN-291,The carpooling network must support failover to backup servers within 30 seconds.,0,1,1,0,0,0,0,0,0,0,0,0,0,0
+SYN-292,Restaurant system must store order state locally for offline recovery after tablet reboot.,0,1,0,1,0,0,0,0,0,0,0,0,0,0
+SYN-293,Carpooling app must adhere to Islamabad regional fare collection legal standards.,0,1,0,0,1,0,0,0,0,0,0,0,0,0
+SYN-294,Delivery tablet interface must use high-contrast fonts for outdoor restaurant use.,0,1,0,0,0,1,0,0,0,0,0,0,0,0
+SYN-295,Exchange portal logs must be structured for easy debugging by university IT staff.,0,1,0,0,0,0,1,0,0,0,0,0,0,0
+SYN-296,Student portal must provide voice-over guidance for visually impaired users.,0,1,0,0,0,0,0,1,0,0,0,0,0,0
+SYN-297,Carpooling ride matching must process 100 requests per second without latency spikes.,0,1,0,0,0,0,0,0,1,0,0,0,0,0
+SYN-298,Delivery app must adapt layout seamlessly between 10-inch and 12-inch tablet screens.,0,1,0,0,0,0,0,0,0,1,0,0,0,0
+SYN-299,University exchange portal must horizontally scale to 5000 concurrent student sessions.,0,1,0,0,0,0,0,0,0,0,1,0,0,0
+SYN-300,Carpooling payment module must encrypt payloads using TLS 1.3.,0,1,0,0,0,0,0,0,0,0,0,1,0,0
+SYN-301,Restaurant order confirmation must be reachable within three taps on tablet.,0,1,0,0,0,0,0,0,0,0,0,0,1,0
+SYN-302,Islamabad carpooling service must have 99.99% uptime during Friday peak hours.,0,1,1,0,0,0,0,0,0,0,0,0,0,0
+SYN-303,Delivery system must retry failed API calls up to 3 times with exponential backoff.,0,1,0,1,0,0,0,0,0,0,0,0,0,0
+SYN-304,Exchange portal must retain student data according to Islamabad data residency laws.,0,1,0,0,1,0,0,0,0,0,0,0,0,0
+SYN-305,Carpooling map markers must be custom-designed for Islamabad road network clarity.,0,1,0,0,0,1,0,0,0,0,0,0,0,0
+SYN-306,Restaurant backend must allow dynamic addition of new delivery zones without redeployment.,0,1,0,0,0,0,1,0,0,0,0,0,0,0
+SYN-307,Student portal must support drag-and-drop course registration with confirmation popups.,0,1,0,0,0,0,0,1,0,0,0,0,0,0
+SYN-308,Carpooling real-time location updates must have latency under 1 second.,0,1,0,0,0,0,0,0,1,0,0,0,0,0
+SYN-309,Delivery app must run on Samsung and Lenovo 10-inch tablets with same features.,0,1,0,0,0,0,0,0,0,1,0,0,0,0
+SYN-310,University portal must auto-scale compute resources for semester registration peaks.,0,1,0,0,0,0,0,0,0,0,1,0,0,0
+SYN-311,Carpooling driver profiles must use biometric authentication for identity verification.,0,1,0,0,0,0,0,0,0,0,0,1,0,0
+SYN-312,Restaurant tablet UI must have minimum 44x44 pixel touch targets for all buttons.,0,1,0,0,0,0,0,0,0,0,0,0,1,0
+SYN-313,Islamabad carpooling network must have hot standby replication for real-time ride data.,0,1,1,0,0,0,0,0,0,0,0,0,0,0
+SYN-314,Delivery order system must handle sudden tablet power loss without corrupting open orders.,0,1,0,1,0,0,0,0,0,0,0,0,0,0
+SYN-315,Carpooling app must display enforceable terms of service for Islamabad regional commuters.,0,1,0,0,1,0,0,0,0,0,0,0,0,0
+SYN-316,Restaurant dashboard must use circular progress indicators for food preparation time.,0,1,0,0,0,1,0,0,0,0,0,0,0,0
+SYN-317,Exchange portal’s microservices must have versioned APIs for backward compatibility.,0,1,0,0,0,0,1,0,0,0,0,0,0,0
+SYN-318,Student exchange system must provide keyboard shortcuts for power users.,0,1,0,0,0,0,0,1,0,0,0,0,0,0
+SYN-319,Carpooling search results must load in under 800ms for 2000 daily active users.,0,1,0,0,0,0,0,0,1,0,0,0,0,0
+SYN-320,Delivery tablet app must be distributable via both Google Play and Apple App Store.,0,1,0,0,0,0,0,0,0,1,0,0,0,0
+SYN-321,University portal must support sharding for 100,000 student records.,0,1,0,0,0,0,0,0,0,0,1,0,0,0
+SYN-322,Carpooling payment gateway must prevent SQL injection and XSS attacks.,0,1,0,0,0,0,0,0,0,0,0,1,0,0
+SYN-323,Restaurant order tracking must show real-time status with intuitive icons on tablet.,0,1,0,0,0,0,0,0,0,0,0,0,1,0
+SYN-324,Islamabad carpooling must have 99.95% availability during heavy rain disruptions.,0,1,1,0,0,0,0,0,0,0,0,0,0,0
+SYN-325,Delivery system must use circuit breakers to prevent cascading failures.,0,1,0,1,0,0,0,0,0,0,0,0,0,0
+SYN-326,Student portal must follow FERPA-like privacy laws for Islamabad student data.,0,1,0,0,1,0,0,0,0,0,0,0,0,0
+SYN-327,Carpooling app must use skeuomorphic design for car selection screen.,0,1,0,0,0,1,0,0,0,0,0,0,0,0
+SYN-328,Delivery backend must have comprehensive logging for all order state changes.,0,1,0,0,0,0,1,0,0,0,0,0,0,0
+SYN-329,University exchange portal must provide contextual help tooltips for each form field.,0,1,0,0,0,0,0,1,0,0,0,0,0,0
+SYN-330,Carpooling fare calculation must complete within 500ms for 100 simultaneous trips.,0,1,0,0,0,0,0,0,1,0,0,0,0,0
+SYN-331,Restaurant tablet app must support screen rotation from portrait to landscape.,0,1,0,0,0,0,0,0,0,1,0,0,0,0
+SYN-332,Student portal must handle 10,000 concurrent API calls during exam registration.,0,1,0,0,0,0,0,0,0,0,1,0,0,0
+SYN-333,Carpooling driver data must be hashed using bcrypt for storage.,0,1,0,0,0,0,0,0,0,0,0,1,0,0
+SYN-334,Delivery app must use consistent bottom navigation bar across all tablet screens.,0,1,0,0,0,0,0,0,0,0,0,0,1,0
+SYN-335,Islamabad carpooling must support automatic failover to secondary data center.,0,1,1,0,0,0,0,0,0,0,0,0,0,0
+SYN-336,Restaurant order system must preserve cart state after network disconnection.,0,1,0,1,0,0,0,0,0,0,0,0,0,0
+SYN-337,Carpooling platform must retain trip records for 5 years per Islamabad transport law.,0,1,0,0,1,0,0,0,0,0,0,0,0,0
+SYN-338,Delivery tablet interface must use animated transitions between menu categories.,0,1,0,0,0,1,0,0,0,0,0,0,0,0
+SYN-339,Exchange portal must have self-healing scripts for common database connection issues.,0,1,0,0,0,0,1,0,0,0,0,0,0,0
+SYN-340,Student portal must support one-tap document scanning from tablet camera.,0,1,0,0,0,0,0,1,0,0,0,0,0,0
+SYN-341,Carpooling routing engine must handle 5000 waypoint calculations per second.,0,1,0,0,0,0,0,0,1,0,0,0,0,0
+SYN-342,Delivery app must work on Huawei and Apple tablets without vendor lock-in.,0,1,0,0,0,0,0,0,0,1,0,0,0,0
+SYN-343,University portal must scale to 20,000 transactions per second during peak.,0,1,0,0,0,0,0,0,0,0,1,0,0,0
+SYN-344,Carpooling chat messages must be end-to-end encrypted.,0,1,0,0,0,0,0,0,0,0,0,1,0,0
+SYN-345,Restaurant tablet UI must have undo option for accidental order deletions.,0,1,0,0,0,0,0,0,0,0,0,0,1,0
+SYN-346,Islamabad carpooling must have redundant network links for continuous operation.,0,1,1,0,0,0,0,0,0,0,0,0,0,0
+SYN-347,Delivery system must use dead letter queues for failed order processing.,0,1,0,1,0,0,0,0,0,0,0,0,0,0
+SYN-348,Carpooling app must comply with Islamabad anti-discrimination transport policies.,0,1,0,0,1,0,0,0,0,0,0,0,0,0
+SYN-349,Restaurant dashboard must use rounded corners and shadow effects for modern look.,0,1,0,0,0,1,0,0,0,0,0,0,0,0
+SYN-350,Exchange portal’s database schema must be documented for future maintainers.,0,1,0,0,0,0,1,0,0,0,0,0,0,0
+SYN-351,Student portal must provide voice search for course catalogs.,0,1,0,0,0,0,0,1,0,0,0,0,0,0
+SYN-352,Carpooling ETA predictions must update within 300ms of traffic change.,0,1,0,0,0,0,0,0,1,0,0,0,0,0
+SYN-353,Delivery app must render correctly on 10-inch tablets with 1280x800 resolution.,0,1,0,0,0,0,0,0,0,1,0,0,0,0
+SYN-354,University portal must auto-provision container instances for 5000 new users.,0,1,0,0,0,0,0,0,0,0,1,0,0,0
+SYN-355,Carpooling payment tokens must expire after 15 minutes of inactivity.,0,1,0,0,0,0,0,0,0,0,0,1,0,0
+SYN-356,Restaurant tablet order history must be filterable by date and meal type.,0,1,0,0,0,0,0,0,0,0,0,0,1,0
+SYN-357,Islamabad carpooling must provide 99.999% availability for emergency ride requests.,0,1,1,0,0,0,0,0,0,0,0,0,0,0
+SYN-358,Delivery system must sync order data after network restoration without duplicates.,0,1,0,1,0,0,0,0,0,0,0,0,0,0
+SYN-359,Carpooling app must display driver background verification as per Islamabad law.,0,1,0,0,1,0,0,0,0,0,0,0,0,0
+SYN-360,Restaurant must use flat design principles for tablet menu cards.,0,1,0,0,0,1,0,0,0,0,0,0,0,0
+SYN-361,Exchange portal must have automated rollback on deployment failure.,0,1,0,0,0,0,1,0,0,0,0,0,0,0
+SYN-362,Student portal must remember login session across tablet browser tabs.,0,1,0,0,0,0,0,1,0,0,0,0,0,0
+SYN-363,Carpooling matchmaking must process 2500 requests per second with 200ms latency.,0,1,0,0,0,0,0,0,1,0,0,0,0,0
+SYN-364,Delivery app must run on 10-inch tablets with Android 11 and 12.,0,1,0,0,0,0,0,0,0,1,0,0,0,0
+SYN-365,University portal must scale database connections from 50 to 5000 elastically.,0,1,0,0,0,0,0,0,0,0,1,0,0,0
+SYN-366,Carpooling rider location must be anonymized with differential privacy.,0,1,0,0,0,0,0,0,0,0,0,1,0,0
+SYN-367,Restaurant tablet must provide haptic feedback for order confirmation button.,0,1,0,0,0,0,0,0,0,0,0,0,1,0
+SYN-368,Islamabad carpooling must have no single point of failure in ride dispatch.,0,1,1,0,0,0,0,0,0,0,0,0,0,0
+SYN-369,Delivery system must implement saga pattern for distributed order transactions.,0,1,0,1,0,0,0,0,0,0,0,0,0,0
+SYN-370,Carpooling platform must retain trip data for insurance claims as per local law.,0,1,0,0,1,0,0,0,0,0,0,0,0,0
+SYN-371,Restaurant app must use minimalist iconography for faster user recognition.,0,1,0,0,0,1,0,0,0,0,0,0,0,0
+SYN-372,Exchange portal’s configuration must be externalized for environment switching.,0,1,0,0,0,0,1,0,0,0,0,0,0,0
+SYN-373,Student portal must support pinch-to-zoom on course schedule calendar.,0,1,0,0,0,0,0,1,0,0,0,0,0,0
+SYN-374,Carpooling price surge algorithm must run in under 400ms.,0,1,0,0,0,0,0,0,1,0,0,0,0,0
+SYN-375,Delivery tablet app must be installable on 10-inch Lenovo Tab P11.,0,1,0,0,0,0,0,0,0,1,0,0,0,0
+SYN-376,Student portal must handle 50,000 document uploads during application peak.,0,1,0,0,0,0,0,0,0,0,1,0,0,0
+SYN-377,Carpooling driver app must use certificate pinning to prevent MITM attacks.,0,1,0,0,0,0,0,0,0,0,0,1,0,0
+SYN-378,Restaurant tablet must allow one-click reorder from past purchases.,0,1,0,0,0,0,0,0,0,0,0,0,1,0
+SYN-379,Islamabad carpooling must have 99.9% availability during national holidays.,0,1,1,0,0,0,0,0,0,0,0,0,0,0
+SYN-380,Delivery system must survive tablet database corruption via graceful degradation.,0,1,0,1,0,0,0,0,0,0,0,0,0,0
+SYN-381,Carpooling app must follow Islamabad consumer protection e-transport rules.,0,1,0,0,1,0,0,0,0,0,0,0,0,0
+SYN-382,Restaurant dashboard must use consistent card-based layout for menu items.,0,1,0,0,0,1,0,0,0,0,0,0,0,0
+SYN-383,Exchange portal must have canary deployments for risk-free updates.,0,1,0,0,0,0,1,0,0,0,0,0,0,0
+SYN-384,Student portal must provide auto-save for application form every 30 seconds.,0,1,0,0,0,0,0,1,0,0,0,0,0,0
+SYN-385,Carpooling driver assignment must complete within 600ms for 300 concurrent users.,0,1,0,0,0,0,0,0,1,0,0,0,0,0
+SYN-386,Delivery app must run on 10-inch tablets with 2GB RAM efficiently.,0,1,0,0,0,0,0,0,0,1,0,0,0,0
+SYN-387,University portal must scale to 15,000 concurrent user sessions during orientation.,0,1,0,0,0,0,0,0,0,0,1,0,0,0
+SYN-388,Carpooling ride history must be encrypted at rest using AES-256.,0,1,0,0,0,0,0,0,0,0,0,1,0,0
+SYN-389,Restaurant tablet must show confirmation snackbar after each order addition.,0,1,0,0,0,0,0,0,0,0,0,0,1,0
+SYN-390,Islamabad carpooling must have automatic failover within 10 seconds for ride state.,0,1,1,0,0,0,0,0,0,0,0,0,0,0
+SYN-391,Delivery system must re-queue failed order submissions with idempotency keys.,0,1,0,1,0,0,0,0,0,0,0,0,0,0
+SYN-392,Carpooling app must display government-mandated fare breakdown per kilometer.,0,1,0,0,1,0,0,0,0,0,0,0,0,0
+SYN-393,Restaurant app must use blurred background effects for modal dialogs.,0,1,0,0,0,1,0,0,0,0,0,0,0,0
+SYN-394,Exchange portal must have automated performance regression tests in CI/CD.,0,1,0,0,0,0,1,0,0,0,0,0,0,0
+SYN-395,Student portal must provide multi-language support for Urdu and English.,0,1,0,0,0,0,0,1,0,0,0,0,0,0
+SYN-396,Carpooling real-time traffic integration must refresh every 2 seconds.,0,1,0,0,0,0,0,0,1,0,0,0,0,0
+SYN-397,Delivery app must support 10-inch tablets from Xiaomi and Realme brands.,0,1,0,0,0,0,0,0,0,1,0,0,0,0
+SYN-398,University portal must auto-scale storage for 10TB of student documents.,0,1,0,0,0,0,0,0,0,0,1,0,0,0
+SYN-399,Carpooling emergency contact sharing must use authenticated encryption.,0,1,0,0,0,0,0,0,0,0,0,1,0,0
+SYN-400,Islamabad carpooling must maintain 99.99% uptime during heavy fog season.,0,1,1,0,0,0,0,0,0,0,0,0,0,0
+SYN-401,Restaurant delivery tablet must queue offline orders and sync automatically.,0,1,0,1,0,0,0,0,0,0,0,0,0,0
+SYN-402,Student exchange portal must comply with Islamabad cross-border student data transfer laws.,0,1,0,0,1,0,0,0,0,0,0,0,0,0
+SYN-403,Carpooling app must use Islamabad road sign colors for route highlights.,0,1,0,0,0,1,0,0,0,0,0,0,0,0
+SYN-404,Delivery platform’s restaurant management module must be pluggable without core changes.,0,1,0,0,0,0,1,0,0,0,0,0,0,0
+SYN-405,University portal must provide single sign-on for all student services.,0,1,0,0,0,0,0,1,0,0,0,0,0,0
+SYN-406,Carpooling notification push must reach 1000 devices within 1 second.,0,1,0,0,0,0,0,0,1,0,0,0,0,0
+SYN-407,Restaurant tablet app must function on 10-inch Fire HD and Galaxy Tab.,0,1,0,0,0,0,0,0,0,1,0,0,0,0
+SYN-408,Islamabad carpooling must support 10000 daily active users with elastic resources.,0,1,0,0,0,0,0,0,0,0,1,0,0,0
+SYN-409,Delivery system must prevent replay attacks on order submission endpoints.,0,1,0,0,0,0,0,0,0,0,0,1,0,0
+SYN-410,Student portal must have intuitive progress bar for semester registration steps.,0,1,0,0,0,0,0,0,0,0,0,0,1,0
+SYN-411,Carpooling must provide 99.95% availability for trip matching service.,0,1,1,0,0,0,0,0,0,0,0,0,0,0
+SYN-412,Restaurant system must cache order data locally for 24 hours offline.,0,1,0,1,0,0,0,0,0,0,0,0,0,0
+SYN-413,Exchange portal must retain audit logs for 7 years per higher education commission rules.,0,1,0,0,1,0,0,0,0,0,0,0,0,0
+SYN-414,Carpooling must use smooth transitions between ride selection and payment screens.,0,1,0,0,0,1,0,0,0,0,0,0,0,0
+SYN-415,Delivery backend services must be independently deployable via containers.,0,1,0,0,0,0,1,0,0,0,0,0,0,0
+SYN-416,Student exchange system must allow admins to impersonate user accounts for support.,0,1,0,0,0,0,0,1,0,0,0,0,0,0
+SYN-417,Carpooling route refresh must complete within 1.5 seconds for 400 concurrent users.,0,1,0,0,0,0,0,0,1,0,0,0,0,0
+SYN-418,Restaurant app must run on 10-inch tablets with Android 13 and 14.,0,1,0,0,0,0,0,0,0,1,0,0,0,0
+SYN-419,University portal must auto-scale from 100 to 10000 users during enrollment.,0,1,0,0,0,0,0,0,0,0,1,0,0,0
+SYN-420,Carpooling payment info must be tokenized before transmission.,0,1,0,0,0,0,0,0,0,0,0,1,0,0
+SYN-421,Delivery tablet must have one-tap repeat order from transaction history.,0,1,0,0,0,0,0,0,0,0,0,0,1,0
+SYN-422,Islamabad carpooling must have 99.9% availability during metro bus strike days.,0,1,1,0,0,0,0,0,0,0,0,0,0,0
+SYN-423,Restaurant order system must use fallback routing to secondary APIs.,0,1,0,1,0,0,0,0,0,0,0,0,0,0
+SYN-424,Carpooling must display driver certification as per Islamabad transport authority.,0,1,0,0,1,0,0,0,0,0,0,0,0,0
+SYN-425,Delivery app must use vibrant colors for promotional banners on tablets.,0,1,0,0,0,1,0,0,0,0,0,0,0,0
+SYN-426,Exchange portal’s code must follow modular monolith structure for easy refactoring.,0,1,0,0,0,0,1,0,0,0,0,0,0,0
+SYN-427,Student portal must provide batch download for all admission documents.,0,1,0,0,0,0,0,1,0,0,0,0,0,0
+SYN-428,Carpooling driver arrival ETA must recalculate within 200ms of GPS update.,0,1,0,0,0,0,0,0,1,0,0,0,0,0
+SYN-429,Delivery tablet app must support both 10-inch landscape and portrait modes.,0,1,0,0,0,0,0,0,0,1,0,0,0,0
+SYN-430,University portal must handle 20000 concurrent exam result queries.,0,1,0,0,0,0,0,0,0,0,1,0,0,0
+SYN-431,Carpooling driver location sharing must use encrypted WebSocket streams.,0,1,0,0,0,0,0,0,0,0,0,1,0,0
+SYN-432,Restaurant tablet must allow font size adjustment for elderly users.,0,1,0,0,0,0,0,0,0,0,0,0,1,0
+SYN-433,Islamabad carpooling must have redundant servers across two availability zones.,0,1,1,0,0,0,0,0,0,0,0,0,0,0
+SYN-434,Delivery system must use write-ahead logs to prevent order loss.,0,1,0,1,0,0,0,0,0,0,0,0,0,0
+SYN-435,Carpooling must comply with Islamabad carbon emissions reporting regulations.,0,1,0,0,1,0,0,0,0,0,0,0,0,0
+SYN-436,Restaurant dashboard must use toast notifications for order updates.,0,1,0,0,0,1,0,0,0,0,0,0,0,0
+SYN-437,Exchange portal must have feature flags for gradual rollouts.,0,1,0,0,0,0,1,0,0,0,0,0,0,0
+SYN-438,Student portal must allow students to save incomplete applications as drafts.,0,1,0,0,0,0,0,1,0,0,0,0,0,0
+SYN-439,Carpooling surge multiplier must compute within 250ms for dynamic pricing.,0,1,0,0,0,0,0,0,1,0,0,0,0,0
+SYN-440,Delivery app must adapt UI for 10-inch tablets with rounded corners.,0,1,0,0,0,0,0,0,0,1,0,0,0,0
+SYN-441,Student portal must scale to 30000 transcript requests per hour.,0,1,0,0,0,0,0,0,0,0,1,0,0,0
+SYN-442,Carpooling chat system must implement perfect forward secrecy.,0,1,0,0,0,0,0,0,0,0,0,1,0,0
+SYN-443,Restaurant tablet must have gesture-based navigation for menu browsing.,0,1,0,0,0,0,0,0,0,0,0,0,1,0
+SYN-444,Islamabad carpooling must have 99.99% availability during wedding season peaks.,0,1,1,0,0,0,0,0,0,0,0,0,0,0
+SYN-445,Restaurant offline mode must accept orders for up to 8 hours without sync.,0,1,0,1,0,0,0,0,0,0,0,0,0,0
+SYN-446,Carpooling must display fare receipts compliant with Islamabad tax laws.,0,1,0,0,1,0,0,0,0,0,0,0,0,0
+SYN-447,Delivery app must use neumorphic design for tablet order confirmation.,0,1,0,0,0,1,0,0,0,0,0,0,0,0
+SYN-448,Exchange portal’s API layer must be versioned for backward compatibility.,0,1,0,0,0,0,1,0,0,0,0,0,0,0
+SYN-449,Student portal must provide real-time form field validation with inline hints.,0,1,0,0,0,0,0,1,0,0,0,0,0,0
+SYN-450,Carpooling ride cost estimation must return within 150ms for 800 requests.,0,1,0,0,0,0,0,0,1,0,0,0,0,0
+SYN-451,Restaurant tablet app must support Turkish and Arabic language layouts.,0,1,0,0,0,0,0,0,0,1,0,0,0,0
+SYN-452,University exchange portal must handle 50000 course registration attempts simultaneously.,0,1,0,0,0,0,0,0,0,0,1,0,0,0
+SYN-453,Carpooling user session tokens must rotate every 15 minutes.,0,1,0,0,0,0,0,0,0,0,0,1,0,0
+SYN-454,Delivery tablet must allow voice command for order search.,0,1,0,0,0,0,0,0,0,0,0,0,1,0
+SYN-455,Islamabad carpooling must have load balancer failover under 5 seconds.,0,1,1,0,0,0,0,0,0,0,0,0,0,0
+SYN-456,Restaurant system must retry failed webhook deliveries with jitter.,0,1,0,1,0,0,0,0,0,0,0,0,0,0
+SYN-457,Carpooling driver onboarding must verify ID per Islamabad transport rules.,0,1,0,0,1,0,0,0,0,0,0,0,0,0
+SYN-458,Restaurant app must use drop shadows for tablet card components.,0,1,0,0,0,1,0,0,0,0,0,0,0,0
+SYN-459,Exchange portal must have automated database migration rollback capability.,0,1,0,0,0,0,1,0,0,0,0,0,0,0
+SYN-460,Student portal must support fingerprint login on tablets.,0,1,0,0,0,0,0,1,0,0,0,0,0,0
+SYN-461,Carpooling multiple ride matching must process 2000 matches per second.,0,1,0,0,0,0,0,0,1,0,0,0,0,0
+SYN-462,Delivery app must run on 10-inch tablets with Android 9 to 14.,0,1,0,0,0,0,0,0,0,1,0,0,0,0
+SYN-463,University portal must scale to 10000 virtual classroom sessions.,0,1,0,0,0,0,0,0,0,0,1,0,0,0
+SYN-464,Carpooling driver ratings must be stored with cryptographic signatures.,0,1,0,0,0,0,0,0,0,0,0,1,0,0
+SYN-465,Restaurant tablet must have high-contrast mode for outdoor use.,0,1,0,0,0,0,0,0,0,0,0,0,1,0
+SYN-466,Islamabad carpooling must provide 99.5% availability during network congestion.,0,1,1,0,0,0,0,0,0,0,0,0,0,0
+SYN-467,Delivery system must use idempotent order creation keys to avoid duplicates.,0,1,0,1,0,0,0,0,0,0,0,0,0,0
+SYN-468,Carpooling must show Islamabad consumer helpline number as per regulation.,0,1,0,0,1,0,0,0,0,0,0,0,0,0
+SYN-469,Restaurant tablet must use consistent typography across all screens.,0,1,0,0,0,1,0,0,0,0,0,0,0,0
+SYN-470,Exchange portal must support zero-downtime deployments.,0,1,0,0,0,0,1,0,0,0,0,0,0,0
+SYN-471,Student portal must provide keyboard navigation for all form elements.,0,1,0,0,0,0,0,1,0,0,0,0,0,0
+SYN-472,Carpooling location sharing must update every 500ms for driver tracking.,0,1,0,0,0,0,0,0,1,0,0,0,0,0
+SYN-473,Delivery tablet app must handle 10-inch screens with 1920x1200 resolution.,0,1,0,0,0,0,0,0,0,1,0,0,0,0
+SYN-474,University portal must auto-scale database read replicas to 50 instances.,0,1,0,0,0,0,0,0,0,0,1,0,0,0
+SYN-475,Carpooling driver phone numbers must be masked using format-preserving encryption.,0,1,0,0,0,0,0,0,0,0,0,1,0,0
+SYN-476,Restaurant tablet must show order progress with animated spinners.,0,1,0,0,0,0,0,0,0,0,0,0,1,0
+SYN-477,Islamabad carpooling must have active-passive failover for database tier.,0,1,1,0,0,0,0,0,0,0,0,0,0,0
+SYN-478,Restaurant system must store offline orders with conflict resolution on sync.,0,1,0,1,0,0,0,0,0,0,0,0,0,0
+SYN-479,Carpooling must show driver background check status per Islamabad law.,0,1,0,0,1,0,0,0,0,0,0,0,0,0
+SYN-480,Delivery dashboard must use gradient backgrounds for restaurant categories.,0,1,0,0,0,1,0,0,0,0,0,0,0,0
+SYN-481,Exchange portal must have structured logging for distributed tracing.,0,1,0,0,0,0,1,0,0,0,0,0,0,0
+SYN-482,Student portal must provide audible alerts for registration deadlines.,0,1,0,0,0,0,0,1,0,0,0,0,0,0
+SYN-483,Carpooling batch fare processing must finish within 3 seconds for 600 trips.,0,1,0,0,0,0,0,0,1,0,0,0,0,0
+SYN-484,Delivery app must run on 10-inch tablets with 1.5GB RAM minimum.,0,1,0,0,0,0,0,0,0,1,0,0,0,0
+SYN-485,University portal must scale WebSocket connections to 20000 users.,0,1,0,0,0,0,0,0,0,0,1,0,0,0
+SYN-486,Carpooling payment method tokens must be stored in hardware security module.,0,1,0,0,0,0,0,0,0,0,0,1,0,0
+SYN-487,Restaurant tablet must allow drag-and-drop reordering of menu items.,0,1,0,0,0,0,0,0,0,0,0,0,1,0
+SYN-488,Islamabad carpooling must have 99.9% uptime during power shutdowns.,0,1,1,0,0,0,0,0,0,0,0,0,0,0
+SYN-489,Delivery system must use dead letter exchange for unprocessable orders.,0,1,0,1,0,0,0,0,0,0,0,0,0,0
+SYN-490,Carpooling must include digital fare meter as per Islamabad transport ordinance.,0,1,0,0,1,0,0,0,0,0,0,0,0,0
+SYN-491,Restaurant app must use rounded rectangular buttons consistent with design system.,0,1,0,0,0,1,0,0,0,0,0,0,0,0
+SYN-492,Exchange portal must support blue-green deployment strategy.,0,1,0,0,0,0,1,0,0,0,0,0,0,0
+SYN-493,Student portal must provide one-click export of transcripts to PDF.,0,1,0,0,0,0,0,1,0,0,0,0,0,0
+SYN-494,Carpooling driver allocation must compute within 800ms for 1200 requests.,0,1,0,0,0,0,0,0,1,0,0,0,0,0
+SYN-495,Delivery app must render correctly on 10-inch tablets with custom display densities.,0,1,0,0,0,0,0,0,0,1,0,0,0,0
+SYN-496,University exchange portal must scale to 60000 document uploads per hour.,0,1,0,0,0,0,0,0,0,0,1,0,0,0
+SYN-497,Carpooling rider phone numbers must be hashed with salt before storage.,0,1,0,0,0,0,0,0,0,0,0,1,0,0
+SYN-498,Restaurant tablet must support screen reader for visually impaired staff.,0,1,0,0,0,0,0,0,0,0,0,0,1,0
+SYN-499,Islamabad carpooling must maintain availability during fibre optic cuts.,0,1,1,0,0,0,0,0,0,0,0,0,0,0
+SYN-500,Delivery system must replicate order data to three regions for disaster recovery.,0,1,0,1,0,0,0,0,0,0,0,0,0,0
+SYN-501,Carpooling must display route deviation alerts per Islamabad traffic rules.,0,1,0,0,1,0,0,0,0,0,0,0,0,0
+SYN-502,Restaurant dashboard must use monochromatic icons for preparation stages.,0,1,0,0,0,1,0,0,0,0,0,0,0,0
+SYN-503,Exchange portal must have health check endpoints for all microservices.,0,1,0,0,0,0,1,0,0,0,0,0,0,0
+SYN-504,Student portal must provide tooltip explanations for complex academic terms.,0,1,0,0,0,0,0,1,0,0,0,0,0,0
+SYN-505,Carpooling trip history query must return within 200ms for 5000 records.,0,1,0,0,0,0,0,0,1,0,0,0,0,0
+SYN-506,Delivery app must support 10-inch tablets from Nokia and Motorola.,0,1,0,0,0,0,0,0,0,1,0,0,0,0
+SYN-507,Student portal must auto-scale compute for 40000 concurrent quiz attempts.,0,1,0,0,0,0,0,0,0,0,1,0,0,0
+SYN-508,Carpooling driver route history must be encrypted with rotating keys.,0,1,0,0,0,0,0,0,0,0,0,1,0,0
+SYN-509,Restaurant tablet must have clear visual feedback for add-to-cart action.,0,1,0,0,0,0,0,0,0,0,0,0,1,0
+SYN-510,Islamabad carpooling must have 99.95% availability for ride hailing API.,0,1,1,0,0,0,0,0,0,0,0,0,0,0
+SYN-511,Delivery offline mode must sync payment receipts after connection restores.,0,1,0,1,0,0,0,0,0,0,0,0,0,0
+SYN-512,Carpooling must comply with Islamabad women-only ride safety regulations.,0,1,0,0,1,0,0,0,0,0,0,0,0,0
+SYN-513,Restaurant app must use fluid animations for cart expansion on tablets.,0,1,0,0,0,1,0,0,0,0,0,0,0,0
+SYN-514,Exchange portal must have automated canary analysis for rollbacks.,0,1,0,0,0,0,1,0,0,0,0,0,0,0
+SYN-515,Student portal must provide bulk edit for course enrollment selections.,0,1,0,0,0,0,0,1,0,0,0,0,0,0
+SYN-516,Carpooling rider matching must scale to 3000 matches per second.,0,1,0,0,0,0,0,0,1,0,0,0,0,0
+SYN-517,Delivery app must run on 10-inch tablets with Android 10 Go edition.,0,1,0,0,0,0,0,0,0,1,0,0,0,0
+SYN-518,University portal must scale storage to 500TB for research datasets.,0,1,0,0,0,0,0,0,0,0,1,0,0,0
+SYN-519,Carpooling user profile photos must be stripped of EXIF metadata.,0,1,0,0,0,0,0,0,0,0,0,1,0,0
+SYN-520,Restaurant tablet must support double-tap zoom on menu images.,0,1,0,0,0,0,0,0,0,0,0,0,1,0
+SYN-521,Islamabad carpooling must have automatic recovery from AZ outage within 2 minutes.,0,1,1,0,0,0,0,0,0,0,0,0,0,0
+SYN-522,Restaurant system must implement outbox pattern for reliable event publishing.,0,1,0,1,0,0,0,0,0,0,0,0,0,0
+SYN-523,Carpooling must show real-time per-kilometer fare breakdown per Islamabad rules.,0,1,0,0,1,0,0,0,0,0,0,0,0,0
+SYN-524,Delivery UI must use consistent spacing grid across tablet layouts.,0,1,0,0,0,1,0,0,0,0,0,0,0,0
+SYN-525,Exchange portal must support rolling updates without service interruption.,0,1,0,0,0,0,1,0,0,0,0,0,0,0
+SYN-526,Student portal must provide search filters with auto-suggest for courses.,0,1,0,0,0,0,0,1,0,0,0,0,0,0
+SYN-527,Carpooling ETA must recalculate within 100ms after each GPS ping.,0,1,0,0,0,0,0,0,1,0,0,0,0,0
+SYN-528,Delivery app must run on 10-inch tablets with Android 12L optimized.,0,1,0,0,0,0,0,0,0,1,0,0,0,0
+SYN-529,University portal must auto-scale to 20000 API requests per second.,0,1,0,0,0,0,0,0,0,0,1,0,0,0
+SYN-530,Carpooling driver location must be anonymized using k-anonymity technique.,0,1,0,0,0,0,0,0,0,0,0,1,0,0
+SYN-531,Restaurant tablet must show confirmation dialog before order cancellation.,0,1,0,0,0,0,0,0,0,0,0,0,1,0
+SYN-532,Islamabad carpooling must maintain 99.9% uptime during Eid travel rush.,0,1,1,0,0,0,0,0,0,0,0,0,0,0
+SYN-533,Delivery system must use checkpoint-based recovery for order state.,0,1,0,1,0,0,0,0,0,0,0,0,0,0
+SYN-534,Carpooling app must store trip records per Islamabad data retention law.,0,1,0,0,1,0,0,0,0,0,0,0,0,0
+SYN-535,Restaurant dashboard must use card hover effects for menu previews.,0,1,0,0,0,1,0,0,0,0,0,0,0,0
+SYN-536,Exchange portal must have centralized configuration management.,0,1,0,0,0,0,1,0,0,0,0,0,0,0
+SYN-537,Student portal must provide offline access to downloaded course materials.,0,1,0,0,0,0,0,1,0,0,0,0,0,0
+SYN-538,Carpooling batch payment processing must handle 2000 transactions per minute.,0,1,0,0,0,0,0,0,1,0,0,0,0,0
+SYN-539,Delivery app must work on 10-inch tablets with custom ROMs.,0,1,0,0,0,0,0,0,0,1,0,0,0,0
+SYN-540,University portal must scale to 80000 concurrent video streaming sessions.,0,1,0,0,0,0,0,0,0,0,1,0,0,0
+SYN-541,Carpooling chat messages must be deleted after 30 days with secure wipe.,0,1,0,0,0,0,0,0,0,0,0,1,0,0
+SYN-542,Restaurant tablet must allow customers to split bills with visual indicators.,0,1,0,0,0,0,0,0,0,0,0,0,1,0
+SYN-543,Islamabad carpooling must have 99.99% availability for driver acceptance API.,0,1,1,0,0,0,0,0,0,0,0,0,0,0
+SYN-544,Delivery system must rebuild local state from event logs after crash.,0,1,0,1,0,0,0,0,0,0,0,0,0,0
+SYN-545,Carpooling must display environmental surcharge as per Islamabad green transport law.,0,1,0,0,1,0,0,0,0,0,0,0,0,0
+SYN-546,Restaurant app must use parallax scrolling effects for menu headers.,0,1,0,0,0,1,0,0,0,0,0,0,0,0
+SYN-547,Exchange portal must support A/B testing via feature toggles.,0,1,0,0,0,0,1,0,0,0,0,0,0,0
+SYN-548,Student portal must provide collaborative annotation for study materials.,0,1,0,0,0,0,0,1,0,0,0,0,0,0
+SYN-549,Carpooling route optimization must run within 250ms for 1000 requests.,0,1,0,0,0,0,0,0,1,0,0,0,0,0
+SYN-550,Delivery app must run on 10-inch tablets with 1GB RAM and low brightness.,0,1,0,0,0,0,0,0,0,1,0,0,0,0
+SYN-551,University portal must auto-scale to 15000 concurrent assignment submissions.,0,1,0,0,0,0,0,0,0,0,1,0,0,0
+SYN-552,Carpooling payment card data must be transmitted using TLS 1.2 minimum.,0,1,0,0,0,0,0,0,0,0,0,1,0,0
+SYN-553,Restaurant tablet must show order count badge on cart icon.,0,1,0,0,0,0,0,0,0,0,0,0,1,0
+SYN-554,Islamabad carpooling must have three redundant load balancers.,0,1,1,0,0,0,0,0,0,0,0,0,0,0
+SYN-555,Delivery system must apply compensating transactions for failed orders.,0,1,0,1,0,0,0,0,0,0,0,0,0,0
+SYN-556,Carpooling must include digital receipt with tax invoice per Islamabad rules.,0,1,0,0,1,0,0,0,0,0,0,0,0,0
+SYN-557,Restaurant app must use skeleton screens during image loading on tablets.,0,1,0,0,0,1,0,0,0,0,0,0,0,0
+SYN-558,Exchange portal must have graceful shutdown for pod termination.,0,1,0,0,0,0,1,0,0,0,0,0,0,0
+SYN-559,Student portal must provide semester calendar with drag-and-drop events.,0,1,0,0,0,0,0,1,0,0,0,0,0,0
+SYN-560,Carpooling driver matching must achieve 500 matches per second average.,0,1,0,0,0,0,0,0,1,0,0,0,0,0
+SYN-561,Delivery app must function on 10-inch tablets with Android 8.1.,0,1,0,0,0,0,0,0,0,1,0,0,0,0
+SYN-562,Student exchange portal must scale to 30000 file transfers per minute.,0,1,0,0,0,0,0,0,0,0,1,0,0,0
+SYN-563,Carpooling driver record must be encrypted at application layer.,0,1,0,0,0,0,0,0,0,0,0,1,0,0
+SYN-564,Restaurant tablet must support one-tap favorite dish bookmarking.,0,1,0,0,0,0,0,0,0,0,0,0,1,0
+SYN-565,Islamabad carpooling must have 99.95% uptime for payment gateway.,0,1,1,0,0,0,0,0,0,0,0,0,0,0
+SYN-566,Delivery system must use checksums to detect offline storage corruption.,0,1,0,1,0,0,0,0,0,0,0,0,0,0
+SYN-567,Carpooling must display driver badge number as per Islamabad regulations.,0,1,0,0,1,0,0,0,0,0,0,0,0,0
+SYN-568,Restaurant dashboard must use subtle motion design for loading states.,0,1,0,0,0,1,0,0,0,0,0,0,0,0
+SYN-569,Exchange portal must have automated rollback on latency spike detection.,0,1,0,0,0,0,1,0,0,0,0,0,0,0
+SYN-570,Student portal must provide highlight-to-search on course descriptions.,0,1,0,0,0,0,0,1,0,0,0,0,0,0
+SYN-571,Carpooling location update throughput must handle 10000 GPS points per second.,0,1,0,0,0,0,0,0,1,0,0,0,0,0
+SYN-572,Delivery app must run on 10-inch tablets with 1280x800 and 1920x1200.,0,1,0,0,0,0,0,0,0,1,0,0,0,0
+SYN-573,University portal must auto-scale to 20000 concurrent quiz submissions.,0,1,0,0,0,0,0,0,0,0,1,0,0,0
+SYN-574,Carpooling driver payout account numbers must be encrypted in database.,0,1,0,0,0,0,0,0,0,0,0,1,0,0
+SYN-575,Restaurant tablet must suggest popular items based on tap patterns.,0,1,0,0,0,0,0,0,0,0,0,0,1,0
+SYN-576,Islamabad carpooling must have cross-region failover within 1 minute.,0,1,1,0,0,0,0,0,0,0,0,0,0,0
+SYN-577,Delivery system must preserve order intent if tablet crashes mid-order.,0,1,0,1,0,0,0,0,0,0,0,0,0,0
+SYN-578,Carpooling must store insurance policy records per Islamabad transport law.,0,1,0,0,1,0,0,0,0,0,0,0,0,0
+SYN-579,Restaurant app must use expandable bottom sheets for customizations.,0,1,0,0,0,1,0,0,0,0,0,0,0,0
+SYN-580,Exchange portal must have chaos engineering experiments for resilience.,0,1,0,0,0,0,1,0,0,0,0,0,0,0
+SYN-581,Student portal must provide auto-complete for university name fields.,0,1,0,0,0,0,0,1,0,0,0,0,0,0
+SYN-582,Carpooling fare splitting must compute within 300ms for 5 passengers.,0,1,0,0,0,0,0,0,1,0,0,0,0,0
+SYN-583,Delivery app must support 10-inch tablets from Amazon and Google.,0,1,0,0,0,0,0,0,0,1,0,0,0,0
+SYN-584,University portal must scale to 40000 concurrent chat messages per minute.,0,1,0,0,0,0,0,0,0,0,1,0,0,0
+SYN-585,Carpooling user data export must be encrypted with user-provided key.,0,1,0,0,0,0,0,0,0,0,0,1,0,0
+SYN-586,Restaurant tablet must provide haptic feedback for numeric keypad entries.,0,1,0,0,0,0,0,0,0,0,0,0,1,0
+SYN-587,Islamabad carpooling must have auto-healing for crashed pods.,0,1,1,0,0,0,0,0,0,0,0,0,0,0
+SYN-588,Delivery system must handle partial sync conflicts using CRDTs.,0,1,0,1,0,0,0,0,0,0,0,0,0,0
+SYN-589,Carpooling must show per-trip insurance coverage as required by Islamabad.,0,1,0,0,1,0,0,0,0,0,0,0,0,0
+SYN-590,Restaurant dashboard must use color-coded order status badges.,0,1,0,0,0,1,0,0,0,0,0,0,0,0
+SYN-591,Exchange portal must have circuit breakers for downstream dependencies.,0,1,0,0,0,0,1,0,0,0,0,0,0,0
+SYN-592,Student portal must provide quick reply templates for advisor messages.,0,1,0,0,0,0,0,1,0,0,0,0,0,0
+SYN-593,Carpooling ETA broadcast must reach 1000 riders within 500ms.,0,1,0,0,0,0,0,0,1,0,0,0,0,0
+SYN-594,Delivery app must function on 10-inch tablets with odd resolutions.,0,1,0,0,0,0,0,0,0,1,0,0,0,0
+SYN-595,University portal must scale to 10000 video call participants.,0,1,0,0,0,0,0,0,0,0,1,0,0,0
+SYN-596,Carpooling driver vehicle plate numbers must be hashed in logs.,0,1,0,0,0,0,0,0,0,0,0,1,0,0
+SYN-597,Restaurant tablet must provide offline mode indicator with icon.,0,1,0,0,0,0,0,0,0,0,0,0,1,0
+SYN-598,Islamabad carpooling must have 99.9% availability for driver incentives API.,0,1,1,0,0,0,0,0,0,0,0,0,0,0
+SYN-599,Delivery system must replay failed events from dead letter queue.,0,1,0,1,0,0,0,0,0,0,0,0,0,0
+SYN-600,Carpooling must comply with Islamabad disabled passenger accessibility laws.,0,1,0,0,1,0,0,0,0,0,0,0,0,0
+SYN-601,Restaurant app must use shimmer effect while menu loads on tablet.,0,1,0,0,0,1,0,0,0,0,0,0,0,0
+SYN-602,Exchange portal must have rate limiting per tenant to avoid abuse.,0,1,0,0,0,0,1,0,0,0,0,0,0,0
+SYN-603,Student portal must allow saving favorite course sections.,0,1,0,0,0,0,0,1,0,0,0,0,0,0
+SYN-604,Carpooling ride acceptance must process 1500 transactions per second.,0,1,0,0,0,0,0,0,1,0,0,0,0,0
+SYN-605,Delivery app must run on 10-inch tablets with 16:10 aspect ratio.,0,1,0,0,0,0,0,0,0,1,0,0,0,0
+SYN-606,Student portal must auto-scale to 50000 assignment uploads per hour.,0,1,0,0,0,0,0,0,0,0,1,0,0,0
+SYN-607,Carpooling user location history must be anonymized after 90 days.,0,1,0,0,0,0,0,0,0,0,0,1,0,0
+SYN-608,Restaurant tablet must allow guest checkout with minimal taps.,0,1,0,0,0,0,0,0,0,0,0,0,1,0
+SYN-609,Islamabad carpooling must have 99.99% uptime for SOS feature.,0,1,1,0,0,0,0,0,0,0,0,0,0,0
+SYN-610,Delivery system must use optimistic locking for order updates.,0,1,0,1,0,0,0,0,0,0,0,0,0,0
+SYN-611,Carpooling must display fare comparison as per Islamabad consumer law.,0,1,0,0,1,0,0,0,0,0,0,0,0,0
+SYN-612,Restaurant dashboard must use consistent icon library across tablets.,0,1,0,0,0,1,0,0,0,0,0,0,0,0
+SYN-613,Exchange portal must have automated certificate rotation for security.,0,1,0,0,0,0,1,0,0,0,0,0,0,0
+SYN-614,Student portal must provide voice-to-text for application essays.,0,1,0,0,0,0,0,1,0,0,0,0,0,0
+SYN-615,Carpooling cancellation refund must process within 1 second.,0,1,0,0,0,0,0,0,1,0,0,0,0,0
+SYN-616,Delivery app must support 10-inch tablets with stylus input.,0,1,0,0,0,0,0,0,0,1,0,0,0,0
+SYN-617,University portal must scale to 20000 concurrent grade view requests.,0,1,0,0,0,0,0,0,0,0,1,0,0,0
+SYN-618,Carpooling driver tax records must be encrypted with customer keys.,0,1,0,0,0,0,0,0,0,0,0,1,0,0
+SYN-619,Restaurant tablet must show real-time preparation status with icons.,0,1,0,0,0,0,0,0,0,0,0,0,1,0
+SYN-620,Islamabad carpooling must have failover for map tile service.,0,1,1,0,0,0,0,0,0,0,0,0,0,0
+SYN-621,Delivery system must compact offline event store automatically.,0,1,0,1,0,0,0,0,0,0,0,0,0,0
+SYN-622,Carpooling must warn riders of surge pricing as per Islamabad rules.,0,1,0,0,1,0,0,0,0,0,0,0,0,0
+SYN-623,Restaurant app must use spring animations for panel expansions.,0,1,0,0,0,1,0,0,0,0,0,0,0,0
+SYN-624,Exchange portal must support distributed tracing with OpenTelemetry.,0,1,0,0,0,0,1,0,0,0,0,0,0,0
+SYN-625,Student portal must allow uploading multiple documents simultaneously.,0,1,0,0,0,0,0,1,0,0,0,0,0,0
+SYN-626,Carpooling real-time driver position must broadcast to 50 riders under 1 sec.,0,1,0,0,0,0,0,0,1,0,0,0,0,0
+SYN-627,Delivery app must work on 10-inch tablets with Android 10 and 11.,0,1,0,0,0,0,0,0,0,1,0,0,0,0
+SYN-628,University portal must auto-scale to 30000 calendar event syncs.,0,1,0,0,0,0,0,0,0,0,1,0,0,0
+SYN-629,Carpooling ride payment signatures must be verified on server side.,0,1,0,0,0,0,0,0,0,0,0,1,0,0
+SYN-630,Restaurant tablet must provide order summary with line item details.,0,1,0,0,0,0,0,0,0,0,0,0,1,0
+SYN-631,Islamabad carpooling must have active-active load balancer pair.,0,1,1,0,0,0,0,0,0,0,0,0,0,0
+SYN-632,Delivery system must detect split-brain scenarios with lease mechanism.,0,1,0,1,0,0,0,0,0,0,0,0,0,0
+SYN-633,Carpooling must show driver rating as per Islamabad safety standards.,0,1,0,0,1,0,0,0,0,0,0,0,0,0
+SYN-634,Restaurant dashboard must use horizontal scrolling for categories.,0,1,0,0,0,1,0,0,0,0,0,0,0,0
+SYN-635,Exchange portal must have health probes for liveness and readiness.,0,1,0,0,0,0,1,0,0,0,0,0,0,0
+SYN-636,Student portal must provide keyboard shortcuts for navigation menu.,0,1,0,0,0,0,0,1,0,0,0,0,0,0
+SYN-637,Carpooling batch invoice generation must finish within 5 seconds for 2000 rides.,0,1,0,0,0,0,0,0,1,0,0,0,0,0
+SYN-638,Delivery app must run on 10-inch tablets with 2GB RAM and 32GB storage.,0,1,0,0,0,0,0,0,0,1,0,0,0,0
+SYN-639,Student exchange must scale to 50000 concurrent document previews.,0,1,0,0,0,0,0,0,0,0,1,0,0,0
+SYN-640,Carpooling passenger phone must be masked using tokenization.,0,1,0,0,0,0,0,0,0,0,0,1,0,0
+SYN-641,Restaurant tablet must support table flip gesture for order clearing.,0,1,0,0,0,0,0,0,0,0,0,0,1,0
+SYN-642,Islamabad carpooling must have 99.9% availability for driver onboarding.,0,1,1,0,0,0,0,0,0,0,0,0,0,0
+SYN-643,Delivery system must store offline events in encrypted SQLite.,0,1,0,1,0,0,0,0,0,0,0,0,0,0
+SYN-644,Carpooling must follow Islamabad emergency response integration laws.,0,1,0,0,1,0,0,0,0,0,0,0,0,0
+SYN-645,Restaurant app must use blur effect for background during dialogs.,0,1,0,0,0,1,0,0,0,0,0,0,0,0
+SYN-646,Exchange portal must have graceful degradation when cache fails.,0,1,0,0,0,0,1,0,0,0,0,0,0,0
+SYN-647,Student portal must automatically save form inputs every 10 seconds.,0,1,0,0,0,0,0,1,0,0,0,0,0,0
+SYN-648,Carpooling driver acceptance must have 95th percentile latency under 400ms.,0,1,0,0,0,0,0,0,1,0,0,0,0,0
+SYN-649,Delivery app must support 10-inch tablets from Chuwi and Teclast.,0,1,0,0,0,0,0,0,0,1,0,0,0,0
+SYN-650,University portal must scale to 100000 API calls per minute.,0,1,0,0,0,0,0,0,0,0,1,0,0,0
+SYN-651,Carpooling user payment methods must be vaulted offsite.,0,1,0,0,0,0,0,0,0,0,0,1,0,0
+SYN-652,Restaurant tablet must allow quantity adjustment with stepper control.,0,1,0,0,0,0,0,0,0,0,0,0,1,0
+SYN-653,Islamabad carpooling must have redundant Redis cluster for session store.,0,1,1,0,0,0,0,0,0,0,0,0,0,0
+SYN-654,Delivery system must handle corrupted local database by rebuilding from cloud.,0,1,0,1,0,0,0,0,0,0,0,0,0,0
+SYN-655,Carpooling must display maximum passenger limit per Islamabad regulation.,0,1,0,0,1,0,0,0,0,0,0,0,0,0
+SYN-656,Restaurant dashboard must use consistent status indicator colors.,0,1,0,0,0,1,0,0,0,0,0,0,0,0
+SYN-657,Exchange portal must have configurable log levels per service.,0,1,0,0,0,0,1,0,0,0,0,0,0,0
+SYN-658,Student portal must provide one-click course withdrawal with confirmation.,0,1,0,0,0,0,0,1,0,0,0,0,0,0
+SYN-659,Carpooling real-time seat availability must update within 200ms.,0,1,0,0,0,0,0,0,1,0,0,0,0,0
+SYN-660,Delivery app must run on 10-inch tablets with wide color gamut.,0,1,0,0,0,0,0,0,0,1,0,0,0,0
+SYN-661,Student portal must scale to 40000 concurrent video playback streams.,0,1,0,0,0,0,0,0,0,0,1,0,0,0
+SYN-662,Carpooling driver communication logs must be encrypted with TLS.,0,1,0,0,0,0,0,0,0,0,0,1,0,0
+SYN-663,Restaurant tablet must provide barcode scanning for loyalty cards.,0,1,0,0,0,0,0,0,0,0,0,0,1,0
+SYN-664,Islamabad carpooling must have database cluster with automatic failover.,0,1,1,0,0,0,0,0,0,0,0,0,0,0
+SYN-665,Delivery system must handle partial network connectivity with sync queue.,0,1,0,1,0,0,0,0,0,0,0,0,0,0
+SYN-666,Carpooling must show driver vehicle registration per Islamabad rules.,0,1,0,0,1,0,0,0,0,0,0,0,0,0
+SYN-667,Restaurant app must use bottom tab bar with five maximum items.,0,1,0,0,0,1,0,0,0,0,0,0,0,0
+SYN-668,Exchange portal must have retry with backoff for transient failures.,0,1,0,0,0,0,1,0,0,0,0,0,0,0
+SYN-669,Student portal must provide real-time credit hour calculator.,0,1,0,0,0,0,0,1,0,0,0,0,0,0
+SYN-670,Carpooling surge pricing must compute for 500 zones under 2 seconds.,0,1,0,0,0,0,0,0,1,0,0,0,0,0
+SYN-671,Delivery app must work on 10-inch tablets with Bluetooth keyboard.,0,1,0,0,0,0,0,0,0,1,0,0,0,0
+SYN-672,University portal must scale to 25000 concurrent exam proctoring streams.,0,1,0,0,0,0,0,0,0,0,1,0,0,0
+SYN-673,Carpooling passenger identity must be verified with OTP.,0,1,0,0,0,0,0,0,0,0,0,1,0,0
+SYN-674,Restaurant tablet must show popular items badge with star icon.,0,1,0,0,0,0,0,0,0,0,0,0,1,0
+SYN-675,Islamabad carpooling must have 99.9% availability for driver payout service.,0,1,1,0,0,0,0,0,0,0,0,0,0,0
+SYN-676,Delivery system must use persistent volume for offline storage.,0,1,0,1,0,0,0,0,0,0,0,0,0,0
+SYN-677,Carpooling must include emergency contact as required by Islamabad law.,0,1,0,0,1,0,0,0,0,0,0,0,0,0
+SYN-678,Restaurant dashboard must use fixed header during scroll on tablets.,0,1,0,0,0,1,0,0,0,0,0,0,0,0
+SYN-679,Exchange portal must have graceful shutdown for background jobs.,0,1,0,0,0,0,1,0,0,0,0,0,0,0
+SYN-680,Student portal must provide course syllabus preview without download.,0,1,0,0,0,0,0,1,0,0,0,0,0,0
+SYN-681,Carpooling route recalculation must complete within 150ms for deviation.,0,1,0,0,0,0,0,0,1,0,0,0,0,0
+SYN-682,Delivery app must support 10-inch tablets with USB-C docking.,0,1,0,0,0,0,0,0,0,1,0,0,0,0
+SYN-683,University portal must auto-scale to 80000 concurrent session logins.,0,1,0,0,0,0,0,0,0,0,1,0,0,0
+SYN-684,Carpooling driver documents must be stored with client-side encryption.,0,1,0,0,0,0,0,0,0,0,0,1,0,0
+SYN-685,Restaurant tablet must allow pinch-to-zoom on dish photos.,0,1,0,0,0,0,0,0,0,0,0,0,1,0
+SYN-686,Islamabad carpooling must have multi-region database replication.,0,1,1,0,0,0,0,0,0,0,0,0,0,0
+SYN-687,Delivery system must merge offline edits using operational transforms.,0,1,0,1,0,0,0,0,0,0,0,0,0,0
+SYN-688,Carpooling must show total fare including taxes as per Islamabad rules.,0,1,0,0,1,0,0,0,0,0,0,0,0,0
+SYN-689,Restaurant app must use motion easing for transition animations.,0,1,0,0,0,1,0,0,0,0,0,0,0,0
+SYN-690,Exchange portal must support fault injection testing.,0,1,0,0,0,0,1,0,0,0,0,0,0,0
+SYN-691,Student portal must provide copy-paste support for application IDs.,0,1,0,0,0,0,0,1,0,0,0,0,0,0
+SYN-692,Carpooling payment processing must handle 3000 transactions per second.,0,1,0,0,0,0,0,0,1,0,0,0,0,0
+SYN-693,Delivery app must run on 10-inch tablets with 4:3 aspect ratio.,0,1,0,0,0,0,0,0,0,1,0,0,0,0
+SYN-694,Student portal must scale to 20000 concurrent chat support messages.,0,1,0,0,0,0,0,0,0,0,1,0,0,0
+SYN-695,Carpooling driver location must use differential privacy for sharing.,0,1,0,0,0,0,0,0,0,0,0,1,0,0
+SYN-696,Restaurant tablet must provide order timer with visual countdown.,0,1,0,0,0,0,0,0,0,0,0,0,1,0
+SYN-697,Islamabad carpooling must have 99.999% uptime for ride start API.,0,1,1,0,0,0,0,0,0,0,0,0,0,0
+SYN-698,Delivery system must queue offline payments for later processing.,0,1,0,1,0,0,0,0,0,0,0,0,0,0
+SYN-699,Carpooling must display estimated arrival as per Islamabad service standards.,0,1,0,0,1,0,0,0,0,0,0,0,0,0
+SYN-700,Restaurant dashboard must use adaptive layout for split-screen mode.,0,1,0,0,0,1,0,0,0,0,0,0,0,0
+SYN-701,Exchange portal must have automatic dead letter queue cleanup.,0,1,0,0,0,0,1,0,0,0,0,0,0,0
+SYN-702,Student portal must provide quick add to calendar for events.,0,1,0,0,0,0,0,1,0,0,0,0,0,0
+SYN-703,Carpooling driver location update must have 99th percentile latency under 700ms.,0,1,0,0,0,0,0,0,1,0,0,0,0,0
+SYN-704,Delivery app must run on 10-inch tablets with Android 13 Go.,0,1,0,0,0,0,0,0,0,1,0,0,0,0
+SYN-705,University portal must scale to 60000 concurrent assignment submission forms.,0,1,0,0,0,0,0,0,0,0,1,0,0,0
+SYN-706,Carpooling chat media must be encrypted with per-message keys.,0,1,0,0,0,0,0,0,0,0,0,1,0,0
+SYN-707,Restaurant tablet must support swipe to delete from cart.,0,1,0,0,0,0,0,0,0,0,0,0,1,0
+SYN-708,Islamabad carpooling must have failover DNS with 30 second TTL.,0,1,1,0,0,0,0,0,0,0,0,0,0,0
+SYN-709,Delivery system must time-travel debug offline event sequence.,0,1,0,1,0,0,0,0,0,0,0,0,0,0
+SYN-710,Carpooling must show driver route history as per Islamabad transparency law.,0,1,0,0,1,0,0,0,0,0,0,0,0,0
+SYN-711,Restaurant app must use card flip animations for menu details.,0,1,0,0,0,1,0,0,0,0,0,0,0,0
+SYN-712,Exchange portal must have retry storms prevention mechanism.,0,1,0,0,0,0,1,0,0,0,0,0,0,0
+SYN-713,Student portal must auto-fill previous application data with confirmation.,0,1,0,0,0,0,0,1,0,0,0,0,0,0
+SYN-714,Carpooling batch notification must deliver to 5000 users under 3 seconds.,0,1,0,0,0,0,0,0,1,0,0,0,0,0
+SYN-715,Delivery app must support 10-inch tablets with stylus and finger input.,0,1,0,0,0,0,0,0,0,1,0,0,0,0
+SYN-716,Student portal must scale to 100000 grade calculation requests per minute.,0,1,0,0,0,0,0,0,0,0,1,0,0,0
+SYN-717,Carpooling payment confirmation must be signed with HMAC.,0,1,0,0,0,0,0,0,0,0,0,1,0,0
+SYN-718,Restaurant tablet must provide visual separation between appetizers and mains.,0,1,0,0,0,0,0,0,0,0,0,0,1,0
+SYN-719,Islamabad carpooling must have 99.95% availability for driver matching.,0,1,1,0,0,0,0,0,0,0,0,0,0,0
+SYN-720,Delivery system must resolve offline conflicts with last-write-wins.,0,1,0,1,0,0,0,0,0,0,0,0,0,0
+SYN-721,Carpooling must show per-ride insurance deduction as per Islamabad law.,0,1,0,0,1,0,0,0,0,0,0,0,0,0
+SYN-722,Restaurant dashboard must use progress ring for order preparation.,0,1,0,0,0,1,0,0,0,0,0,0,0,0
+SYN-723,Exchange portal must have connection pool monitoring and alerting.,0,1,0,0,0,0,1,0,0,0,0,0,0,0
+SYN-724,Student portal must provide export of grades to CSV with one click.,0,1,0,0,0,0,0,1,0,0,0,0,0,0
+SYN-725,Carpooling route optimization for 100 drivers must finish under 800ms.,0,1,0,0,0,0,0,0,1,0,0,0,0,0
+SYN-726,Delivery app must run on 10-inch tablets with 1024x600 resolution.,0,1,0,0,0,0,0,0,0,1,0,0,0,0
+SYN-727,University portal must scale to 40000 concurrent scholarship applications.,0,1,0,0,0,0,0,0,0,0,1,0,0,0
+SYN-728,Carpooling rider history must be purged with secure deletion.,0,1,0,0,0,0,0,0,0,0,0,1,0,0
+SYN-729,Restaurant tablet must show calorie information with tooltip.,0,1,0,0,0,0,0,0,0,0,0,0,1,0
+SYN-730,Islamabad carpooling must have stand-by replicas for critical services.,0,1,1,0,0,0,0,0,0,0,0,0,0,0
+SYN-731,Delivery system must replay missed events from event store after restart.,0,1,0,1,0,0,0,0,0,0,0,0,0,0
+SYN-732,Carpooling must verify driver fitness certificate as per Islamabad rules.,0,1,0,0,1,0,0,0,0,0,0,0,0,0
+SYN-733,Restaurant app must use dynamic island for notification display.,0,1,0,0,0,1,0,0,0,0,0,0,0,0
+SYN-734,Exchange portal must have timeout configuration per endpoint.,0,1,0,0,0,0,1,0,0,0,0,0,0,0
+SYN-735,Student portal must provide course recommendation based on past enrollment.,0,1,0,0,0,0,0,1,0,0,0,0,0,0
+SYN-736,Carpooling fare estimation must have p95 latency under 350ms.,0,1,0,0,0,0,0,0,1,0,0,0,0,0
+SYN-737,Delivery app must support 10-inch tablets with HDR display.,0,1,0,0,0,0,0,0,0,1,0,0,0,0
+SYN-738,Student portal must scale to 120000 transcript downloads per day.,0,1,0,0,0,0,0,0,0,0,1,0,0,0
+SYN-739,Carpooling driver rating must be obfuscated during dispute resolution.,0,1,0,0,0,0,0,0,0,0,0,1,0,0
+SYN-740,Restaurant tablet must support dark mode automatically at night.,0,1,0,0,0,0,0,0,0,0,0,0,1,0
+SYN-741,Islamabad carpooling must have 99.9% uptime for customer support chat.,0,1,1,0,0,0,0,0,0,0,0,0,0,0
+SYN-742,Delivery system must use idempotent event processing with deduplication.,0,1,0,1,0,0,0,0,0,0,0,0,0,0
+SYN-743,Carpooling must display digital meter calibration date per Islamabad law.,0,1,0,0,1,0,0,0,0,0,0,0,0,0
+SYN-744,Restaurant dashboard must use sticky call-to-action button on scroll.,0,1,0,0,0,1,0,0,0,0,0,0,0,0
+SYN-745,Exchange portal must have pessimistic locking for critical updates.,0,1,0,0,0,0,1,0,0,0,0,0,0,0
+SYN-746,Student portal must allow pinning frequently used sections.,0,1,0,0,0,0,0,1,0,0,0,0,0,0
+SYN-747,Carpooling batch ETA update must finish within 2 seconds for 1000 rides.,0,1,0,0,0,0,0,0,1,0,0,0,0,0
+SYN-748,Delivery app must run on 10-inch tablets with Android 7.1.,0,1,0,0,0,0,0,0,0,1,0,0,0,0
+SYN-749,University portal must scale to 30000 concurrent library resource views.,0,1,0,0,0,0,0,0,0,0,1,0,0,0
+SYN-750,Carpooling user location must be encrypted using homomorphic encryption.,0,1,0,0,0,0,0,0,0,0,0,1,0,0
+SYN-751,Restaurant tablet must provide context menu on long press.,0,1,0,0,0,0,0,0,0,0,0,0,1,0
+SYN-752,Islamabad carpooling must have automatic recovery for network partitions.,0,1,1,0,0,0,0,0,0,0,0,0,0,0
+SYN-753,Delivery system must preserve causal ordering of offline events.,0,1,0,1,0,0,0,0,0,0,0,0,0,0
+SYN-754,Carpooling must include waiting time charges as per Islamabad tariff rules.,0,1,0,0,1,0,0,0,0,0,0,0,0,0
+SYN-755,Restaurant app must use corner swipe for quick cart access.,0,1,0,0,0,1,0,0,0,0,0,0,0,0
+SYN-756,Exchange portal must have thread pool sizing based on load.,0,1,0,0,0,0,1,0,0,0,0,0,0,0
+SYN-757,Student portal must provide bulk action for enrollment changes.,0,1,0,0,0,0,0,1,0,0,0,0,0,0
+SYN-758,Carpooling dynamic pricing must recalculate all zones under 1.5 seconds.,0,1,0,0,0,0,0,0,1,0,0,0,0,0
+SYN-759,Delivery app must function on 10-inch tablets with 3GB RAM maximum.,0,1,0,0,0,0,0,0,0,1,0,0,0,0
+SYN-760,Student portal must scale to 70000 concurrent scholarship form submissions.,0,1,0,0,0,0,0,0,0,0,1,0,0,0
+SYN-761,Carpooling ride share invite links must be signed with short expiry.,0,1,0,0,0,0,0,0,0,0,0,1,0,0
+SYN-762,Restaurant tablet must show item availability with red dot indicator.,0,1,0,0,0,0,0,0,0,0,0,0,1,0
+SYN-763,Islamabad carpooling must have 99.99% availability for trip cancellation API.,0,1,1,0,0,0,0,0,0,0,0,0,0,0
+SYN-764,Delivery system must use local-first architecture with sync later.,0,1,0,1,0,0,0,0,0,0,0,0,0,0
+SYN-765,Carpooling must display fuel surcharge as per Islamabad guidelines.,0,1,0,0,1,0,0,0,0,0,0,0,0,0
+SYN-766,Restaurant dashboard must have floating action button for new orders.,0,1,0,0,0,1,0,0,0,0,0,0,0,0
+SYN-767,Exchange portal must have jitter for retry to avoid thundering herd.,0,1,0,0,0,0,1,0,0,0,0,0,0,0
+SYN-768,Student portal must provide undo for accidental course drop.,0,1,0,0,0,0,0,1,0,0,0,0,0,0
+SYN-769,Carpooling seat map refresh must load within 400ms for 200 users.,0,1,0,0,0,0,0,0,1,0,0,0,0,0
+SYN-770,Delivery app must support 10-inch tablets with foldable screen.,0,1,0,0,0,0,0,0,0,1,0,0,0,0
+SYN-771,University portal must scale to 15000 concurrent forum posts.,0,1,0,0,0,0,0,0,0,0,1,0,0,0
+SYN-772,Carpooling payment receipts must be digitally signed.,0,1,0,0,0,0,0,0,0,0,0,1,0,0
+SYN-773,Restaurant tablet must allow click-to-call for restaurant support.,0,1,0,0,0,0,0,0,0,0,0,0,1,0
+SYN-774,Islamabad carpooling must have read replica for reporting queries.,0,1,1,0,0,0,0,0,0,0,0,0,0,0
+SYN-775,Delivery system must apply monotonic reads for event consistency.,0,1,0,1,0,0,0,0,0,0,0,0,0,0
+SYN-776,Carpooling must comply with Islamabad badge display for commercial vehicles.,0,1,0,0,1,0,0,0,0,0,0,0,0,0
+SYN-777,Restaurant app must use icon badges for new order notifications.,0,1,0,0,0,1,0,0,0,0,0,0,0,0
+SYN-778,Exchange portal must have database connection retry with exponential backoff.,0,1,0,0,0,0,1,0,0,0,0,0,0,0
+SYN-779,Student portal must provide keyboard accessible dropdown menus.,0,1,0,0,0,0,0,1,0,0,0,0,0,0
+SYN-780,Carpooling driver incentive calculation must finish under 500ms.,0,1,0,0,0,0,0,0,1,0,0,0,0,0
+SYN-781,Delivery app must run on 10-inch tablets with Android 12 and 13.,0,1,0,0,0,0,0,0,0,1,0,0,0,0
+SYN-782,Student portal must scale to 90000 concurrent exam answer uploads.,0,1,0,0,0,0,0,0,0,0,1,0,0,0
+SYN-783,Carpooling rider feedback must be anonymized before analysis.,0,1,0,0,0,0,0,0,0,0,0,1,0,0
+SYN-784,Restaurant tablet must show estimated delivery time with icon.,0,1,0,0,0,0,0,0,0,0,0,0,1,0
+SYN-785,Islamabad carpooling must have 99.9% availability for promo code service.,0,1,1,0,0,0,0,0,0,0,0,0,0,0
+SYN-786,Delivery system must apply vector clocks for offline conflict detection.,0,1,0,1,0,0,0,0,0,0,0,0,0,0
+SYN-787,Carpooling must show digital token used as per Islamabad transport act.,0,1,0,0,1,0,0,0,0,0,0,0,0,0
+SYN-788,Restaurant dashboard must use rounded corners for all panels.,0,1,0,0,0,1,0,0,0,0,0,0,0,0
+SYN-789,Exchange portal must have bulkhead pattern for tenant isolation.,0,1,0,0,0,0,1,0,0,0,0,0,0,0
+SYN-790,Student portal must provide smart search for course codes.,0,1,0,0,0,0,0,1,0,0,0,0,0,0
+SYN-791,Carpooling batch payment must process 5000 transactions per minute.,0,1,0,0,0,0,0,0,1,0,0,0,0,0
+SYN-792,Delivery app must work on 10-inch tablets with Wi-Fi only mode.,0,1,0,0,0,0,0,0,0,1,0,0,0,0
+SYN-793,University portal must scale to 50000 concurrent internship applications.,0,1,0,0,0,0,0,0,0,0,1,0,0,0
+SYN-794,Carpooling driver payouts must be encrypted in transit and at rest.,0,1,0,0,0,0,0,0,0,0,0,1,0,0
+SYN-795,Restaurant tablet must support pull-to-refresh for menu updates.,0,1,0,0,0,0,0,0,0,0,0,0,1,0
+SYN-796,Islamabad carpooling must have cached routes for offline availability.,0,1,1,0,0,0,0,0,0,0,0,0,0,0
+SYN-797,Delivery system must merge offline changes with three-way merge.,0,1,0,1,0,0,0,0,0,0,0,0,0,0
+SYN-798,Carpooling must show driver training certificate per Islamabad standards.,0,1,0,0,1,0,0,0,0,0,0,0,0,0
+SYN-799,Restaurant app must use micro-interactions for button presses.,0,1,0,0,0,1,0,0,0,0,0,0,0,0
+SYN-800,Exchange portal must have automated retries for stale connection handles.,0,1,0,0,0,0,1,0,0,0,0,0,0,0
