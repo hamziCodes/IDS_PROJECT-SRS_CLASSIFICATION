@@ -7,14 +7,13 @@ from pathlib import Path
 from fastapi import FastAPI, HTTPException
 from fastapi.middleware.cors import CORSMiddleware
 
-# Ensure backend and PROJECT paths are importable when running on Vercel
+# Ensure backend path is importable when running on Vercel
 REPO_ROOT = Path(__file__).parent.parent.resolve()
 backend_path = REPO_ROOT / "vertex_app" / "backend"
-project_path = REPO_ROOT / "PROJECT"
+
+# Only insert the backend API path to prevent Streamlit collisions
 if str(backend_path) not in sys.path:
     sys.path.insert(0, str(backend_path))
-if str(project_path) not in sys.path:
-    sys.path.insert(0, str(project_path))
 
 os.environ.setdefault("REPO_ROOT", str(REPO_ROOT))
 
