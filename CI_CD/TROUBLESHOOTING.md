@@ -2,6 +2,23 @@
 
 Common issues and their solutions for the iOS TestFlight CI/CD workflow.
 
+## 🚨 Most Common Issue: PhaseScriptExecution Error
+
+If you're seeing:
+```
+Command PhaseScriptExecution failed with a nonzero exit code
+```
+
+**⚡ See:** [FIX_PHASESCRIPT_ERROR.md](FIX_PHASESCRIPT_ERROR.md) ← **Start here!**
+
+This comprehensive guide covers:
+- Root causes and solutions
+- Step-by-step fix process
+- Common variations and fixes
+- What to do on Windows (you!)
+
+---
+
 ## Build Issues
 
 ### "Certificate not found" Error

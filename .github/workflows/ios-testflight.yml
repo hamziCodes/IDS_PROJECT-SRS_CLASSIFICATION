@@ -62,6 +62,45 @@ jobs:
         working-directory: ./vertex_app
         run: flutter pub get
 
+      # 3.5 Pre-build diagnostics
+      - name: Pre-build iOS diagnostics
+        working-directory: ./vertex_app
+        run: |
+          echo "📱 iOS Build Environment:"
+          echo "  Xcode version: $(xcode-select -p)"
+          echo "  Flutter version: $(flutter --version)"
+          echo "  Dart version: $(dart --version)"
+          
+          echo ""
+          echo "📦 Pod setup:"
+          cd ios
+          echo "  Fetching pods..."
+          pod repo update
+          echo "  Installing pods..."
+          pod install --repo-update
+          pod install:update_search_paths
+          
+          # Verify Pods are installed
+          if [ -d "Pods" ]; then
+            echo "  ✓ Pods directory exists"
+            echo "  Installed pods: $(ls Pods | wc -l) packages"
+          else
+            echo "  ✗ Pods directory not found!"
+            exit 1
+          fi
+          
+          cd ..
+          
+          echo ""
+          echo "📋 ExportOptions.plist:"
+          if plutil -lint ios/ExportOptions.plist > /dev/null 2>&1; then
+            echo "  ✓ ExportOptions.plist is valid XML"
+          else
+            echo "  ✗ ExportOptions.plist has XML errors!"
+            plutil -lint ios/ExportOptions.plist
+            exit 1
+          fi
+
       # 4. Setup iOS signing (Corrected to use .p12 certificates)
       - name: Import certificates
         uses: apple-actions/import-codesign-certs@v2
@@ -80,25 +119,58 @@ jobs:
           api-key-id: ${{ secrets.APPSTORE_API_KEY_ID }}
           api-private-key: ${{ secrets.APPSTORE_API_PRIVATE_KEY }}
 
-      # 5. Build iOS app
+      # 5. Build iOS app with verbose output
       - name: Build iOS IPA
         working-directory: ./vertex_app
         run: |
+          # Clean previous builds
+          rm -rf build
+          
+          # Build with verbose output to catch real errors
           flutter build ios \
             --release \
             --no-codesign \
             --suppress-analytics \
-            --build-number "$GITHUB_RUN_NUMBER"
+            --build-number "$GITHUB_RUN_NUMBER" \
+            --verbose 2>&1 | tee build.log
+          
+          # Check if build succeeded
+          if [ ${PIPESTATUS[0]} -ne 0 ]; then
+            echo "::error::iOS build failed. See logs above for details."
+            echo "::group::Build Log (last 100 lines)"
+            tail -n 100 build.log
+            echo "::endgroup::"
+            exit 1
+          fi
 
       - name: Show installed provisioning profiles
-        run: ls -la ~/Library/MobileDevice/Provisioning\ Profiles
+        run: ls -la ~/Library/MobileDevice/Provisioning\ Profiles/ || echo "No provisioning profiles found"
+      
+      - name: Verify Runner.app exists
+        working-directory: ./vertex_app
+        run: |
+          if [ -d "build/ios/Release-iphoneos/Runner.app" ]; then
+            echo "✓ Runner.app built successfully"
+            ls -la build/ios/Release-iphoneos/Runner.app | head -20
+          else
+            echo "✗ Runner.app not found!"
+            find build/ios -name "*.app" -type d || echo "No .app files found"
+            exit 1
+          fi
 
       # 6. Archive and export IPA using native Xcode
       - name: Archive and Export IPA
         working-directory: ./vertex_app/ios
         run: |
           mkdir -p build
-
+          
+          # Clean previous archives
+          rm -rf build/Runner.xcarchive build/AppStore
+          
+          echo "🔍 Listing current build directory contents..."
+          ls -la build/ || true
+          
+          echo "📦 Creating Xcode archive..."
           xcodebuild \
             -workspace Runner.xcworkspace \
             -scheme Runner \
@@ -113,24 +185,108 @@ jobs:
             CURRENT_PROJECT_VERSION="$GITHUB_RUN_NUMBER" \
             GCC_TREAT_WARNINGS_AS_ERRORS=NO \
             SWIFT_TREAT_WARNINGS_AS_ERRORS=NO \
-            clean archive
-
+            clean archive 2>&1 | tee archive.log
+          
+          if [ ${PIPESTATUS[0]} -ne 0 ]; then
+            echo "::error::Xcode archive failed!"
+            echo "::group::Archive Log (last 150 lines)"
+            tail -n 150 archive.log
+            echo "::endgroup::"
+            exit 1
+          fi
+          
+          echo "✓ Archive created successfully"
+          ls -lah build/Runner.xcarchive/
+          
+          echo "📤 Exporting archive to IPA..."
           xcodebuild \
             -exportArchive \
             -archivePath build/Runner.xcarchive \
             -exportPath build/AppStore \
-            -exportOptionsPlist ExportOptions.plist
+            -exportOptionsPlist ExportOptions.plist \
+            2>&1 | tee export.log
+          
+          if [ ${PIPESTATUS[0]} -ne 0 ]; then
+            echo "::error::IPA export failed!"
+            echo "::group::Export Log (last 150 lines)"
+            tail -n 150 export.log
+            echo "::endgroup::"
+            exit 1
+          fi
+          
+          echo "✓ IPA exported successfully"
 
       - name: List exported files
         working-directory: ./vertex_app/ios
-        run: find build/AppStore
+        run: |
+          echo "📂 Build output structure:"
+          find build -type f -name "*.ipa" -o -name "*.app" | head -20
+          
+          if [ -f "build/AppStore/Runner.ipa" ]; then
+            echo "✓ IPA file ready: $(du -h build/AppStore/Runner.ipa | cut -f1)"
+          else
+            echo "✗ IPA file not found!"
+            ls -la build/AppStore/
+            exit 1
+          fi
 
       # 7. Upload to TestFlight
       - name: Upload IPA to TestFlight
         working-directory: ./vertex_app/ios
         run: |
+          echo "📤 Uploading to TestFlight..."
           xcrun altool --upload-app \
             --type ios \
             --file build/AppStore/Runner.ipa \
             --apiKey ${{ secrets.APPSTORE_API_KEY_ID }} \
-            --apiIssuer ${{ secrets.APPSTORE_ISSUER_ID }}
+            --apiIssuer ${{ secrets.APPSTORE_ISSUER_ID }} \
+            --show-progress
+          
+          if [ $? -eq 0 ]; then
+            echo "✓ Upload successful! Build should appear in TestFlight in 5-10 minutes."
+          else
+            echo "✗ Upload failed!"
+            exit 1
+          fi
+
+      # 8. Upload build log as artifact (for debugging)
+      - name: Upload build logs on failure
+        if: failure()
+        uses: actions/upload-artifact@v4
+        with:
+          name: ios-build-logs
+          path: vertex_app/build.log
+          retention-days: 7
+        continue-on-error: true
+
+      # 9. Notify on success
+      - name: Build Success Summary
+        if: success()
+        run: |
+          echo "✅ iOS TestFlight Build Successful!"
+          echo ""
+          echo "📊 Build Summary:"
+          echo "  • Build Number: $GITHUB_RUN_NUMBER"
+          echo "  • Bundle ID: $BUNDLE_ID"
+          echo "  • Team ID: $DEVELOPMENT_TEAM"
+          echo "  • Profile: $PROVISIONING_PROFILE_SPECIFIER"
+          echo ""
+          echo "⏱️  TestFlight should have your build ready in 5-10 minutes."
+          echo "📱 Check App Store Connect → Your App → TestFlight to download."
+          echo ""
+          echo "🔗 View build: https://github.com/${{ github.repository }}/actions/runs/${{ github.run_id }}"
+
+      # 10. On failure, provide troubleshooting info
+      - name: Troubleshooting Info on Failure
+        if: failure()
+        run: |
+          echo "❌ Build failed! Here's what to check:"
+          echo ""
+          echo "1. 📋 Review the logs above for the actual error message"
+          echo "2. 🔑 Verify all GitHub secrets are set correctly"
+          echo "3. 📱 Check that your provisioning profile is valid"
+          echo "4. 📦 Ensure all dependencies are compatible"
+          echo "5. 🎯 Verify Bundle ID matches App Store Connect"
+          echo ""
+          echo "📚 See CI_CD/TROUBLESHOOTING.md for detailed help"
+          echo "🔗 Workflow: https://github.com/${{ github.repository }}/actions/runs/${{ github.run_id }}"
