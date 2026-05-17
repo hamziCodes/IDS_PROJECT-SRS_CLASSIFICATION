@@ -21,20 +21,22 @@ if str(project_path) not in sys.path:
 # Set environment variable for model paths
 os.environ["REPO_ROOT"] = str(REPO_ROOT)
 
-# Create main app if backend import fails
-app = FastAPI(title="Vertex IDS API", version="1.0.0")
-
 # Try to import the backend app
 try:
-    from app.main import app as backend_app
-    app = backend_app
+    from app.main import app
 except ImportError as e:
     print(f"Failed to import backend app: {e}")
     print(f"REPO_ROOT: {REPO_ROOT}")
     print(f"backend_path: {backend_path}")
     print(f"backend_path exists: {backend_path.exists()}")
     
-    # Create a fallback health endpoint
+    # Create a fallback app with error info
+    app = FastAPI(title="Vertex IDS API", version="1.0.0")
+    
+    @app.get("/")
+    def root():
+        return {"status": "error", "message": f"Backend import failed: {str(e)}"}
+    
     @app.get("/health")
     def health():
         return {"status": "error", "message": f"Backend import failed: {str(e)}"}

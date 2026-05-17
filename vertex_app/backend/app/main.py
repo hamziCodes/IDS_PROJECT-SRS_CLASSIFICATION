@@ -21,6 +21,20 @@ app.add_middleware(
 )
 
 
+@app.get("/")
+def root() -> dict:
+    return {
+        "status": "ok",
+        "message": "Vertex IDS API is running",
+        "version": "1.0.0",
+        "endpoints": {
+            "health": "/health",
+            "predict": "/predict",
+            "model-info": "/model-info"
+        }
+    }
+
+
 @app.on_event("startup")
 def warm_models() -> None:
     get_model_bundle()
