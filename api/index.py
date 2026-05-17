@@ -50,6 +50,3 @@ if not any(isinstance(m, CORSMiddleware) for m in app.user_middleware):
         allow_methods=["*"],
         allow_headers=["*"],
     )
-
-# Export for Vercel
-handler = app
