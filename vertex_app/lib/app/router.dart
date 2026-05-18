@@ -3,6 +3,7 @@ import 'package:go_router/go_router.dart';
 
 import '../features/about/presentation/about_screen.dart';
 import '../features/chat/presentation/chat_screen.dart';
+import '../features/diagnostics/presentation/diagnostics_screen.dart';
 import '../features/model/presentation/model_screen.dart';
 import '../features/splash/presentation/splash_screen.dart';
 
@@ -33,6 +34,10 @@ final appRouter = GoRouter(
     GoRoute(
       path: '/about',
       pageBuilder: (context, state) => _fadeTransition(const AboutScreen()),
+    ),
+    GoRoute(
+      path: '/diagnostics',
+      pageBuilder: (context, state) => _fadeTransition(const DiagnosticsScreen()),
     ),
   ],
 );

@@ -28,6 +28,13 @@ class AppDrawer extends StatelessWidget {
                   'assets/images/app_logo.png',
                   width: 36,
                   height: 36,
+                  errorBuilder: (context, error, stackTrace) {
+                    return const Icon(
+                      Icons.auto_graph_rounded,
+                      size: 36,
+                      color: AppColors.accentSoft,
+                    );
+                  },
                 ),
                 const SizedBox(width: 12),
                 Expanded(
@@ -57,6 +64,7 @@ class AppDrawer extends StatelessWidget {
           _drawerItem(context, Icons.chat_bubble_outline, 'Home', '/home'),
           _drawerItem(context, Icons.memory, 'Model', '/model'),
           _drawerItem(context, Icons.info_outline, 'About Us', '/about'),
+          _drawerItem(context, Icons.bug_report_outlined, 'Diagnostics', '/diagnostics'),
           const Spacer(),
           Padding(
             padding: const EdgeInsets.all(16),

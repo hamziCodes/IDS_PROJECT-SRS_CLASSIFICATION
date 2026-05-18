@@ -30,6 +30,13 @@ class VertexAppBar extends StatelessWidget implements PreferredSizeWidget {
               'assets/images/app_logo.png',
               width: 28,
               height: 28,
+              errorBuilder: (context, error, stackTrace) {
+                return const Icon(
+                  Icons.auto_graph_rounded,
+                  size: 28,
+                  color: AppColors.accentSoft,
+                );
+              },
             ),
           ),
           const SizedBox(width: 10),
