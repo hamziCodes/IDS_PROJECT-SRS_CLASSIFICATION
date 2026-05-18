@@ -24,7 +24,7 @@ void main() {
       StartupLog.add('WidgetsFlutterBinding.ensureInitialized() complete');
 
       await SystemChrome.setEnabledSystemUIMode(SystemUiMode.edgeToEdge);
-      await SystemChrome.setSystemUIOverlayStyle(
+      SystemChrome.setSystemUIOverlayStyle(
         const SystemUiOverlayStyle(
           statusBarColor: Colors.transparent,
           systemNavigationBarColor: Colors.transparent,
