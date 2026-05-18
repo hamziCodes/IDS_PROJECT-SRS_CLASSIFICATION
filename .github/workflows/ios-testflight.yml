@@ -72,6 +72,10 @@ jobs:
           echo "  Dart version: $(dart --version)"
           
           echo ""
+          echo "📦 Ensure Flutter iOS artifacts are available (precache):"
+          flutter precache --ios
+
+          echo ""
           echo "📦 Pod setup:"
           cd ios
           echo "  Fetching pods..."
