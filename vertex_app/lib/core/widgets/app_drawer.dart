@@ -64,7 +64,12 @@ class AppDrawer extends StatelessWidget {
           _drawerItem(context, Icons.chat_bubble_outline, 'Home', '/home'),
           _drawerItem(context, Icons.memory, 'Model', '/model'),
           _drawerItem(context, Icons.info_outline, 'About Us', '/about'),
-          _drawerItem(context, Icons.bug_report_outlined, 'Diagnostics', '/diagnostics'),
+          _drawerItem(
+            context,
+            Icons.bug_report_outlined,
+            'Diagnostics',
+            '/diagnostics',
+          ),
           const Spacer(),
           Padding(
             padding: const EdgeInsets.all(16),

@@ -28,7 +28,8 @@ class _DiagnosticsScreenState extends State<DiagnosticsScreen> {
         children: [
           const SectionHeader(
             title: 'Diagnostics',
-            subtitle: 'Startup logs and basic app state for black screen checks.',
+            subtitle:
+                'Startup logs and basic app state for black screen checks.',
           ),
           const SizedBox(height: 12),
           Card(

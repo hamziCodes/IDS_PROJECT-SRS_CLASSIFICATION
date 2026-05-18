@@ -37,7 +37,8 @@ final appRouter = GoRouter(
     ),
     GoRoute(
       path: '/diagnostics',
-      pageBuilder: (context, state) => _fadeTransition(const DiagnosticsScreen()),
+      pageBuilder: (context, state) =>
+          _fadeTransition(const DiagnosticsScreen()),
     ),
   ],
 );
