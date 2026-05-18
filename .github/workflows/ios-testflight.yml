@@ -159,18 +159,38 @@ jobs:
         run: |
           set -euo pipefail
 
-          profile_path=$(ls -t ~/Library/MobileDevice/Provisioning\ Profiles/*.mobileprovision | head -n 1)
+          profile_path=""
+          profile_name=""
+          profile_uuid=""
+
+          for candidate in ~/Library/MobileDevice/Provisioning\ Profiles/*.mobileprovision; do
+            [ -e "$candidate" ] || continue
+
+            temp_plist=$(mktemp)
+            security cms -D -i "$candidate" -o "$temp_plist"
+
+            candidate_bundle_id=$(
+              /usr/libexec/PlistBuddy -c 'Print :Entitlements:application-identifier' "$temp_plist" 2>/dev/null |
+              sed 's/^[^.]*\.//'
+            )
+
+            if [ "$candidate_bundle_id" = "$BUNDLE_ID" ]; then
+              profile_path="$candidate"
+              profile_name=$(/usr/libexec/PlistBuddy -c 'Print :Name' "$temp_plist")
+              profile_uuid=$(/usr/libexec/PlistBuddy -c 'Print :UUID' "$temp_plist")
+              rm -f "$temp_plist"
+              break
+            fi
+
+            rm -f "$temp_plist"
+          done
+
+          if [ -z "$profile_path" ]; then
+            echo "::error::No provisioning profile matching bundle id $BUNDLE_ID was found"
+            exit 1
+          fi
+
           echo "Using provisioning profile file: $profile_path"
-
-          profile_name=$(
-            security cms -D -i "$profile_path" |
-            /usr/libexec/PlistBuddy -c 'Print :Name' /dev/stdin
-          )
-
-          profile_uuid=$(
-            security cms -D -i "$profile_path" |
-            /usr/libexec/PlistBuddy -c 'Print :UUID' /dev/stdin
-          )
 
           echo "profile_name=$profile_name" >> "$GITHUB_OUTPUT"
           echo "profile_uuid=$profile_uuid" >> "$GITHUB_OUTPUT"
