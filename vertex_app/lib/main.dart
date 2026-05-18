@@ -1,5 +1,6 @@
 import 'dart:async';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import 'app/app.dart';
@@ -21,6 +22,15 @@ void main() {
     () async {
       WidgetsFlutterBinding.ensureInitialized();
       StartupLog.add('WidgetsFlutterBinding.ensureInitialized() complete');
+
+      await SystemChrome.setEnabledSystemUIMode(SystemUiMode.edgeToEdge);
+      await SystemChrome.setSystemUIOverlayStyle(
+        const SystemUiOverlayStyle(
+          statusBarColor: Colors.transparent,
+          systemNavigationBarColor: Colors.transparent,
+          systemNavigationBarDividerColor: Colors.transparent,
+        ),
+      );
 
       StartupLog.add('runApp() begin');
       debugPrint('VertexApp: starting');

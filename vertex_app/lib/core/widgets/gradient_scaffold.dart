@@ -27,11 +27,13 @@ class GradientScaffold extends StatelessWidget {
         ),
       ),
       child: Scaffold(
+        extendBody: true,
+        extendBodyBehindAppBar: true,
         backgroundColor: Colors.transparent,
         appBar: appBar,
         drawer: drawer,
         floatingActionButton: floatingActionButton,
-        body: SafeArea(child: body),
+        body: body,
       ),
     );
   }
