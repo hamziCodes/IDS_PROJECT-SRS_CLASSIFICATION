@@ -132,6 +132,29 @@ jobs:
             exit 1
           fi
 
+      # 3.6 Xcode version check (fail early if Xcode < 26)
+      - name: Check Xcode version
+        working-directory: ./vertex_app
+        run: |
+          echo "🔎 Checking Xcode version on runner..."
+          if ! command -v xcodebuild >/dev/null 2>&1; then
+            echo "::warning::xcodebuild not found on this runner. This job requires macOS with Xcode 26+."
+            echo "If you have a self-hosted mac with Xcode 26+, set the job's runs-on to: [self-hosted, macos, xcode-26]"
+            exit 1
+          fi
+          xcodebuild -version
+          ver=$(xcodebuild -version | head -n1 | awk '{print $2}')
+          major=$(echo "$ver" | cut -d. -f1)
+          echo "Detected Xcode version: $ver (major: $major)"
+          if [ "$major" -lt 26 ]; then
+            echo "::error::Xcode $ver detected. App Store Connect requires builds with iOS 26 SDK (Xcode 26+)."
+            echo "Options:"
+            echo "  • Use a self-hosted mac with Xcode 26 and set 'runs-on: [self-hosted, macos, xcode-26]' in this job."
+            echo "  • Build locally on a Mac with Xcode 26 and upload manually."
+            exit 1
+          fi
+          echo "✅ Xcode >= 26 detected: $ver"
+
       # 4. Setup iOS signing (Corrected to use .p12 certificates)
       - name: Import certificates
         uses: apple-actions/import-codesign-certs@v2
