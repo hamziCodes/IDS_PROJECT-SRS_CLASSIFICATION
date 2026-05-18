@@ -11,7 +11,7 @@ on:
 
 jobs:
   build-and-deploy-testflight:
-    runs-on: macos-latest
+    runs-on: macos-26
     
     env:
       FLUTTER_VERSION: "3.41.9"
@@ -55,6 +55,26 @@ jobs:
         with:
           flutter-version: ${{ env.FLUTTER_VERSION }}
           cache: true
+
+      # 2.1 Ensure Xcode 26 is selected
+      - name: Select Xcode 26
+        working-directory: ./vertex_app
+        run: |
+          echo "🔧 Selecting Xcode 26 if available..."
+          set -e
+          if [ -d "/Applications/Xcode_26.app" ]; then
+            sudo xcode-select -s /Applications/Xcode_26.app
+          elif [ -d "/Applications/Xcode-26.app" ]; then
+            sudo xcode-select -s /Applications/Xcode-26.app
+          elif [ -d "/Applications/Xcode.app" ]; then
+            # If the image's default Xcode is already 26, use it; otherwise print installed Xcodes
+            echo "/Applications/Xcode.app exists; printing version..."
+          else
+            echo "::warning::Xcode 26 not found in expected locations. Listing /Applications:" 
+            ls -la /Applications || true
+          fi
+          echo "Current xcodebuild version:"
+          xcodebuild -version || true
 
       # 3. Install dependencies
       - name: Install Flutter dependencies
