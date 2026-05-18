@@ -1,9 +1,7 @@
 #include "Generated.xcconfig"
-# Include CocoaPods profile settings so CocoaPods can inject required build settings
-# This file is created by CocoaPods at: Pods/Target Support Files/Pods-Runner/Pods-Runner.profile.xcconfig
-# It may not exist until `pod install` runs, but including it here ensures Xcode picks up the settings
-# when present.
+// Include CocoaPods profile settings so CocoaPods can inject required build settings
+// This file is created by CocoaPods at: Pods/Target Support Files/Pods-Runner/Pods-Runner.profile.xcconfig
+// It may not exist until `pod install` runs, but including it here ensures Xcode picks up the settings
+// when present.
 #include "Pods/Target Support Files/Pods-Runner/Pods-Runner.profile.xcconfig"
-#if exists("Pods/Target Support Files/Pods-Runner/Pods-Runner.release.xcconfig")
 #include "Pods/Target Support Files/Pods-Runner/Pods-Runner.release.xcconfig"
-#endif
