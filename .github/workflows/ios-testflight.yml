@@ -155,9 +155,11 @@ jobs:
       - name: Build iOS IPA
         working-directory: ./vertex_app
         run: |
+          set -euo pipefail
+
           # Clean previous builds
           rm -rf build
-          
+
           # Build with verbose output to catch real errors
           flutter build ios \
             --release \
@@ -165,9 +167,9 @@ jobs:
             --suppress-analytics \
             --build-number "$GITHUB_RUN_NUMBER" \
             --verbose 2>&1 | tee build.log
-          
-          # Check if build succeeded
-          if [ ${PIPESTATUS[0]} -ne 0 ]; then
+
+          # Check if build succeeded (pipefail makes the pipeline return a non-zero code on failure)
+          if [ $? -ne 0 ]; then
             echo "::error::iOS build failed. See logs above for details."
             echo "::group::Build Log (last 100 lines)"
             tail -n 100 build.log
@@ -194,14 +196,16 @@ jobs:
       - name: Archive and Export IPA
         working-directory: ./vertex_app/ios
         run: |
+          set -euo pipefail
+
           mkdir -p build
-          
+
           # Clean previous archives
           rm -rf build/Runner.xcarchive build/AppStore
-          
+
           echo "🔍 Listing current build directory contents..."
           ls -la build/ || true
-          
+
           echo "📦 Creating Xcode archive..."
           xcodebuild \
             -workspace Runner.xcworkspace \
@@ -218,18 +222,18 @@ jobs:
             GCC_TREAT_WARNINGS_AS_ERRORS=NO \
             SWIFT_TREAT_WARNINGS_AS_ERRORS=NO \
             clean archive 2>&1 | tee archive.log
-          
-          if [ ${PIPESTATUS[0]} -ne 0 ]; then
+
+          if [ $? -ne 0 ]; then
             echo "::error::Xcode archive failed!"
             echo "::group::Archive Log (last 150 lines)"
             tail -n 150 archive.log
             echo "::endgroup::"
             exit 1
           fi
-          
+
           echo "✓ Archive created successfully"
           ls -lah build/Runner.xcarchive/
-          
+
           echo "📤 Exporting archive to IPA..."
           xcodebuild \
             -exportArchive \
@@ -237,15 +241,15 @@ jobs:
             -exportPath build/AppStore \
             -exportOptionsPlist ExportOptions.plist \
             2>&1 | tee export.log
-          
-          if [ ${PIPESTATUS[0]} -ne 0 ]; then
+
+          if [ $? -ne 0 ]; then
             echo "::error::IPA export failed!"
             echo "::group::Export Log (last 150 lines)"
             tail -n 150 export.log
             echo "::endgroup::"
             exit 1
           fi
-          
+
           echo "✓ IPA exported successfully"
 
       - name: List exported files
