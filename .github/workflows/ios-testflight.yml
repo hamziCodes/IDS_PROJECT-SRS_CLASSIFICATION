@@ -293,7 +293,14 @@ jobs:
             exit 1
           fi
 
-      # 7. Upload to TestFlight
+      # 7. Setup App Store Connect API credentials
+      - name: Setup App Store Connect API Key
+        run: |
+          mkdir -p ~/.appstoreconnect/private_keys
+          echo "${{ secrets.APPSTORE_API_PRIVATE_KEY }}" > ~/.appstoreconnect/private_keys/AuthKey_${{ secrets.APPSTORE_API_KEY_ID }}.p8
+          chmod 600 ~/.appstoreconnect/private_keys/AuthKey_${{ secrets.APPSTORE_API_KEY_ID }}.p8
+
+      # 8. Upload to TestFlight
       - name: Upload IPA to TestFlight
         working-directory: ./vertex_app/ios
         run: |
@@ -315,7 +322,7 @@ jobs:
             exit 1
           fi
 
-      # 8. Upload build log as artifact (for debugging)
+      # 9. Upload build log as artifact (for debugging)
       - name: Upload build logs on failure
         if: failure()
         uses: actions/upload-artifact@v4
@@ -325,7 +332,7 @@ jobs:
           retention-days: 7
         continue-on-error: true
 
-      # 9. Notify on success
+      # 10. Notify on success
       - name: Build Success Summary
         if: success()
         run: |
@@ -341,7 +348,7 @@ jobs:
           echo ""
           echo "🔗 View build: https://github.com/${{ github.repository }}/actions/runs/${{ github.run_id }}"
 
-      # 10. On failure, provide troubleshooting info
+      # 11. On failure, provide troubleshooting info
       - name: Troubleshooting Info on Failure
         if: failure()
         run: |
