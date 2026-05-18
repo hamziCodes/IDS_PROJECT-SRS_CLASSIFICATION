@@ -31,12 +31,9 @@ end
 
 post_install do |installer|
   installer.pods_project.targets.each do |target|
+    flutter_additional_ios_build_settings(target)
     target.build_configurations.each do |config|
       config.build_settings['IPHONEOS_DEPLOYMENT_TARGET'] = '13.0'
-      # Ensure the Flutter engine/framework is discoverable to Swift-based plugin pods
-      # Add both the Pods configuration Flutter folder and the FLUTTER_FRAMEWORK_DIR
-      fs = config.build_settings['FRAMEWORK_SEARCH_PATHS'] || '$(inherited)'
-      config.build_settings['FRAMEWORK_SEARCH_PATHS'] = "#{fs} \"${PODS_CONFIGURATION_BUILD_DIR}/Flutter\" \"${FLUTTER_FRAMEWORK_DIR}\""
     end
   end
 end
