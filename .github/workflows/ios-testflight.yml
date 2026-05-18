@@ -142,11 +142,58 @@ jobs:
       - name: Verify signing identities
         run: security find-identity -v -p codesigning
 
+      - name: Import provisioning profile
+        uses: apple-actions/download-provisioning-profiles@v1
+        with:
+          bundle-id: ${{ env.BUNDLE_ID }}
+          issuer-id: ${{ secrets.APPSTORE_ISSUER_ID }}
+          api-key-id: ${{ secrets.APPSTORE_API_KEY_ID }}
+          api-private-key: ${{ secrets.APPSTORE_API_PRIVATE_KEY }}
+
+      - name: Resolve installed provisioning profile
+        id: resolve_profile
+        run: |
+          set -euo pipefail
+
+          profile_path=""
+          profile_name=""
+
+          for candidate in ~/Library/MobileDevice/Provisioning\ Profiles/*.mobileprovision; do
+            [ -e "$candidate" ] || continue
+
+            temp_plist=$(mktemp)
+            security cms -D -i "$candidate" -o "$temp_plist"
+
+            candidate_bundle_id=$(
+              /usr/libexec/PlistBuddy -c 'Print :Entitlements:application-identifier' "$temp_plist" 2>/dev/null |
+              sed 's/^[^.]*\.//'
+            )
+
+            if [ "$candidate_bundle_id" = "$BUNDLE_ID" ]; then
+              profile_path="$candidate"
+              profile_name=$(/usr/libexec/PlistBuddy -c 'Print :Name' "$temp_plist")
+              rm -f "$temp_plist"
+              break
+            fi
+
+            rm -f "$temp_plist"
+          done
+
+          if [ -z "$profile_path" ]; then
+            echo "::error::No provisioning profile matching bundle id $BUNDLE_ID was found"
+            exit 1
+          fi
+
+          echo "Using provisioning profile file: $profile_path"
+          echo "profile_name=$profile_name" >> "$GITHUB_OUTPUT"
+          echo "Resolved profile name: $profile_name"
+
       # 5. Archive and export IPA using native Xcode
       - name: Archive and Export IPA
         working-directory: ./vertex_app/ios
         run: |
           set -euo pipefail
+          profile_name='${{ steps.resolve_profile.outputs.profile_name }}'
 
           mkdir -p build
 
@@ -163,11 +210,11 @@ jobs:
             -configuration Release \
             -sdk iphoneos \
             -archivePath build/Runner.xcarchive \
+            CODE_SIGN_STYLE=Manual \
             DEVELOPMENT_TEAM="$DEVELOPMENT_TEAM" \
             PRODUCT_BUNDLE_IDENTIFIER="$BUNDLE_ID" \
-            CODE_SIGN_STYLE=Automatic \
             CODE_SIGN_IDENTITY="Apple Distribution" \
-            -allowProvisioningUpdates \
+            PROVISIONING_PROFILE_SPECIFIER="$profile_name" \
             CURRENT_PROJECT_VERSION="$GITHUB_RUN_NUMBER" \
             GCC_TREAT_WARNINGS_AS_ERRORS=NO \
             SWIFT_TREAT_WARNINGS_AS_ERRORS=NO \
@@ -195,9 +242,14 @@ jobs:
               <key>method</key>
               <string>app-store</string>
               <key>signingStyle</key>
-                <string>automatic</string>
+              <string>manual</string>
               <key>teamID</key>
               <string>$DEVELOPMENT_TEAM</string>
+              <key>provisioningProfiles</key>
+              <dict>
+                  <key>$BUNDLE_ID</key>
+                  <string>$profile_name</string>
+              </dict>
               <key>compileBitcode</key>
               <false/>
               <key>stripSwiftSymbols</key>
