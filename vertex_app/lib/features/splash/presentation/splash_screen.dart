@@ -61,60 +61,87 @@ class _SplashScreenState extends State<SplashScreen>
               end: Alignment.bottomRight,
             ),
           ),
-          child: Center(
-            child: FadeTransition(
-              opacity: _fade,
-              child: ScaleTransition(
-                scale: _scale,
-                child: Column(
-                  mainAxisSize: MainAxisSize.min,
-                  children: [
-                    Hero(
-                      tag: 'vertexLogo',
-                      child: Image.asset(
-                        'assets/images/app_logo.png',
-                        width: 84,
-                        height: 84,
-                        errorBuilder: (context, error, stackTrace) {
-                          return const Icon(
-                            Icons.auto_graph_rounded,
-                            size: 84,
-                            color: AppColors.accentSoft,
-                          );
-                        },
+          child: SafeArea(
+            child: LayoutBuilder(
+              builder: (context, constraints) {
+                final shortestSide = MediaQuery.sizeOf(context).shortestSide;
+                final logoSize = shortestSide < 380 ? 72.0 : 84.0;
+                final titleStyle = Theme.of(
+                  context,
+                ).textTheme.displayLarge?.copyWith(color: AppColors.textPrimary);
+
+                return Center(
+                  child: SingleChildScrollView(
+                    padding: const EdgeInsets.symmetric(horizontal: 24),
+                    child: ConstrainedBox(
+                      constraints: BoxConstraints(minHeight: constraints.maxHeight),
+                      child: Center(
+                        child: FadeTransition(
+                          opacity: _fade,
+                          child: ScaleTransition(
+                            scale: _scale,
+                            child: Column(
+                              mainAxisSize: MainAxisSize.min,
+                              children: [
+                                Hero(
+                                  tag: 'vertexLogo',
+                                  child: Image.asset(
+                                    'assets/images/app_logo.png',
+                                    width: logoSize,
+                                    height: logoSize,
+                                    errorBuilder: (context, error, stackTrace) {
+                                      return Icon(
+                                        Icons.auto_graph_rounded,
+                                        size: logoSize,
+                                        color: AppColors.accentSoft,
+                                      );
+                                    },
+                                  ),
+                                ),
+                                const SizedBox(height: 16),
+                                Text(
+                                  AppConstants.appName,
+                                  textAlign: TextAlign.center,
+                                  style: titleStyle,
+                                ),
+                                const SizedBox(height: 6),
+                                Text(
+                                  AppConstants.appTagline,
+                                  textAlign: TextAlign.center,
+                                  style: Theme.of(
+                                    context,
+                                  ).textTheme.bodyMedium?.copyWith(
+                                    color: AppColors.textSecondary,
+                                  ),
+                                ),
+                                const SizedBox(height: 24),
+                                const SizedBox(
+                                  width: 140,
+                                  child: LinearProgressIndicator(
+                                    color: AppColors.accentSoft,
+                                    backgroundColor: Colors.white12,
+                                  ),
+                                ),
+                                const SizedBox(height: 16),
+                                Text(
+                                  'Long-press for diagnostics',
+                                  textAlign: TextAlign.center,
+                                  style: Theme.of(
+                                    context,
+                                  ).textTheme.bodySmall?.copyWith(
+                                    color: AppColors.textSecondary,
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ),
+                        ),
                       ),
                     ),
-                    const SizedBox(height: 16),
-                    Text(
-                      AppConstants.appName,
-                      style: Theme.of(context).textTheme.displayLarge?.copyWith(
-                        color: AppColors.textPrimary,
-                      ),
-                    ),
-                    const SizedBox(height: 6),
-                    Text(
-                      AppConstants.appTagline,
-                      style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                        color: AppColors.textSecondary,
-                      ),
-                    ),
-                    const SizedBox(height: 24),
-                    const SizedBox(
-                      width: 140,
-                      child: LinearProgressIndicator(
-                        color: AppColors.accentSoft,
-                        backgroundColor: Colors.white12,
-                      ),
-                    ),
-                    const SizedBox(height: 16),
-                    Text(
-                      'Long-press for diagnostics',
-                      style: Theme.of(context).textTheme.bodySmall?.copyWith(
-                        color: AppColors.textSecondary,
-                      ),
-                    ),
-                  ],
-                ),
+                  ),
+                );
+              },
+            ),
               ),
             ),
           ),
