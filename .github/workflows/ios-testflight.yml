@@ -93,6 +93,35 @@ jobs:
           fi
           
           cd ..
+
+          echo ""
+          echo "🔎 Pod/Flutter diagnostics:" 
+          echo "FLUTTER_ROOT=$FLUTTER_ROOT"
+          echo "Listing Flutter engine artifacts (ios-release):"
+          ls -la "$FLUTTER_ROOT/bin/cache/artifacts/engine/ios-release/" || echo "No ios-release artifacts found"
+          echo "Listing Flutter engine artifacts (ios):"
+          ls -la "$FLUTTER_ROOT/bin/cache/artifacts/engine/" || true
+
+          echo "-- Pods-Runner.release.xcconfig --"
+          if [ -f "ios/Pods/Target Support Files/Pods-Runner/Pods-Runner.release.xcconfig" ]; then
+            sed -n '1,200p' ios/Pods/Target\ Support\ Files/Pods-Runner/Pods-Runner.release.xcconfig || true
+          else
+            echo "Pods-Runner.release.xcconfig not found"
+          fi
+
+          echo "-- Pods-Runner.profile.xcconfig --"
+          if [ -f "ios/Pods/Target Support Files/Pods-Runner/Pods-Runner.profile.xcconfig" ]; then
+            sed -n '1,200p' ios/Pods/Target\ Support\ Files/Pods-Runner/Pods-Runner.profile.xcconfig || true
+          else
+            echo "Pods-Runner.profile.xcconfig not found"
+          fi
+
+          echo "-- Podfile.lock (summary) --"
+          if [ -f "ios/Podfile.lock" ]; then
+            sed -n '1,200p' ios/Podfile.lock || true
+          else
+            echo "Podfile.lock not found"
+          fi
           
           echo ""
           echo "📋 ExportOptions.plist:"
