@@ -66,15 +66,16 @@ class _SplashScreenState extends State<SplashScreen>
               builder: (context, constraints) {
                 final shortestSide = MediaQuery.sizeOf(context).shortestSide;
                 final logoSize = shortestSide < 380 ? 72.0 : 84.0;
-                final titleStyle = Theme.of(
-                  context,
-                ).textTheme.displayLarge?.copyWith(color: AppColors.textPrimary);
+                final titleStyle = Theme.of(context).textTheme.displayLarge
+                    ?.copyWith(color: AppColors.textPrimary);
 
                 return Center(
                   child: SingleChildScrollView(
                     padding: const EdgeInsets.symmetric(horizontal: 24),
                     child: ConstrainedBox(
-                      constraints: BoxConstraints(minHeight: constraints.maxHeight),
+                      constraints: BoxConstraints(
+                        minHeight: constraints.maxHeight,
+                      ),
                       child: Center(
                         child: FadeTransition(
                           opacity: _fade,
@@ -108,11 +109,10 @@ class _SplashScreenState extends State<SplashScreen>
                                 Text(
                                   AppConstants.appTagline,
                                   textAlign: TextAlign.center,
-                                  style: Theme.of(
-                                    context,
-                                  ).textTheme.bodyMedium?.copyWith(
-                                    color: AppColors.textSecondary,
-                                  ),
+                                  style: Theme.of(context).textTheme.bodyMedium
+                                      ?.copyWith(
+                                        color: AppColors.textSecondary,
+                                      ),
                                 ),
                                 const SizedBox(height: 24),
                                 const SizedBox(
@@ -126,11 +126,10 @@ class _SplashScreenState extends State<SplashScreen>
                                 Text(
                                   'Long-press for diagnostics',
                                   textAlign: TextAlign.center,
-                                  style: Theme.of(
-                                    context,
-                                  ).textTheme.bodySmall?.copyWith(
-                                    color: AppColors.textSecondary,
-                                  ),
+                                  style: Theme.of(context).textTheme.bodySmall
+                                      ?.copyWith(
+                                        color: AppColors.textSecondary,
+                                      ),
                                 ),
                               ],
                             ),
