@@ -151,48 +151,10 @@ jobs:
           api-key-id: ${{ secrets.APPSTORE_API_KEY_ID }}
           api-private-key: ${{ secrets.APPSTORE_API_PRIVATE_KEY }}
 
-      # 5. Build iOS app with verbose output
-      - name: Build iOS IPA
-        working-directory: ./vertex_app
-        run: |
-          set -euo pipefail
-
-          # Clean previous builds
-          rm -rf build
-
-          # Build with verbose output to catch real errors
-          flutter build ios \
-            --release \
-            --no-codesign \
-            --suppress-analytics \
-            --build-number "$GITHUB_RUN_NUMBER" \
-            --verbose 2>&1 | tee build.log
-
-          # Check if build succeeded (pipefail makes the pipeline return a non-zero code on failure)
-          if [ $? -ne 0 ]; then
-            echo "::error::iOS build failed. See logs above for details."
-            echo "::group::Build Log (last 100 lines)"
-            tail -n 100 build.log
-            echo "::endgroup::"
-            exit 1
-          fi
-
       - name: Show installed provisioning profiles
         run: ls -la ~/Library/MobileDevice/Provisioning\ Profiles/ || echo "No provisioning profiles found"
       
-      - name: Verify Runner.app exists
-        working-directory: ./vertex_app
-        run: |
-          if [ -d "build/ios/Release-iphoneos/Runner.app" ]; then
-            echo "✓ Runner.app built successfully"
-            ls -la build/ios/Release-iphoneos/Runner.app | head -20
-          else
-            echo "✗ Runner.app not found!"
-            find build/ios -name "*.app" -type d || echo "No .app files found"
-            exit 1
-          fi
-
-      # 6. Archive and export IPA using native Xcode
+      # 5. Archive and export IPA using native Xcode
       - name: Archive and Export IPA
         working-directory: ./vertex_app/ios
         run: |
