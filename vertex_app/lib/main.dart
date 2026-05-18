@@ -10,9 +10,6 @@ void main() {
   StartupLog.add('main() start');
   debugPrint('Vertex: main() start');
 
-  WidgetsFlutterBinding.ensureInitialized();
-  StartupLog.add('WidgetsFlutterBinding.ensureInitialized() complete');
-
   // Forward Flutter framework errors to the console and to the zone handler.
   FlutterError.onError = (FlutterErrorDetails details) {
     FlutterError.dumpErrorToConsole(details);
@@ -22,6 +19,9 @@ void main() {
   // Run the app inside a guarded zone to capture uncaught async errors.
   runZonedGuarded<Future<void>>(
     () async {
+      WidgetsFlutterBinding.ensureInitialized();
+      StartupLog.add('WidgetsFlutterBinding.ensureInitialized() complete');
+
       StartupLog.add('runApp() begin');
       debugPrint('VertexApp: starting');
       runApp(const ProviderScope(child: VertexApp()));
