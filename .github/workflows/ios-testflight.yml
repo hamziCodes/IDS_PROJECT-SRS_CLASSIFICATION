@@ -153,12 +153,36 @@ jobs:
 
       - name: Show installed provisioning profiles
         run: ls -la ~/Library/MobileDevice/Provisioning\ Profiles/ || echo "No provisioning profiles found"
+
+      - name: Resolve installed provisioning profile
+        id: resolve_profile
+        run: |
+          set -euo pipefail
+
+          profile_path=$(ls -t ~/Library/MobileDevice/Provisioning\ Profiles/*.mobileprovision | head -n 1)
+          echo "Using provisioning profile file: $profile_path"
+
+          profile_name=$(
+            security cms -D -i "$profile_path" |
+            /usr/libexec/PlistBuddy -c 'Print :Name' /dev/stdin
+          )
+
+          profile_uuid=$(
+            security cms -D -i "$profile_path" |
+            /usr/libexec/PlistBuddy -c 'Print :UUID' /dev/stdin
+          )
+
+          echo "profile_name=$profile_name" >> "$GITHUB_OUTPUT"
+          echo "profile_uuid=$profile_uuid" >> "$GITHUB_OUTPUT"
+          echo "Resolved profile name: $profile_name"
+          echo "Resolved profile UUID: $profile_uuid"
       
       # 5. Archive and export IPA using native Xcode
       - name: Archive and Export IPA
         working-directory: ./vertex_app/ios
         run: |
           set -euo pipefail
+          profile_name='${{ steps.resolve_profile.outputs.profile_name }}'
 
           mkdir -p build
 
@@ -175,11 +199,11 @@ jobs:
             -configuration Release \
             -sdk iphoneos \
             -archivePath build/Runner.xcarchive \
+            CODE_SIGN_STYLE=Manual \
             DEVELOPMENT_TEAM="$DEVELOPMENT_TEAM" \
             PRODUCT_BUNDLE_IDENTIFIER="$BUNDLE_ID" \
-            CODE_SIGN_STYLE=Automatic \
             CODE_SIGN_IDENTITY="Apple Distribution" \
-            -allowProvisioningUpdates \
+            PROVISIONING_PROFILE_SPECIFIER="$profile_name" \
             CURRENT_PROJECT_VERSION="$GITHUB_RUN_NUMBER" \
             GCC_TREAT_WARNINGS_AS_ERRORS=NO \
             SWIFT_TREAT_WARNINGS_AS_ERRORS=NO \
@@ -197,11 +221,39 @@ jobs:
           ls -lah build/Runner.xcarchive/
 
           echo "📤 Exporting archive to IPA..."
+          cat > ExportOptions.generated.plist <<EOF
+          <?xml version="1.0" encoding="UTF-8"?>
+          <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+          <plist version="1.0">
+          <dict>
+              <key>destination</key>
+              <string>export</string>
+              <key>method</key>
+              <string>app-store</string>
+              <key>signingStyle</key>
+              <string>manual</string>
+              <key>teamID</key>
+              <string>$DEVELOPMENT_TEAM</string>
+              <key>provisioningProfiles</key>
+              <dict>
+                  <key>$BUNDLE_ID</key>
+                  <string>$profile_name</string>
+              </dict>
+              <key>compileBitcode</key>
+              <false/>
+              <key>stripSwiftSymbols</key>
+              <true/>
+              <key>thinning</key>
+              <string>&lt;none&gt;</string>
+          </dict>
+          </plist>
+          EOF
+
           xcodebuild \
             -exportArchive \
             -archivePath build/Runner.xcarchive \
             -exportPath build/AppStore \
-            -exportOptionsPlist ExportOptions.plist \
+            -exportOptionsPlist ExportOptions.generated.plist \
             2>&1 | tee export.log
 
           if [ $? -ne 0 ]; then
