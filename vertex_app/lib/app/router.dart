@@ -17,10 +17,10 @@ CustomTransitionPage<void> _fadeTransition(Widget child) {
 }
 
 final appRouter = GoRouter(
-  initialLocation: '/',
+  initialLocation: '/home',
   routes: [
     GoRoute(
-      path: '/',
+      path: '/splash',
       pageBuilder: (context, state) => _fadeTransition(const SplashScreen()),
     ),
     GoRoute(
