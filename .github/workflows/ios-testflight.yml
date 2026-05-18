@@ -283,8 +283,10 @@ jobs:
           echo "📂 Build output structure:"
           find build -type f -name "*.ipa" -o -name "*.app" | head -20
           
-          if [ -f "build/AppStore/Runner.ipa" ]; then
-            echo "✓ IPA file ready: $(du -h build/AppStore/Runner.ipa | cut -f1)"
+          ipa_file=$(find build/AppStore -name "*.ipa" -type f | head -1)
+          if [ -n "$ipa_file" ]; then
+            echo "✓ IPA file ready: $(du -h "$ipa_file" | cut -f1)"
+            echo "IPA_FILE=$ipa_file" >> $GITHUB_ENV
           else
             echo "✗ IPA file not found!"
             ls -la build/AppStore/
@@ -296,9 +298,12 @@ jobs:
         working-directory: ./vertex_app/ios
         run: |
           echo "📤 Uploading to TestFlight..."
+          ipa_file=${{ env.IPA_FILE }}
+          echo "Uploading: $ipa_file"
+          
           xcrun altool --upload-app \
             --type ios \
-            --file build/AppStore/Runner.ipa \
+            --file "$ipa_file" \
             --apiKey ${{ secrets.APPSTORE_API_KEY_ID }} \
             --apiIssuer ${{ secrets.APPSTORE_ISSUER_ID }} \
             --show-progress
