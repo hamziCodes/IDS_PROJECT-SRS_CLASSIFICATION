@@ -7,17 +7,18 @@ import 'app/app.dart';
 import 'core/services/startup_log.dart';
 
 void main() {
-  // Lightweight startup logging to help diagnose startup issues on devices.
-  StartupLog.add('main() start');
-  debugPrint('Vertex: main() start');
-
-  // Forward Flutter framework errors to the console and to the zone handler.
+  // 1. Catch Flutter UI framework errors and paint them to the screen
   FlutterError.onError = (FlutterErrorDetails details) {
     FlutterError.dumpErrorToConsole(details);
-    StartupLog.add('FlutterError: ${details.exception}');
+    runApp(
+      ErrorScreen(
+        error: details.exceptionAsString(),
+        stackTrace: details.stack?.toString(),
+      ),
+    );
   };
 
-  // Run the app inside a guarded zone to capture uncaught async errors.
+  // 2. Catch asynchronous errors (like missing iOS permissions or failed async calls)
   runZonedGuarded<Future<void>>(
     () async {
       WidgetsFlutterBinding.ensureInitialized();
@@ -33,15 +34,64 @@ void main() {
       );
 
       StartupLog.add('runApp() begin');
-      debugPrint('VertexApp: starting');
       runApp(const ProviderScope(child: VertexApp()));
-      StartupLog.add('runApp() invoked');
     },
     (error, stack) {
-      // Keep this lightweight — only log errors. Do not change app flow.
+      // Paint the error to the screen instead of silently crashing
       StartupLog.add('Uncaught zone error: $error');
-      debugPrint('VertexApp: Uncaught zone error: $error');
-      if (stack != null) debugPrint(stack.toString());
+      runApp(
+        ErrorScreen(error: error.toString(), stackTrace: stack.toString()),
+      );
     },
   );
+}
+
+/// A standalone, dependency-free screen that will pop up if the app crashes.
+class ErrorScreen extends StatelessWidget {
+  final String error;
+  final String? stackTrace;
+
+  const ErrorScreen({super.key, required this.error, this.stackTrace});
+
+  @override
+  Widget build(BuildContext context) {
+    return MaterialApp(
+      debugShowCheckedModeBanner: false,
+      home: Scaffold(
+        backgroundColor: Colors.red.shade900,
+        body: SafeArea(
+          child: SingleChildScrollView(
+            padding: const EdgeInsets.all(24.0),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                const Text(
+                  '🚨 FATAL STARTUP ERROR 🚨',
+                  style: TextStyle(
+                    color: Colors.white,
+                    fontSize: 22,
+                    fontWeight: FontWeight.bold,
+                  ),
+                ),
+                const SizedBox(height: 20),
+                Text(
+                  error,
+                  style: const TextStyle(
+                    color: Colors.yellow,
+                    fontSize: 16,
+                    fontWeight: FontWeight.bold,
+                  ),
+                ),
+                const SizedBox(height: 20),
+                Text(
+                  stackTrace ?? 'No stack trace provided.',
+                  style: const TextStyle(color: Colors.white70, fontSize: 12),
+                ),
+              ],
+            ),
+          ),
+        ),
+      ),
+    );
+  }
 }
