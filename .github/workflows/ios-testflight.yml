@@ -241,21 +241,16 @@ jobs:
           ls -la build/ || true
 
           echo "📦 Creating Xcode archive..."
-          xcodebuild \
-            -workspace Runner.xcworkspace \
-            -scheme Runner \
-            -configuration Release \
-            -sdk iphoneos \
-            -archivePath build/Runner.xcarchive \
-            CODE_SIGN_STYLE=Manual \
-            DEVELOPMENT_TEAM="$DEVELOPMENT_TEAM" \
-            PRODUCT_BUNDLE_IDENTIFIER="$BUNDLE_ID" \
-            CODE_SIGN_IDENTITY="Apple Distribution" \
-            PROVISIONING_PROFILE_SPECIFIER="$profile_name" \
-            CURRENT_PROJECT_VERSION="$GITHUB_RUN_NUMBER" \
-            GCC_TREAT_WARNINGS_AS_ERRORS=NO \
-            SWIFT_TREAT_WARNINGS_AS_ERRORS=NO \
-            clean archive 2>&1 | tee archive.log
+            xcodebuild \
+              -workspace Runner.xcworkspace \
+              -scheme Runner \
+              -configuration Release \
+              -sdk iphoneos \
+              -archivePath build/Runner.xcarchive \
+              CURRENT_PROJECT_VERSION="$GITHUB_RUN_NUMBER" \
+              GCC_TREAT_WARNINGS_AS_ERRORS=NO \
+              SWIFT_TREAT_WARNINGS_AS_ERRORS=NO \
+              clean archive 2>&1 | tee archive.log
 
           if [ $? -ne 0 ]; then
             echo "::error::Xcode archive failed!"
