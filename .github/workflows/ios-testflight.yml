@@ -81,6 +81,12 @@ jobs:
         working-directory: ./vertex_app
         run: flutter pub get
 
+      # 3.1 Regenerate ios/Flutter/Generated.xcconfig with correct Unix paths
+      - name: Generate iOS build artifacts
+        working-directory: ./vertex_app
+        run: |
+          flutter build ios --release --no-codesign
+
       # 3.5 Pre-build diagnostics
       - name: Pre-build iOS diagnostics
         working-directory: ./vertex_app
@@ -93,25 +99,6 @@ jobs:
           echo ""
           echo "📦 Ensure Flutter iOS artifacts are available (precache):"
           flutter precache --ios
-
-          echo ""
-          echo "📦 Pod setup:"
-          cd ios
-          echo "  Fetching pods..."
-          pod repo update
-          echo "  Installing pods..."
-          pod install --repo-update
-          
-          # Verify Pods are installed
-          if [ -d "Pods" ]; then
-            echo "  ✓ Pods directory exists"
-            echo "  Installed pods: $(ls Pods | wc -l) packages"
-          else
-            echo "  ✗ Pods directory not found!"
-            exit 1
-          fi
-          
-          cd ..
 
           echo ""
           echo "🔎 Pod/Flutter diagnostics:" 
@@ -152,7 +139,14 @@ jobs:
             exit 1
           fi
 
-      # 3.6 Xcode version check (fail early if Xcode < 26)
+      # 3.6 Install CocoaPods dependencies (must run after flutter build ios)
+      - name: Install CocoaPods dependencies
+        working-directory: ./vertex_app/ios
+        run: |
+          pod install --repo-update
+          echo "✓ Pods installed: $(ls Pods | wc -l) packages"
+
+      # 3.7 Xcode version check (fail early if Xcode < 26)
       - name: Check Xcode version
         working-directory: ./vertex_app
         run: |
