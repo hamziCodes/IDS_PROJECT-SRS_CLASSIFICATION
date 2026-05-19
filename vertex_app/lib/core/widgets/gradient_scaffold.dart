@@ -28,7 +28,7 @@ class GradientScaffold extends StatelessWidget {
       ),
       child: Scaffold(
         extendBody: true,
-        extendBodyBehindAppBar: true,
+        extendBodyBehindAppBar: false,
         backgroundColor: Colors.transparent,
         appBar: appBar,
         drawer: drawer,
