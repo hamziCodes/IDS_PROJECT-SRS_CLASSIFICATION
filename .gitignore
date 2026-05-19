@@ -40,3 +40,4 @@ Thumbs.db
 .env
 .env.local
 secrets.txt
+ios_key_files/
