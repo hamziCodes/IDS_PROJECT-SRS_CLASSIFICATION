@@ -41,3 +41,8 @@ Thumbs.db
 .env.local
 secrets.txt
 ios_key_files/
+
+#logs
+github-workflow-logs/
+tools/
+gitignore-files/
