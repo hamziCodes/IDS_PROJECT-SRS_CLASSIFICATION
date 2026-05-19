@@ -48,7 +48,7 @@ You need to create a Base64-encoded version of your `.p8` file.
 
 ```powershell
 # Set the path to your .p8 file
-$p8FilePath = "C:\Users\YourName\Downloads\AuthKey_A1B2C3D4.p8"
+$p8FilePath = "C:\Users\hamza\Downloads\jtsTCm.p8"
 
 # Read and encode
 $bytes = [System.IO.File]::ReadAllBytes($p8FilePath)
