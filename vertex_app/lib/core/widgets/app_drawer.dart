@@ -24,39 +24,16 @@ class AppDrawer extends StatelessWidget {
             ),
             child: Row(
               children: [
-                Image.asset(
-                  'assets/images/app_logo.png',
-                  width: 36,
-                  height: 36,
-                  errorBuilder: (context, error, stackTrace) {
-                    return const Icon(
-                      Icons.auto_graph_rounded,
-                      size: 36,
-                      color: AppColors.accentSoft,
-                    );
-                  },
-                ),
+                Image.asset('assets/images/logo_nobg.png', width: 36, height: 36),
                 const SizedBox(width: 12),
-                Expanded(
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      Text(
-                        AppConstants.appName,
-                        maxLines: 1,
-                        overflow: TextOverflow.ellipsis,
-                        style: Theme.of(context).textTheme.titleLarge,
-                      ),
-                      const SizedBox(height: 4),
-                      Text(
-                        AppConstants.appTagline,
-                        maxLines: 1,
-                        overflow: TextOverflow.ellipsis,
-                        style: Theme.of(context).textTheme.bodyMedium,
-                      ),
-                    ],
-                  ),
+                Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Text(AppConstants.appName, style: Theme.of(context).textTheme.titleLarge),
+                    const SizedBox(height: 4),
+                    Text(AppConstants.appTagline, style: Theme.of(context).textTheme.bodyMedium),
+                  ],
                 ),
               ],
             ),
@@ -64,20 +41,12 @@ class AppDrawer extends StatelessWidget {
           _drawerItem(context, Icons.chat_bubble_outline, 'Home', '/home'),
           _drawerItem(context, Icons.memory, 'Model', '/model'),
           _drawerItem(context, Icons.info_outline, 'About Us', '/about'),
-          _drawerItem(
-            context,
-            Icons.bug_report_outlined,
-            'Diagnostics',
-            '/diagnostics',
-          ),
           const Spacer(),
           Padding(
             padding: const EdgeInsets.all(16),
             child: Text(
               'Vertex - AI Studio',
-              style: Theme.of(
-                context,
-              ).textTheme.bodySmall?.copyWith(color: AppColors.textSecondary),
+              style: Theme.of(context).textTheme.bodySmall?.copyWith(color: AppColors.textSecondary),
             ),
           ),
         ],
@@ -85,12 +54,7 @@ class AppDrawer extends StatelessWidget {
     );
   }
 
-  Widget _drawerItem(
-    BuildContext context,
-    IconData icon,
-    String label,
-    String route,
-  ) {
+  Widget _drawerItem(BuildContext context, IconData icon, String label, String route) {
     return ListTile(
       leading: Icon(icon, color: AppColors.textPrimary),
       title: Text(label, style: Theme.of(context).textTheme.bodyLarge),

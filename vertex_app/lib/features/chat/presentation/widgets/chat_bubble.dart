@@ -1,21 +1,20 @@
-import 'dart:convert';
-
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 
-import '../../../../core/services/export_service.dart';
 import '../../../../core/theme/app_colors.dart';
 import '../../../../core/utils/date_utils.dart';
-import '../../../../core/utils/web_download_util.dart';
 import '../../../../core/widgets/glass_container.dart';
 import '../../domain/models/chat_message.dart';
 import '../../domain/models/prediction_models.dart';
-import 'collapsible_category_section.dart';
 
 class ChatBubble extends StatelessWidget {
-  const ChatBubble({super.key, required this.message});
+  const ChatBubble({
+    super.key,
+    required this.message,
+    required this.onDownloadPrediction,
+  });
 
   final ChatMessage message;
+  final void Function(PredictionResponse prediction) onDownloadPrediction;
 
   @override
   Widget build(BuildContext context) {
@@ -40,35 +39,28 @@ class ChatBubble extends StatelessWidget {
         child: Container(
           margin: const EdgeInsets.symmetric(vertical: 8),
           child: Column(
-            crossAxisAlignment: isUser
-                ? CrossAxisAlignment.end
-                : CrossAxisAlignment.start,
+            crossAxisAlignment: isUser ? CrossAxisAlignment.end : CrossAxisAlignment.start,
             children: [
               if (message.prediction != null && !isUser)
                 GlassContainer(
-                  child: _PredictionContent(prediction: message.prediction!),
+                  child: _PredictionContent(
+                    prediction: message.prediction!,
+                    onDownload: () => onDownloadPrediction(message.prediction!),
+                  ),
                 )
               else
                 Container(
-                  padding: const EdgeInsets.symmetric(
-                    horizontal: 16,
-                    vertical: 12,
-                  ),
+                  padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
                   decoration: BoxDecoration(
                     color: isUser ? bubbleColor : AppColors.surfaceSoft,
                     borderRadius: BorderRadius.circular(16),
                   ),
-                  child: Text(
-                    message.text,
-                    style: Theme.of(context).textTheme.bodyMedium,
-                  ),
+                  child: Text(message.text, style: Theme.of(context).textTheme.bodyMedium),
                 ),
               const SizedBox(height: 6),
               Text(
                 DateUtilsX.formatDateTime(message.timestamp),
-                style: Theme.of(
-                  context,
-                ).textTheme.bodySmall?.copyWith(color: AppColors.textSecondary),
+                style: Theme.of(context).textTheme.bodySmall?.copyWith(color: AppColors.textSecondary),
               ),
             ],
           ),
@@ -79,46 +71,10 @@ class ChatBubble extends StatelessWidget {
 }
 
 class _PredictionContent extends StatelessWidget {
-  const _PredictionContent({required this.prediction});
+  const _PredictionContent({required this.prediction, required this.onDownload});
 
   final PredictionResponse prediction;
-
-  void _downloadResults(BuildContext context) {
-    try {
-      final csvContent = ExportService.generateCsv(prediction);
-      final filename = ExportService.generateFilename();
-
-      if (kIsWeb) {
-        _downloadWebCsv(csvContent, filename);
-      } else {
-        _showMessage(context, 'Download will be supported soon on mobile!');
-        return;
-      }
-
-      _showMessage(context, 'Downloaded $filename', isSuccess: true);
-    } catch (e) {
-      _showMessage(context, 'Error: ${e.toString()}', isSuccess: false);
-    }
-  }
-
-  void _downloadWebCsv(String csvContent, String filename) {
-    WebDownloadUtil.downloadCsv(csvContent, filename);
-  }
-
-  void _showMessage(
-    BuildContext context,
-    String message, {
-    bool isSuccess = true,
-  }) {
-    if (!context.mounted) return;
-    ScaffoldMessenger.of(context).showSnackBar(
-      SnackBar(
-        content: Text(message),
-        duration: const Duration(seconds: 2),
-        backgroundColor: isSuccess ? AppColors.success : AppColors.warning,
-      ),
-    );
-  }
+  final VoidCallback onDownload;
 
   @override
   Widget build(BuildContext context) {
@@ -126,68 +82,139 @@ class _PredictionContent extends StatelessWidget {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Row(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
-            Text(
-              'Classification Results',
-              style: Theme.of(context).textTheme.titleLarge,
+            Expanded(
+              child: Text('Classification Results', style: Theme.of(context).textTheme.titleLarge),
             ),
-            GestureDetector(
-              onTap: () => _downloadResults(context),
-              child: Container(
-                padding: const EdgeInsets.symmetric(
-                  horizontal: 12,
-                  vertical: 6,
-                ),
-                decoration: BoxDecoration(
-                  color: AppColors.accent.withOpacity(0.15),
-                  borderRadius: BorderRadius.circular(8),
-                  border: Border.all(
-                    color: AppColors.accent.withOpacity(0.3),
-                    width: 1,
-                  ),
-                ),
-                child: Row(
-                  mainAxisSize: MainAxisSize.min,
-                  children: [
-                    Icon(
-                      Icons.download_rounded,
-                      color: AppColors.accent,
-                      size: 16,
-                    ),
-                    const SizedBox(width: 6),
-                    Text(
-                      'Download',
-                      style: Theme.of(context).textTheme.bodySmall?.copyWith(
-                        color: AppColors.accent,
-                        fontWeight: FontWeight.w600,
-                      ),
-                    ),
-                  ],
-                ),
-              ),
+            TextButton.icon(
+              onPressed: onDownload,
+              icon: const Icon(Icons.download_rounded, size: 18),
+              label: const Text('Download Results'),
             ),
           ],
         ),
-        const SizedBox(height: 16),
-        CollapsibleCategorySection(
-          title: 'Functional Requirements (FR)',
-          items: prediction.functionalRequirements,
-          accentColor: AppColors.success,
-        ),
-        const SizedBox(height: 12),
-        CollapsibleCategorySection(
-          title: 'Non-Functional Requirements (NFR)',
-          items: prediction.nonFunctionalRequirements,
-          accentColor: AppColors.warning,
-        ),
-        const SizedBox(height: 12),
-        CollapsibleCategorySection(
-          title: 'Neither',
-          items: prediction.neither,
-          accentColor: AppColors.textSecondary,
-        ),
+        const SizedBox(height: 8),
+        _categorySection(context, 'Functional Requirements', prediction.functionalRequirements, AppColors.success),
+        const SizedBox(height: 10),
+        _categorySection(context, 'Non-Functional Requirements', prediction.nonFunctionalRequirements, AppColors.warning),
+        const SizedBox(height: 10),
+        _categorySection(context, 'Neither', prediction.neither, AppColors.textSecondary),
       ],
+    );
+  }
+
+  Widget _categorySection(
+    BuildContext context,
+    String title,
+    List<RequirementItem> items,
+    Color accent,
+  ) {
+    return ClipRRect(
+      borderRadius: BorderRadius.circular(16),
+      child: ExpansionTile(
+        key: PageStorageKey<String>('classification-$title'),
+        initiallyExpanded: false,
+        tilePadding: const EdgeInsets.symmetric(horizontal: 14, vertical: 6),
+        childrenPadding: const EdgeInsets.fromLTRB(14, 0, 14, 14),
+        collapsedBackgroundColor: AppColors.surfaceSoft.withValues(alpha: 0.65),
+        backgroundColor: AppColors.surfaceSoft,
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
+        collapsedShape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
+        iconColor: accent,
+        collapsedIconColor: accent,
+        textColor: Theme.of(context).textTheme.bodyLarge?.color,
+        collapsedTextColor: Theme.of(context).textTheme.bodyLarge?.color,
+        title: Row(
+          children: [
+            Container(width: 8, height: 8, decoration: BoxDecoration(color: accent, shape: BoxShape.circle)),
+            const SizedBox(width: 8),
+            Expanded(
+              child: Text(
+                title,
+                style: Theme.of(context).textTheme.bodyLarge,
+                overflow: TextOverflow.ellipsis,
+              ),
+            ),
+            const SizedBox(width: 8),
+            Text(
+              '${items.length}',
+              style: Theme.of(context).textTheme.bodySmall?.copyWith(color: AppColors.textSecondary),
+            ),
+          ],
+        ),
+        children: [
+          if (items.isEmpty)
+            Align(
+              alignment: Alignment.centerLeft,
+              child: Text(
+                'No items',
+                style: Theme.of(context).textTheme.bodySmall?.copyWith(color: AppColors.textSecondary),
+              ),
+            )
+          else
+            Column(
+              children: items
+                  .map(
+                    (item) => Container(
+                      margin: const EdgeInsets.only(bottom: 6),
+                      padding: const EdgeInsets.all(10),
+                      decoration: BoxDecoration(
+                        color: AppColors.surface,
+                        borderRadius: BorderRadius.circular(12),
+                      ),
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text(item.text, style: Theme.of(context).textTheme.bodyMedium),
+                          if (item.confidence != null) ...[
+                            const SizedBox(height: 4),
+                            Text(
+                              'Confidence: ${(item.confidence! * 100).toStringAsFixed(1)}%',
+                              style: Theme.of(context)
+                                  .textTheme
+                                  .bodySmall
+                                  ?.copyWith(color: AppColors.textSecondary),
+                            ),
+                          ],
+                          if (item.nfrTypes.isNotEmpty) ...[
+                            const SizedBox(height: 6),
+                            Wrap(
+                              spacing: 6,
+                              runSpacing: 6,
+                              children: item.nfrTypes
+                                  .map(
+                                    (type) => Container(
+                                      padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+                                      decoration: BoxDecoration(
+                                        color: AppColors.surfaceSoft,
+                                        borderRadius: BorderRadius.circular(10),
+                                      ),
+                                      child: Text(type, style: Theme.of(context).textTheme.bodySmall),
+                                    ),
+                                  )
+                                  .toList(),
+                            ),
+                          ],
+                          if (item.isOutlier) ...[
+                            const SizedBox(height: 6),
+                            Text(
+                              item.outlierProbability == null
+                                  ? 'Flagged as outlier'
+                                  : 'Outlier probability: ${(item.outlierProbability! * 100).toStringAsFixed(1)}%',
+                              style: Theme.of(context)
+                                  .textTheme
+                                  .bodySmall
+                                  ?.copyWith(color: AppColors.textSecondary),
+                            ),
+                          ],
+                        ],
+                      ),
+                    ),
+                  )
+                  .toList(),
+            ),
+        ],
+      ),
     );
   }
 }

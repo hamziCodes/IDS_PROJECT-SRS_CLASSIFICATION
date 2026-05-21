@@ -4,6 +4,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:share_plus/share_plus.dart';
 
 import '../../../core/services/haptic_service.dart';
+import '../../../core/services/csv_export_service.dart';
 import '../../../core/services/pdf_service.dart';
 import '../../../core/theme/app_colors.dart';
 import '../../../core/widgets/app_drawer.dart';
@@ -34,6 +35,34 @@ class _ChatScreenState extends ConsumerState<ChatScreen> {
     super.dispose();
   }
 
+  Future<void> _downloadResults(PredictionResponse response) async {
+    final csv = CsvExportService.buildClassificationCsv(response);
+    final result = await CsvExportService.saveClassificationCsv(csv);
+    if (!mounted) return;
+
+    if (!kIsWeb && result.filePath != null) {
+      final box = context.findRenderObject() as RenderBox?;
+      try {
+        await Share.shareXFiles(
+          [XFile(result.filePath!, mimeType: 'text/csv')],
+          text: 'Vertex classification results (CSV)',
+          sharePositionOrigin: box == null
+              ? null
+              : (box.localToGlobal(Offset.zero) & box.size),
+        );
+        return;
+      } catch (error) {
+        if (!mounted) return;
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(content: Text('Unable to open share sheet. ${result.message}')),
+        );
+        return;
+      }
+    }
+
+    ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(result.message)));
+  }
+
   Future<void> _handleSend() async {
     await HapticService.mediumImpact();
     final text = _controller.text;
@@ -57,9 +86,7 @@ class _ChatScreenState extends ConsumerState<ChatScreen> {
   Future<void> _openShareSheet(PredictionResponse response) async {
     if (kIsWeb) {
       ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(
-          content: Text('PDF export is not available on web yet.'),
-        ),
+        const SnackBar(content: Text('PDF export is not available on web yet.')),
       );
       return;
     }
@@ -72,18 +99,16 @@ class _ChatScreenState extends ConsumerState<ChatScreen> {
           Navigator.of(context).pop();
           final bytes = await PdfService.buildReport(response);
           final file = await PdfService.saveReport(bytes);
-          await Share.shareXFiles([
-            XFile(file.path),
-          ], text: 'Vertex classification report');
+          await Share.shareXFiles([XFile(file.path)], text: 'Vertex classification report');
         },
         onDownload: () async {
           Navigator.of(context).pop();
           final bytes = await PdfService.buildReport(response);
           final file = await PdfService.saveReport(bytes);
           if (!mounted) return;
-          ScaffoldMessenger.of(
-            context,
-          ).showSnackBar(SnackBar(content: Text('Saved to ${file.path}')));
+          ScaffoldMessenger.of(context).showSnackBar(
+            SnackBar(content: Text('Saved to ${file.path}')),
+          );
         },
       ),
     );
@@ -93,14 +118,11 @@ class _ChatScreenState extends ConsumerState<ChatScreen> {
   Widget build(BuildContext context) {
     final state = ref.watch(chatControllerProvider);
     final lastPrediction = state.lastPrediction;
-    final isIOS = !kIsWeb && defaultTargetPlatform == TargetPlatform.iOS;
 
     return GradientScaffold(
       appBar: VertexAppBar(
         showShare: true,
-        onShare: lastPrediction == null
-            ? null
-            : () => _openShareSheet(lastPrediction),
+        onShare: lastPrediction == null ? null : () => _openShareSheet(lastPrediction),
       ),
       drawer: const AppDrawer(),
       body: Column(
@@ -110,13 +132,17 @@ class _ChatScreenState extends ConsumerState<ChatScreen> {
             padding: EdgeInsets.symmetric(horizontal: 16),
             child: SectionHeader(
               title: 'Try out our model',
-              subtitle:
-                  'Paste software requirements and let Vertex classify them instantly.',
+              subtitle: 'Paste software requirements and let Vertex classify them instantly.',
             ),
           ),
-          Expanded(child: MessageList(scrollController: _scrollController)),
+          Expanded(
+            child: MessageList(
+              scrollController: _scrollController,
+              onDownloadPrediction: _downloadResults,
+            ),
+          ),
           Padding(
-            padding: EdgeInsets.fromLTRB(16, 0, 16, isIOS ? 24 : 16),
+            padding: const EdgeInsets.fromLTRB(16, 0, 16, 16),
             child: ChatInputBar(
               controller: _controller,
               isLoading: state.isLoading,
@@ -128,21 +154,11 @@ class _ChatScreenState extends ConsumerState<ChatScreen> {
               padding: const EdgeInsets.only(left: 16, right: 16, bottom: 12),
               child: Row(
                 children: [
-                  const Icon(
-                    Icons.warning_amber_rounded,
-                    color: AppColors.warning,
-                    size: 18,
-                  ),
+                  const Icon(Icons.warning_amber_rounded, color: AppColors.warning, size: 18),
                   const SizedBox(width: 8),
-                  Expanded(
-                    child: Text(
-                      state.errorMessage!,
-                      maxLines: 2,
-                      overflow: TextOverflow.ellipsis,
-                      style: Theme.of(
-                        context,
-                      ).textTheme.bodySmall?.copyWith(color: AppColors.warning),
-                    ),
+                  Text(
+                    state.errorMessage!,
+                    style: Theme.of(context).textTheme.bodySmall?.copyWith(color: AppColors.warning),
                   ),
                 ],
               ),

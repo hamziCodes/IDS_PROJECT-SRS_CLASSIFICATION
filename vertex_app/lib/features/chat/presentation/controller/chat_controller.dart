@@ -1,5 +1,6 @@
 import 'dart:convert';
 
+import 'package:dio/dio.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:uuid/uuid.dart';
 
@@ -85,29 +86,21 @@ class ChatController extends StateNotifier<ChatState> {
       );
 
       await StorageService.saveLastResponse(jsonEncode(response.toJson()));
-    } catch (error) {
-      final cached = await StorageService.loadLastResponse();
-      ChatMessage fallbackMessage;
+    } on DioException catch (error) {
+      final errorMessage = _dioErrorMessage(error);
+      final fallbackMessage = await _buildFallbackMessage(
+        'Unable to reach the classification service. Please try again.',
+      );
 
-      if (cached != null) {
-        final cachedResponse = PredictionResponse.fromJson(
-          jsonDecode(cached) as Map<String, dynamic>,
-        );
-        fallbackMessage = ChatMessage(
-          id: _uuid.v4(),
-          role: MessageRole.assistant,
-          text: 'Showing the last saved response because the service is unreachable.',
-          timestamp: DateTime.now(),
-          prediction: cachedResponse,
-        );
-      } else {
-        fallbackMessage = ChatMessage(
-          id: _uuid.v4(),
-          role: MessageRole.system,
-          text: 'Unable to reach the classification service. Please try again.',
-          timestamp: DateTime.now(),
-        );
-      }
+      state = state.copyWith(
+        messages: [...state.messages, fallbackMessage],
+        isLoading: false,
+        errorMessage: errorMessage,
+      );
+    } catch (error) {
+      final fallbackMessage = await _buildFallbackMessage(
+        'Unable to reach the classification service. Please try again.',
+      );
 
       state = state.copyWith(
         messages: [...state.messages, fallbackMessage],
@@ -129,6 +122,52 @@ class ChatController extends StateNotifier<ChatState> {
         '${response.counts['functional'] ?? 0} functional, '
         '${response.counts['non_functional'] ?? 0} non-functional, '
         '${response.counts['neither'] ?? 0} neither.';
+  }
+
+  String _dioErrorMessage(DioException error) {
+    switch (error.type) {
+      case DioExceptionType.connectionTimeout:
+      case DioExceptionType.sendTimeout:
+      case DioExceptionType.receiveTimeout:
+        return 'Connection timed out. Check your network and try again.';
+      case DioExceptionType.badResponse:
+        final status = error.response?.statusCode;
+        if (status != null) {
+          return 'Service error ($status). Please try again shortly.';
+        }
+        return 'Service error. Please try again shortly.';
+      case DioExceptionType.cancel:
+        return 'Request cancelled.';
+      case DioExceptionType.badCertificate:
+        return 'Secure connection failed. Please verify the server certificate.';
+      case DioExceptionType.connectionError:
+        return 'Unable to connect to the service. Please check your network.';
+      case DioExceptionType.unknown:
+        return 'Unexpected error. Please try again.';
+    }
+  }
+
+  Future<ChatMessage> _buildFallbackMessage(String fallbackText) async {
+    final cached = await StorageService.loadLastResponse();
+    if (cached != null) {
+      final cachedResponse = PredictionResponse.fromJson(
+        jsonDecode(cached) as Map<String, dynamic>,
+      );
+      return ChatMessage(
+        id: _uuid.v4(),
+        role: MessageRole.assistant,
+        text: 'Showing the last saved response because the service is unreachable.',
+        timestamp: DateTime.now(),
+        prediction: cachedResponse,
+      );
+    }
+
+    return ChatMessage(
+      id: _uuid.v4(),
+      role: MessageRole.system,
+      text: fallbackText,
+      timestamp: DateTime.now(),
+    );
   }
 }
 

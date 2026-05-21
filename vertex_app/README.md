@@ -1,29 +1,16 @@
-# Vertex App
+# vertex_app
 
-Flutter client for the Vertex IDS classifier.
+A new Flutter project.
 
-## Run the backend first
+## Getting Started
 
-The app calls the FastAPI service in [backend/app/main.py](backend/app/main.py).
+This project is a starting point for a Flutter application.
 
-```bash
-cd backend
-python -m uvicorn app.main:app --host 0.0.0.0 --port 8000 --reload
-```
+A few resources to get you started if this is your first Flutter project:
 
-## Run the Flutter app
+- [Lab: Write your first Flutter app](https://docs.flutter.dev/get-started/codelab)
+- [Cookbook: Useful Flutter samples](https://docs.flutter.dev/cookbook)
 
-For Chrome/web, the app now uses `http://localhost:8000` by default.
-
-For an Android emulator, it uses `http://10.0.2.2:8000` by default.
-
-You can override the API host explicitly:
-
-```bash
-flutter run -d chrome --dart-define=API_BASE_URL=http://localhost:8000
-```
-
-## Notes
-
-- The trained model artifacts live in [../trained_models/FR_NFRTrained_models](../trained_models/FR_NFRTrained_models) and [../trained_models/outlierTrained_model](../trained_models/outlierTrained_model).
-- The backend applies the same outlier gate and FR/NFR logic used by the training pipeline.
+For help getting started with Flutter development, view the
+[online documentation](https://docs.flutter.dev/), which offers tutorials,
+samples, guidance on mobile development, and a full API reference.

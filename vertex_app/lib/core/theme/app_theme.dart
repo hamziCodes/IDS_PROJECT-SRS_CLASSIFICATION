@@ -1,9 +1,16 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 
 import 'app_colors.dart';
 import 'app_text.dart';
 
 class AppTheme {
+  static const SystemUiOverlayStyle systemUiOverlayStyle = SystemUiOverlayStyle(
+    statusBarColor: Colors.transparent,
+    statusBarIconBrightness: Brightness.light,
+    statusBarBrightness: Brightness.dark,
+  );
+
   static ThemeData get darkTheme {
     final base = ThemeData.dark();
     return base.copyWith(
@@ -21,6 +28,8 @@ class AppTheme {
       appBarTheme: const AppBarTheme(
         backgroundColor: Colors.transparent,
         elevation: 0,
+        surfaceTintColor: Colors.transparent,
+        systemOverlayStyle: systemUiOverlayStyle,
       ),
       inputDecorationTheme: InputDecorationTheme(
         filled: true,

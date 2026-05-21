@@ -18,6 +18,12 @@ class GradientScaffold extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final safeBody = SafeArea(
+      top: appBar == null,
+      bottom: true,
+      child: body,
+    );
+
     return Container(
       decoration: const BoxDecoration(
         gradient: LinearGradient(
@@ -27,13 +33,13 @@ class GradientScaffold extends StatelessWidget {
         ),
       ),
       child: Scaffold(
-        extendBody: true,
-        extendBodyBehindAppBar: false,
         backgroundColor: Colors.transparent,
+        extendBody: true,
+        resizeToAvoidBottomInset: true,
         appBar: appBar,
         drawer: drawer,
         floatingActionButton: floatingActionButton,
-        body: body,
+        body: safeBody,
       ),
     );
   }

@@ -46,3 +46,4 @@ ios_key_files/
 github-workflow-logs/
 tools/
 gitignore-files/
+vertex_app/ios/Runner/Assets.xcassets/*.zip

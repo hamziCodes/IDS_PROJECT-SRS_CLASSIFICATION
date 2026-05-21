@@ -5,7 +5,7 @@ class AppConfig {
   static const String renderApiBaseUrl =
       'https://vertex-ids-backend.onrender.com';
 
-  // Fallback: Local development backend (for viva/testing if Vercel fails)
+  // Fallback: Local development backend (for viva/testing if render fails)
   static const String devApiBaseUrl = 'http://10.0.2.2:8000';
   static const String webDevApiBaseUrl = 'http://localhost:8000';
 

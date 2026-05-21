@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 
 import '../../../../core/theme/app_colors.dart';
-import 'expanded_input_modal.dart';
 
 class ChatInputBar extends StatefulWidget {
   const ChatInputBar({
@@ -20,144 +19,182 @@ class ChatInputBar extends StatefulWidget {
 }
 
 class _ChatInputBarState extends State<ChatInputBar> {
-  late TextEditingController _internalController;
-  double _inputHeight = 52;
-  static const double _minHeight = 52; // 1 line
-  static const double _maxHeight = 98; // 3 lines (~18 pixels each + padding)
-  static const double _lineHeight = 20;
+  Future<void> _openExpandedComposer() async {
+    final result = await showGeneralDialog<String>(
+      context: context,
+      barrierDismissible: true,
+      barrierLabel: 'Expanded Composer',
+      barrierColor: Colors.black.withValues(alpha: 0.72),
+      transitionDuration: const Duration(milliseconds: 280),
+      pageBuilder: (context, _, _) {
+        return _ExpandedComposerDialog(initialText: widget.controller.text);
+      },
+      transitionBuilder: (context, animation, secondaryAnimation, child) {
+        final curved = CurvedAnimation(parent: animation, curve: Curves.easeOutCubic);
+        return FadeTransition(
+          opacity: curved,
+          child: SlideTransition(
+            position: Tween<Offset>(begin: const Offset(0, 0.03), end: Offset.zero).animate(curved),
+            child: child,
+          ),
+        );
+      },
+    );
 
-  @override
-  void initState() {
-    super.initState();
-    _internalController = widget.controller;
-    _internalController.addListener(_updateHeight);
-  }
-
-  @override
-  void dispose() {
-    _internalController.removeListener(_updateHeight);
-    super.dispose();
-  }
-
-  void _updateHeight() {
-    final text = _internalController.text;
-    if (text.isEmpty) {
-      _setHeight(_minHeight);
+    if (result == null || !mounted) {
       return;
     }
-
-    // Count newlines to estimate line count
-    final lineCount = '\n'.allMatches(text).length + 1;
-    final estimatedHeight = _minHeight + ((lineCount - 1) * _lineHeight) + 8;
-
-    if (estimatedHeight >= _maxHeight) {
-      _setHeight(_maxHeight);
-    } else {
-      _setHeight(estimatedHeight);
-    }
-  }
-
-  void _setHeight(double height) {
-    if (_inputHeight != height) {
-      setState(() {
-        _inputHeight = height;
-      });
-    }
-  }
-
-  void _openExpandedInput() {
-    Navigator.of(context).push(
-      MaterialPageRoute(
-        builder: (_) => ExpandedInputModal(
-          controller: _internalController,
-          onClose: () => Navigator.of(context).pop(),
-        ),
-        fullscreenDialog: true,
-      ),
+    widget.controller.value = TextEditingValue(
+      text: result,
+      selection: TextSelection.collapsed(offset: result.length),
     );
+    setState(() {});
   }
 
   @override
   Widget build(BuildContext context) {
-    return AnimatedContainer(
-      duration: const Duration(milliseconds: 200),
-      curve: Curves.easeOut,
-      height: _inputHeight,
-      padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+    final canSend = widget.controller.text.trim().isNotEmpty && !widget.isLoading;
+
+    return Container(
+      constraints: const BoxConstraints(minHeight: 56),
+      padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
       decoration: BoxDecoration(
         color: const Color(0xFF1F1F1F),
-        borderRadius: BorderRadius.circular(16),
+        borderRadius: BorderRadius.circular(24),
         border: Border.all(color: Colors.white.withOpacity(0.06)),
       ),
       child: Row(
         crossAxisAlignment: CrossAxisAlignment.end,
         children: [
           Expanded(
-            child: TextField(
-              controller: _internalController,
-              maxLines: null,
-              minLines: 1,
-              style: Theme.of(
-                context,
-              ).textTheme.bodyLarge?.copyWith(color: AppColors.textPrimary),
-              cursorColor: AppColors.textPrimary,
-              decoration: const InputDecoration(
-                hintText: 'Ask anything',
-                hintStyle: TextStyle(color: AppColors.textSecondary),
-                border: InputBorder.none,
-                enabledBorder: InputBorder.none,
-                focusedBorder: InputBorder.none,
-                filled: true,
-                fillColor: Colors.transparent,
-                isDense: true,
-                contentPadding: EdgeInsets.symmetric(
-                  horizontal: 4,
-                  vertical: 0,
+            child: AnimatedSize(
+              duration: const Duration(milliseconds: 220),
+              curve: Curves.easeOutCubic,
+              child: TextField(
+                controller: widget.controller,
+                minLines: 1,
+                maxLines: 3,
+                keyboardType: TextInputType.multiline,
+                textInputAction: TextInputAction.newline,
+                style: Theme.of(context).textTheme.bodyLarge?.copyWith(color: AppColors.textPrimary),
+                cursorColor: AppColors.textPrimary,
+                decoration: const InputDecoration(
+                  hintText: 'Ask anything',
+                  hintStyle: TextStyle(color: AppColors.textSecondary),
+                  border: InputBorder.none,
+                  enabledBorder: InputBorder.none,
+                  focusedBorder: InputBorder.none,
+                  filled: true,
+                  fillColor: Colors.transparent,
+                  isDense: true,
                 ),
-              ),
-              textInputAction: TextInputAction.newline,
-              onSubmitted: (_) {
-                // Allow newline on Shift+Enter, manual send only on button
-              },
-            ),
-          ),
-          const SizedBox(width: 8),
-          // Expand button
-          GestureDetector(
-            onTap: _openExpandedInput,
-            child: Container(
-              padding: const EdgeInsets.all(8),
-              decoration: BoxDecoration(
-                color: AppColors.surface,
-                borderRadius: BorderRadius.circular(8),
-                border: Border.all(color: Colors.white.withOpacity(0.1)),
-              ),
-              child: Icon(
-                Icons.unfold_more_rounded,
-                color: AppColors.textSecondary,
-                size: 18,
+                onChanged: (_) => setState(() {}),
               ),
             ),
           ),
-          const SizedBox(width: 8),
-          GestureDetector(
-            onTap: widget.isLoading ? null : widget.onSend,
-            child: Container(
-              padding: const EdgeInsets.all(8),
-              decoration: BoxDecoration(
-                color: widget.isLoading
-                    ? AppColors.accent.withOpacity(0.5)
-                    : AppColors.accent,
-                borderRadius: BorderRadius.circular(8),
-              ),
-              child: Icon(
-                widget.isLoading ? Icons.hourglass_empty : Icons.send_rounded,
-                color: Colors.white,
-                size: 18,
-              ),
+          IconButton(
+            onPressed: _openExpandedComposer,
+            icon: const Icon(Icons.open_in_full_rounded, color: AppColors.textSecondary),
+            tooltip: 'Expand input',
+          ),
+          IconButton(
+            onPressed: canSend ? widget.onSend : null,
+            icon: Icon(
+              Icons.send_rounded,
+              color: canSend ? AppColors.accentSoft : AppColors.textSecondary.withValues(alpha: 0.5),
             ),
+            tooltip: 'Send',
           ),
         ],
+      ),
+    );
+  }
+}
+
+class _ExpandedComposerDialog extends StatefulWidget {
+  const _ExpandedComposerDialog({required this.initialText});
+
+  final String initialText;
+
+  @override
+  State<_ExpandedComposerDialog> createState() => _ExpandedComposerDialogState();
+}
+
+class _ExpandedComposerDialogState extends State<_ExpandedComposerDialog> {
+  late final TextEditingController _draftController;
+
+  @override
+  void initState() {
+    super.initState();
+    _draftController = TextEditingController(text: widget.initialText);
+  }
+
+  @override
+  void dispose() {
+    _draftController.dispose();
+    super.dispose();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return SafeArea(
+      child: Material(
+        color: AppColors.background,
+        child: Column(
+          children: [
+            Padding(
+              padding: const EdgeInsets.fromLTRB(12, 10, 12, 8),
+              child: Row(
+                children: [
+                  IconButton(
+                    onPressed: () => Navigator.of(context).pop(),
+                    icon: const Icon(Icons.close_rounded, color: AppColors.textPrimary),
+                    tooltip: 'Close',
+                  ),
+                  Expanded(
+                    child: Text(
+                      'Expanded Input',
+                      textAlign: TextAlign.center,
+                      style: Theme.of(context).textTheme.titleMedium,
+                    ),
+                  ),
+                  TextButton(
+                    onPressed: () => Navigator.of(context).pop(_draftController.text),
+                    child: const Text('Done'),
+                  ),
+                ],
+              ),
+            ),
+            Expanded(
+              child: Padding(
+                padding: const EdgeInsets.fromLTRB(16, 8, 16, 16),
+                child: Container(
+                  padding: const EdgeInsets.all(14),
+                  decoration: BoxDecoration(
+                    color: AppColors.surfaceSoft,
+                    borderRadius: BorderRadius.circular(18),
+                    border: Border.all(color: Colors.white.withValues(alpha: 0.08)),
+                  ),
+                  child: TextField(
+                    controller: _draftController,
+                    autofocus: true,
+                    expands: true,
+                    maxLines: null,
+                    minLines: null,
+                    keyboardType: TextInputType.multiline,
+                    style: Theme.of(context).textTheme.bodyLarge,
+                    cursorColor: AppColors.textPrimary,
+                    decoration: const InputDecoration(
+                      hintText: 'Paste or type large requirement blocks here...',
+                      hintStyle: TextStyle(color: AppColors.textSecondary),
+                      border: InputBorder.none,
+                    ),
+                  ),
+                ),
+              ),
+            ),
+          ],
+        ),
       ),
     );
   }

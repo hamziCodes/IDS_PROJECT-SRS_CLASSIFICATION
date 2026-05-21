@@ -1,14 +1,20 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
+import '../../domain/models/prediction_models.dart';
 import '../controller/chat_controller.dart';
 import 'chat_bubble.dart';
 import 'typing_indicator.dart';
 
 class MessageList extends ConsumerWidget {
-  const MessageList({super.key, required this.scrollController});
+  const MessageList({
+    super.key,
+    required this.scrollController,
+    required this.onDownloadPrediction,
+  });
 
   final ScrollController scrollController;
+  final void Function(PredictionResponse prediction) onDownloadPrediction;
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -17,10 +23,13 @@ class MessageList extends ConsumerWidget {
 
     if (messages.isEmpty && !state.isLoading) {
       return Center(
-        child: Text(
-          'No messages yet. Start by pasting a requirement.',
-          style: Theme.of(context).textTheme.bodyMedium?.copyWith(color: Colors.white70),
-          textAlign: TextAlign.center,
+        child: Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 24),
+          child: Text(
+            'No messages yet. Start by pasting a requirement.',
+            style: Theme.of(context).textTheme.bodyMedium?.copyWith(color: Colors.white70),
+            textAlign: TextAlign.center,
+          ),
         ),
       );
     }
@@ -28,6 +37,7 @@ class MessageList extends ConsumerWidget {
     return ListView.builder(
       controller: scrollController,
       padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+      keyboardDismissBehavior: ScrollViewKeyboardDismissBehavior.onDrag,
       itemCount: messages.length + (state.isLoading ? 1 : 0),
       itemBuilder: (context, index) {
         if (state.isLoading && index == messages.length) {
@@ -37,7 +47,10 @@ class MessageList extends ConsumerWidget {
           );
         }
 
-        return ChatBubble(message: messages[index]);
+        return ChatBubble(
+          message: messages[index],
+          onDownloadPrediction: onDownloadPrediction,
+        );
       },
     );
   }

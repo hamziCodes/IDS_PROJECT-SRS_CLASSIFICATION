@@ -1,8 +1,2 @@
+#include? "Pods/Target Support Files/Pods-Runner/Pods-Runner.release.xcconfig"
 #include "Generated.xcconfig"
-#include "Pods/Target Support Files/Pods-Runner/Pods-Runner.release.xcconfig"
-
-CODE_SIGN_STYLE=Manual
-PROVISIONING_PROFILE_SPECIFIER=Vertex App TestFlight Profile
-DEVELOPMENT_TEAM=TMDKN6YV7D
-CODE_SIGN_IDENTITY=Apple Distribution
-PRODUCT_BUNDLE_IDENTIFIER=com.vertexsolutions.vertexapp

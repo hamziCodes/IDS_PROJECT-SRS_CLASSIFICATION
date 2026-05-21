@@ -9,8 +9,14 @@ class ApiClient {
           BaseOptions(
             baseUrl: AppConfig.apiBaseUrl,
             connectTimeout: const Duration(seconds: 10),
+            sendTimeout: const Duration(seconds: 15),
             receiveTimeout: const Duration(seconds: 30),
-            headers: {'Content-Type': 'application/json'},
+            contentType: Headers.jsonContentType,
+            responseType: ResponseType.json,
+            validateStatus: (status) => status != null && status >= 200 && status < 300,
+            headers: const {
+              'Accept': 'application/json',
+            },
           ),
         );
 
