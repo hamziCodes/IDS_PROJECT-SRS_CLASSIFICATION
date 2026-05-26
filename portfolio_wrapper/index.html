@@ -1,0 +1,168 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+  <meta name="theme-color" content="#101217" />
+  <title>IDS Portfolio Wrapper</title>
+  <link rel="icon" type="image/png" href="./flutter_build/favicon.png" />
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+  <main class="shell" id="shell">
+    <div class="ambient ambient-a" aria-hidden="true"></div>
+    <div class="ambient ambient-b" aria-hidden="true"></div>
+
+    <section class="device" aria-label="iPhone 16 Pro app preview">
+      <div class="device__frame" aria-hidden="true"></div>
+
+      <div class="screen" aria-live="polite">
+        <section class="state state--warning" id="warningState">
+          <p class="eyebrow">Backend activation required</p>
+          <h1>Note: The Intelligent Data Systems classification pipeline runs on a free cloud instance. The backend must be activated before testing the app.</h1>
+          <button class="button button--primary" id="wakeButton" type="button">Wake up Backend Engine</button>
+        </section>
+
+        <section class="state state--loading" id="loadingState" hidden>
+          <p class="eyebrow">Activating backend</p>
+          <h2>Waiting for Vertex IDS API to wake up...</h2>
+          <p class="body-copy">The simulator will unlock as soon as the service reports it is running.</p>
+          <div class="spinner" aria-hidden="true">
+            <span></span><span></span><span></span>
+          </div>
+        </section>
+
+        <section class="state state--ready" id="readyState" hidden>
+          <p class="eyebrow">Engine awake</p>
+          <h2>Backend is ready. Launch the simulator when you are set.</h2>
+          <button class="button button--secondary" id="launchButton" type="button">Launch Simulator App</button>
+        </section>
+
+        <div class="app-host" id="appHost"></div>
+      </div>
+    </section>
+  </main>
+
+  <script>
+    (() => {
+      const warningState = document.getElementById('warningState');
+      const loadingState = document.getElementById('loadingState');
+      const readyState = document.getElementById('readyState');
+      const wakeButton = document.getElementById('wakeButton');
+      const launchButton = document.getElementById('launchButton');
+      const appHost = document.getElementById('appHost');
+
+      const backendUrl = 'https://vertex-ids-backend.onrender.com/';
+      let isWarmed = false;
+      let wakeAttemptActive = false;
+
+      const backendLooksReady = (payload, text) => {
+        if (typeof payload === 'string') {
+          return payload.includes('Vertex IDS API is running') || payload.includes('Vertex is running');
+        }
+
+        if (!payload || typeof payload !== 'object') {
+          return false;
+        }
+
+        return payload.status === 'ok' || payload.message === 'Vertex IDS API is running' || payload.message === 'Vertex is running';
+      };
+
+      const showLoadingState = () => {
+        warningState.hidden = true;
+        readyState.hidden = true;
+        loadingState.hidden = false;
+        loadingState.classList.add('is-visible');
+      };
+
+      const showReadyState = () => {
+        loadingState.hidden = true;
+        readyState.hidden = false;
+        readyState.classList.add('is-visible');
+        isWarmed = true;
+        wakeAttemptActive = false;
+      };
+
+      const pollBackendUntilReady = async () => {
+        const timeoutMs = 4500;
+        const controller = new AbortController();
+        const timeoutId = window.setTimeout(() => controller.abort(), timeoutMs);
+
+        try {
+          const response = await fetch(backendUrl, {
+            method: 'GET',
+            cache: 'no-store',
+            signal: controller.signal
+          });
+
+          const rawText = await response.text();
+          let payload = rawText;
+
+          try {
+            payload = JSON.parse(rawText);
+          } catch (_) {
+            // Keep the raw text fallback when the endpoint returns plain text.
+          }
+
+          return backendLooksReady(payload, rawText);
+        } catch (_) {
+          return false;
+        } finally {
+          window.clearTimeout(timeoutId);
+        }
+      };
+
+      const waitForBackend = async () => {
+        if (wakeAttemptActive) {
+          return;
+        }
+
+        wakeAttemptActive = true;
+        showLoadingState();
+
+        while (wakeAttemptActive && !isWarmed) {
+          const ready = await pollBackendUntilReady();
+
+          if (ready) {
+            showReadyState();
+            return;
+          }
+
+          await new Promise((resolve) => window.setTimeout(resolve, 1800));
+        }
+      };
+
+      const mountIframe = () => {
+        if (appHost.dataset.mounted === 'true') {
+          return;
+        }
+
+        const iframe = document.createElement('iframe');
+        iframe.src = './flutter_build/index.html';
+        iframe.title = 'Flutter Web Simulator';
+        iframe.loading = 'eager';
+        iframe.setAttribute('allowfullscreen', 'true');
+        iframe.setAttribute('sandbox', 'allow-scripts allow-same-origin allow-forms');
+
+        appHost.appendChild(iframe);
+        appHost.hidden = false;
+        appHost.dataset.mounted = 'true';
+      };
+
+      wakeButton.addEventListener('click', () => {
+        window.open(backendUrl, '_blank', 'noopener,noreferrer');
+        wakeButton.disabled = true;
+        wakeButton.textContent = 'Waking backend...';
+
+        waitForBackend();
+      });
+
+      launchButton.addEventListener('click', () => {
+        appHost.style.display = 'block';
+        readyState.hidden = true;
+        mountIframe();
+      });
+    })();
+  </script>
+</body>
+</html>
